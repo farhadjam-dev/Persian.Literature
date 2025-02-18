@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="colorPrimary">#BDB6B3</color> <!-- رنگ شکلاتی -->
+    <color name="colorPrimaryDark">#5D4037</color> <!-- رنگ شکلاتی تیره -->
+    <color name="colorAccent">#D7CCC8</color> <!-- رنگ کرمی -->
+    <color name="background">#F5F5F5</color> <!-- رنگ خاکستری روشن -->
+    <color name="textColor">#3E2723</color> <!-- رنگ شکلاتی تیره برای متن -->
+    <color name="cardBackground">#FFFFFF</color> <!-- رنگ سفید برای کارت‌ها -->
+</resources>

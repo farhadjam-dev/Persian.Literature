@@ -1,0 +1,37 @@
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp"
+    app:cardBackgroundColor="@color/cardBackground">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- تصویر شاعر -->
+        <ImageView
+            android:id="@+id/poet_image"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/hafez"
+            android:background="@color/colorAccent"
+             />
+
+        <!-- نام شاعر -->
+        <TextView
+            android:id="@+id/poet_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="حافظ"
+            android:textSize="18sp"
+            android:textColor="@color/textColor"
+            android:gravity="center"
+            android:layout_marginTop="8dp" />
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
