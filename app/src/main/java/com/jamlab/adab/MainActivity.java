@@ -2,7 +2,6 @@ package com.jamlab.adab;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -30,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private NavigationView navigationView;
     private EditText searchField;
     private ImageView searchIcon, favoriteIcon, menuIcon;
-    private List<String> poems; // لیست اشعار برای جست‌وجو
+    private List<Poem> poems; // لیست اشعار با اطلاعات کامل
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -189,19 +188,19 @@ public class MainActivity extends AppCompatActivity {
     private void performSearchAndNavigate() {
         String query = searchField.getText().toString().trim();
         if (!query.isEmpty()) {
-            List<String> searchResults = performSearch(poems, query);
+            List<Poem> searchResults = performSearch(poems, query);
 
             // انتقال نتایج جست‌وجو به صفحه جدید
             Intent intent = new Intent(MainActivity.this, SearchResultsActivity.class);
-            intent.putStringArrayListExtra("search_results", new ArrayList<>(searchResults));
+            intent.putParcelableArrayListExtra("search_results", new ArrayList<>(searchResults));
             startActivity(intent);
         }
     }
 
-    private List<String> performSearch(List<String> poems, String query) {
-        List<String> results = new ArrayList<>();
-        for (String poem : poems) {
-            if (poem.contains(query)) {
+    private List<Poem> performSearch(List<Poem> poems, String query) {
+        List<Poem> results = new ArrayList<>();
+        for (Poem poem : poems) {
+            if (poem.getText().contains(query)) {
                 results.add(poem);
             }
         }

@@ -1,5 +1,6 @@
 package com.jamlab.adab;
 
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,9 +21,15 @@ public class SearchResultsActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // دریافت نتایج جست‌وجو از MainActivity
-        List<String> searchResults = getIntent().getStringArrayListExtra("search_results");
+        List<Poem> searchResults = getIntent().getParcelableArrayListExtra("search_results");
 
-        searchResultAdapter = new SearchResultAdapter(searchResults);
+        searchResultAdapter = new SearchResultAdapter(searchResults, poem -> {
+            // انتقال به صفحه شعر مورد نظر
+            Intent intent = new Intent(SearchResultsActivity.this, PoemDetailActivity.class);
+            intent.putExtra("poem", poem); // انتقال کل شیء Poem
+            startActivity(intent);
+        });
+
         recyclerView.setAdapter(searchResultAdapter);
     }
 }
