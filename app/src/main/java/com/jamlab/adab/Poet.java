@@ -1,8 +1,9 @@
 package com.jamlab.adab;
 
 
+import java.io.Serializable;
 
-public class Poet {
+public class Poet implements Serializable {
     private String name;
     private int imageResId;
 
