@@ -16,13 +16,14 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.AppCompatImageView;
+
 import com.google.android.material.navigation.NavigationView;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import hafez.HafezActivity;
+import search.SearchResultsActivity;
 
 public class MainActivity extends AppCompatActivity {
 

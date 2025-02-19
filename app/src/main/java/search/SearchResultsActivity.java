@@ -1,10 +1,15 @@
-package com.jamlab.adab;
+package search;
 
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.jamlab.adab.Poem;
+import com.jamlab.adab.PoemDetailActivity;
+import com.jamlab.adab.R;
+
 import java.util.List;
 
 public class SearchResultsActivity extends AppCompatActivity {

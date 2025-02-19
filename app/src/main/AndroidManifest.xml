@@ -17,7 +17,7 @@
         <activity android:name=".PoemDetailActivity"
             android:exported="false"/>
 
-        <activity android:name=".SearchResultsActivity"
+        <activity android:name="search.SearchResultsActivity"
             android:exported="false"/>
 
         <activity
