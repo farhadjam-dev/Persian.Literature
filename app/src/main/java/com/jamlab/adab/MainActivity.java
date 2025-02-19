@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
         // اتصال Toolbar به layout
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         // حذف عنوان از Toolbar
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayShowTitleEnabled(false); // غیرفعال کردن نمایش عنوان
@@ -109,13 +110,32 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-
         // تنظیم Adapter برای RecyclerView
         recyclerView.setAdapter(poetAdapter);
 
         // خواندن داده‌ها از فایل JSON
         InputStream inputStream = getResources().openRawResource(R.raw.hafez_ghazals);
         poems = PoemLoader.loadPoemsFromJson(inputStream);
+
+        // مدیریت انتخاب گزینه‌های منوی کشویی
+        navigationView.setNavigationItemSelectedListener(item -> {
+            int id = item.getItemId();
+
+            // بررسی گزینه انتخابی
+            if (id == R.id.nav_favorites) {
+                // انتقال به صفحه علاقه‌مندی‌ها
+                Intent intent = new Intent(MainActivity.this, FavoritesActivity.class);
+                startActivity(intent);
+                drawerLayout.closeDrawer(GravityCompat.START); // بستن منو بعد از انتخاب
+            } else if (id == R.id.nav_settings) {
+                // انتقال به صفحه تنظیمات
+                Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+                startActivity(intent);
+                drawerLayout.closeDrawer(GravityCompat.START); // بستن منو بعد از انتخاب
+            }
+
+            return true; // نشان می‌دهد که گزینه پردازش شده است
+        });
 
         // مدیریت کلیک روی آیکون جست‌وجو
         searchIcon.setOnClickListener(v -> {
