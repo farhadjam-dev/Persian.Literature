@@ -1,26 +1,42 @@
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
     app:cardCornerRadius="8dp"
-    app:cardElevation="4dp"
-    app:cardBackgroundColor="@color/cardBackground">
+    app:cardElevation="4dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:gravity="right">  <!-- تراز کردن همه محتوا به سمت راست -->
 
         <!-- عنوان غزل -->
         <TextView
             android:id="@+id/title"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="عنوان غزل"
             android:textSize="18sp"
-            android:textColor="@color/textColor"
-            android:gravity="center" />
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
+            android:gravity="right"
+            android:layout_gravity="right" />  <!-- تراز ویو به راست -->
+
+        <!-- مصرع اول غزل -->
+        <TextView
+            android:id="@+id/first_verse"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="مصرع اول..."
+            android:textSize="14sp"
+            android:textColor="@android:color/darker_gray"
+            android:paddingTop="8dp"
+            android:gravity="right"
+            android:layout_gravity="right" />  <!-- تراز ویو به راست -->
     </LinearLayout>
 </androidx.cardview.widget.CardView>

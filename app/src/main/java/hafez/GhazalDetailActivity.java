@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast; // اضافه کردن import برای Toast
 import com.jamlab.adab.R;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,8 +36,6 @@ public class GhazalDetailActivity extends AppCompatActivity {
         // تنظیم Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        // غیرفعال کردن نمایش عنوان پیش‌فرض (نام نرم‌افزار)
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
@@ -51,7 +50,7 @@ public class GhazalDetailActivity extends AppCompatActivity {
         // دریافت عنوان غزل از Intent
         ghazalTitle = getIntent().getStringExtra("ghazalTitle");
         if (ghazalTitle != null) {
-            toolbarTitle.setText(ghazalTitle); // تنظیم عنوان در TextView سفارشی
+            toolbarTitle.setText(ghazalTitle);
         }
 
         // بارگذاری ابیات غزل
@@ -78,13 +77,17 @@ public class GhazalDetailActivity extends AppCompatActivity {
         favoriteButton.setOnClickListener(v -> {
             SharedPreferences.Editor editor = sharedPreferences.edit();
             if (isFavorite) {
+                // حذف از علاقه‌مندی‌ها
                 isFavorite = false;
                 favoriteButton.setImageResource(R.drawable.ic_star_outline);
                 favorites.remove(ghazalTitle);
+                Toast.makeText(GhazalDetailActivity.this, "از علاقه‌مندی‌ها حذف شد", Toast.LENGTH_SHORT).show();
             } else {
+                // اضافه کردن به علاقه‌مندی‌ها
                 isFavorite = true;
                 favoriteButton.setImageResource(R.drawable.ic_star_filled);
                 favorites.add(ghazalTitle);
+                Toast.makeText(GhazalDetailActivity.this, "به علاقه‌مندی‌ها اضافه شد", Toast.LENGTH_SHORT).show();
             }
             editor.putStringSet("favorites", favorites);
             editor.apply();
