@@ -13,12 +13,12 @@ import hafez.GhazalDetailActivity;
 
 public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHolder> {
 
-    private List<String> favoritePoems; // لیست شعرهای علاقه‌مندی
+    private List<Ghazal> favoriteGhazals; // لیست غزلیات علاقه‌مندی
     private Context context;
 
-    public FavoriteAdapter(Context context, List<String> favoritePoems) {
+    public FavoriteAdapter(Context context, List<Ghazal> favoriteGhazals) {
         this.context = context;
-        this.favoritePoems = favoritePoems;
+        this.favoriteGhazals = favoriteGhazals;
     }
 
     @NonNull
@@ -30,29 +30,23 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        String poem = favoritePoems.get(position);
+        Ghazal ghazal = favoriteGhazals.get(position);
 
-        // جدا کردن عنوان و بخشی از شعر با استفاده از " - "
-        if (poem.contains(" - ")) {
-            String[] parts = poem.split(" - ");
-            holder.poemTitle.setText(parts[0]); // عنوان شعر
-            holder.poemExcerpt.setText(parts[1]); // بخشی از شعر
-        } else {
-            holder.poemTitle.setText(poem);
-            holder.poemExcerpt.setText("...");
-        }
+        // نمایش عنوان و بیت اول
+        holder.poemTitle.setText(ghazal.getTitle());
+        holder.poemExcerpt.setText(ghazal.getFirstVerse());
 
         // تنظیم کلیک روی آیتم
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, GhazalDetailActivity.class);
-            intent.putExtra("ghazalTitle", holder.poemTitle.getText().toString());
+            intent.putExtra("ghazalTitle", ghazal.getTitle());
             context.startActivity(intent);
         });
     }
 
     @Override
     public int getItemCount() {
-        return favoritePoems.size();
+        return favoriteGhazals.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
