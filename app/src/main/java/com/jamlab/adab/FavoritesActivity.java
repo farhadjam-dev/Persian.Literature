@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.View;
 import android.widget.TextView;
 import java.util.ArrayList;
@@ -18,8 +17,8 @@ public class FavoritesActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private FavoriteAdapter favoriteAdapter;
-    private List<String> favoritePoems; // لیست شعرهای علاقه‌مندی
-    private TextView emptyTextView; // نمایش پیام وقتی لیست خالی است
+    private List<String> favoritePoems;
+    private TextView emptyTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,29 +28,29 @@ public class FavoritesActivity extends AppCompatActivity {
         // تنظیم Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true); // اضافه کردن دکمه بازگشت
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // اتصال RecyclerView
         recyclerView = findViewById(R.id.favorites_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // اتصال TextView برای نمایش پیام خالی بودن لیست
+        // اتصال TextView برای پیام خالی بودن
         emptyTextView = findViewById(R.id.empty_text_view);
 
-        // بارگذاری شعرهای علاقه‌مندی از SharedPreferences
+        // بارگذاری شعرهای علاقه‌مندی
         favoritePoems = loadFavoritePoems();
 
-        // بررسی وضعیت لیست علاقه‌مندی‌ها
+        // بررسی وضعیت لیست
         if (favoritePoems.isEmpty()) {
-            recyclerView.setVisibility(View.GONE); // مخفی کردن RecyclerView
-            emptyTextView.setVisibility(View.VISIBLE); // نمایش پیام خالی بودن لیست
+            recyclerView.setVisibility(View.GONE);
+            emptyTextView.setVisibility(View.VISIBLE);
         } else {
-            recyclerView.setVisibility(View.VISIBLE); // نمایش RecyclerView
-            emptyTextView.setVisibility(View.GONE); // مخفی کردن پیام خالی بودن لیست
+            recyclerView.setVisibility(View.VISIBLE);
+            emptyTextView.setVisibility(View.GONE);
         }
 
-        // تنظیم Adapter برای RecyclerView
-        favoriteAdapter = new FavoriteAdapter(favoritePoems);
+        // تنظیم آداپتر با ارسال Context
+        favoriteAdapter = new FavoriteAdapter(this, favoritePoems);
         recyclerView.setAdapter(favoriteAdapter);
     }
 
@@ -59,6 +58,12 @@ public class FavoritesActivity extends AppCompatActivity {
     private List<String> loadFavoritePoems() {
         SharedPreferences sharedPreferences = getSharedPreferences("Favorites", MODE_PRIVATE);
         Set<String> favoritesSet = sharedPreferences.getStringSet("favorites", new HashSet<>());
-        return new ArrayList<>(new HashSet<>(favoritesSet)); // اطمینان از عدم تغییر مجموعه
+        return new ArrayList<>(favoritesSet); // تبدیل به لیست
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish(); // بستن اکتیویتی با کلیک روی دکمه بازگشت
+        return true;
     }
 }

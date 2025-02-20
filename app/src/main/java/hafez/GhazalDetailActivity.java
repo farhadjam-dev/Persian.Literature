@@ -35,43 +35,46 @@ public class GhazalDetailActivity extends AppCompatActivity {
         // تنظیم Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true); // اضافه کردن دکمه بازگشت
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        // اتصال RecyclerView به layout
+        // اتصال RecyclerView
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // دریافت عنوان غزل از Intent
         ghazalTitle = getIntent().getStringExtra("ghazalTitle");
+        if (ghazalTitle != null) {
+            getSupportActionBar().setTitle(ghazalTitle); // تنظیم عنوان Toolbar
+        }
 
-        // خواندن فایل JSON و نمایش ابیات
+        // بارگذاری ابیات غزل
         List<Verse> verseList = loadVersesFromJson(ghazalTitle);
 
-        // ایجاد Adapter و تنظیم آن برای RecyclerView
+        // تنظیم آداپتر
         verseAdapter = new VerseAdapter(verseList);
         recyclerView.setAdapter(verseAdapter);
 
-        // اتصال دکمه ستاره
+        // اتصال دکمه علاقه‌مندی
         favoriteButton = findViewById(R.id.favorite_button);
         SharedPreferences sharedPreferences = getSharedPreferences("Favorites", MODE_PRIVATE);
         Set<String> favorites = sharedPreferences.getStringSet("favorites", new HashSet<>());
 
-        // بررسی اینکه آیا شعر قبلاً به علاقه‌مندی‌ها اضافه شده است
+        // بررسی وضعیت علاقه‌مندی
         if (favorites.contains(ghazalTitle)) {
             isFavorite = true;
             favoriteButton.setImageResource(R.drawable.ic_star_filled);
+        } else {
+            favoriteButton.setImageResource(R.drawable.ic_star_outline);
         }
 
-        // مدیریت کلیک روی دکمه ستاره
+        // مدیریت کلیک دکمه علاقه‌مندی
         favoriteButton.setOnClickListener(v -> {
             SharedPreferences.Editor editor = sharedPreferences.edit();
             if (isFavorite) {
-                // حذف شعر از علاقه‌مندی‌ها
                 isFavorite = false;
                 favoriteButton.setImageResource(R.drawable.ic_star_outline);
                 favorites.remove(ghazalTitle);
             } else {
-                // اضافه کردن شعر به علاقه‌مندی‌ها
                 isFavorite = true;
                 favoriteButton.setImageResource(R.drawable.ic_star_filled);
                 favorites.add(ghazalTitle);
@@ -109,5 +112,11 @@ public class GhazalDetailActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return verseList;
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return true;
     }
 }
