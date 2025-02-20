@@ -25,32 +25,28 @@ public class GhazalListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ghazal_list);
 
-        // تنظیم Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayShowTitleEnabled(false); // غیرفعال کردن عنوان پیش‌فرض
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
 
-        // اتصال RecyclerView به layout
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // خواندن فایل JSON و ایجاد لیست غزلیات
         List<Ghazal> ghazalList = loadGhazalsFromJson();
-
-        // ایجاد Adapter و تنظیم listener برای کلیک روی آیتم‌ها
-        ghazalAdapter = new GhazalAdapter(ghazalList, new GhazalAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(Ghazal ghazal) {
-                Intent intent = new Intent(GhazalListActivity.this, GhazalDetailActivity.class);
-                intent.putExtra("ghazalTitle", ghazal.getTitle());
-                startActivity(intent);
-            }
-        });
-
-        // تنظیم Adapter برای RecyclerView
+        ghazalAdapter = new GhazalAdapter(ghazalList, ghazal -> {
+            Intent intent = new Intent(GhazalListActivity.this, GhazalDetailActivity.class);
+            intent.putExtra("ghazalTitle", ghazal.getTitle());
+            startActivity(intent);
+        }, this); // ارسال Context
         recyclerView.setAdapter(ghazalAdapter);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ghazalAdapter.notifyDataSetChanged(); // به‌روزرسانی آداپتر برای نمایش تغییرات علاقه‌مندی‌ها
     }
 
     private List<Ghazal> loadGhazalsFromJson() {
@@ -62,7 +58,6 @@ public class GhazalListActivity extends AppCompatActivity {
             inputStream.read(buffer);
             inputStream.close();
             String json = new String(buffer, "UTF-8");
-
             JSONArray jsonArray = new JSONArray(json);
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
