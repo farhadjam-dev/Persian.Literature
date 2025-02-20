@@ -20,9 +20,15 @@ import com.jamlab.adab.R;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -43,14 +49,15 @@ public class GhazalDetailActivity extends AppCompatActivity {
     private MediaPlayer mediaPlayer;
     private Handler handler = new Handler(Looper.getMainLooper());
     private boolean isPlaying = false;
-    private boolean isPrepared = false;
 
     // نگاشت عنوان غزل به لینک صوتی Google Drive
     private static final Map<String, String> AUDIO_URLS = new HashMap<String, String>() {{
         put("غزل شماره ۱", "https://drive.google.com/uc?export=download&id=1aGP2JQIOU0r0V_nupxacJBRC7W3IHBJl");
         put("غزل شماره ۲", "https://drive.google.com/uc?export=download&id=1zjIUShd6E8TQeiR-6DjqA9d4KwvwnQSI");
-        // برای غزل‌های دیگر، FILE_ID واقعی را اضافه کنید
     }};
+
+    // حداکثر حجم کش (1000 مگابایت)
+    private static final long MAX_CACHE_SIZE = 1000 * 1024 * 1024; // 1000 MB
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,48 +140,130 @@ public class GhazalDetailActivity extends AppCompatActivity {
             return;
         }
 
-        if (mediaPlayer == null) {
-            // نمایش Toast و انیمیشن دانلود فقط در بار اول
-            Toast.makeText(this, "در حال دانلود صوت...", Toast.LENGTH_SHORT).show();
-            downloadProgress.setVisibility(View.VISIBLE);
-            playPauseButton.setEnabled(false);
+        File cacheFile = new File(getCacheDir(), ghazalTitle.replace(" ", "_") + ".mp3");
 
-            try {
-                mediaPlayer = new MediaPlayer();
-                mediaPlayer.setDataSource(audioUrl);
-                mediaPlayer.setOnPreparedListener(mp -> {
-                    downloadProgress.setVisibility(View.GONE);
-                    playPauseButton.setEnabled(true);
-                    audioSeekBar.setMax(mp.getDuration());
-                    int remaining = mp.getDuration();
-                    remainingTime.setText("-" + formatTime(remaining)); // زمان باقی‌مانده اولیه
-                    mp.start();
-                    isPlaying = true;
-                    isPrepared = true;
-                    playPauseButton.setImageResource(R.drawable.ic_pause);
-                    updateSeekBar();
-                });
-                mediaPlayer.setOnCompletionListener(mp -> {
-                    stopAudio();
-                });
-                mediaPlayer.setOnErrorListener((mp, what, extra) -> {
-                    downloadProgress.setVisibility(View.GONE);
-                    playPauseButton.setEnabled(true);
-                    Toast.makeText(this, "خطا در دانلود یا پخش صوت", Toast.LENGTH_SHORT).show();
-                    return true;
-                });
-                mediaPlayer.prepareAsync();
-            } catch (IOException e) {
-                e.printStackTrace();
-                downloadProgress.setVisibility(View.GONE);
-                playPauseButton.setEnabled(true);
-                Toast.makeText(this, "خطا در دانلود صوت", Toast.LENGTH_SHORT).show();
-            }
-        } else if (!mediaPlayer.isPlaying() && isPrepared) {
+        if (mediaPlayer != null && !mediaPlayer.isPlaying()) {
+            // اگر MediaPlayer وجود دارد و پخش نمی‌شود، از موقعیت فعلی ادامه بده
             mediaPlayer.start();
             isPlaying = true;
             playPauseButton.setImageResource(R.drawable.ic_pause);
             updateSeekBar();
+        } else if (cacheFile.exists()) {
+            // اگر فایل در کش موجود است، از کش پخش کن
+            playFromCache(cacheFile);
+        } else {
+            // دانلود و پخش خودکار پس از دانلود
+            manageCacheSpace();
+            downloadAndPlay(audioUrl, cacheFile);
+        }
+    }
+
+    private void playFromCache(File cacheFile) {
+        try {
+            if (mediaPlayer != null) {
+                mediaPlayer.release();
+            }
+            mediaPlayer = new MediaPlayer();
+            mediaPlayer.setDataSource(cacheFile.getAbsolutePath());
+            mediaPlayer.setOnPreparedListener(mp -> {
+                audioSeekBar.setMax(mp.getDuration());
+                int remaining = mp.getDuration() - mp.getCurrentPosition();
+                remainingTime.setText("-" + formatTime(remaining));
+                mp.start();
+                isPlaying = true;
+                playPauseButton.setImageResource(R.drawable.ic_pause);
+                updateSeekBar();
+            });
+            mediaPlayer.setOnCompletionListener(mp -> resetAudio());
+            mediaPlayer.prepareAsync();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "خطا در پخش از حافظه کش", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void downloadAndPlay(String audioUrl, File cacheFile) {
+        Toast.makeText(this, "در حال دانلود صوت...", Toast.LENGTH_SHORT).show();
+        downloadProgress.setVisibility(View.VISIBLE);
+        playPauseButton.setEnabled(false);
+
+        new Thread(() -> {
+            try {
+                URL url = new URL(audioUrl);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.connect();
+
+                try {
+                    if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                        runOnUiThread(() -> {
+                            downloadProgress.setVisibility(View.GONE);
+                            playPauseButton.setEnabled(true);
+                            try {
+                                Toast.makeText(this, "خطا در دانلود: " + connection.getResponseCode(), Toast.LENGTH_SHORT).show();
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        });
+                        return;
+                    }
+                } catch (IOException e) {
+                    runOnUiThread(() -> {
+                        downloadProgress.setVisibility(View.GONE);
+                        playPauseButton.setEnabled(true);
+                        Toast.makeText(this, "خطا در دریافت پاسخ سرور", Toast.LENGTH_SHORT).show();
+                    });
+                    return;
+                }
+
+                InputStream input = connection.getInputStream();
+                FileOutputStream output = new FileOutputStream(cacheFile);
+                byte[] buffer = new byte[4096];
+                int bytesRead;
+                while ((bytesRead = input.read(buffer)) != -1) {
+                    output.write(buffer, 0, bytesRead);
+                }
+                output.close();
+                input.close();
+                connection.disconnect();
+
+                runOnUiThread(() -> {
+                    downloadProgress.setVisibility(View.GONE);
+                    playPauseButton.setEnabled(true);
+                    playFromCache(cacheFile); // پخش خودکار پس از دانلود
+                });
+            } catch (IOException e) {
+                e.printStackTrace();
+                runOnUiThread(() -> {
+                    downloadProgress.setVisibility(View.GONE);
+                    playPauseButton.setEnabled(true);
+                    Toast.makeText(this, "خطا در دانلود صوت", Toast.LENGTH_SHORT).show();
+                });
+            }
+        }).start();
+    }
+
+    private void manageCacheSpace() {
+        File cacheDir = getCacheDir();
+        File[] files = cacheDir.listFiles();
+        if (files == null) return;
+
+        long totalSize = 0;
+        for (File file : files) {
+            totalSize += file.length();
+        }
+
+        if (totalSize >= MAX_CACHE_SIZE) {
+            // مرتب‌سازی فایل‌ها بر اساس زمان آخرین تغییر (قدیمی‌ترین اول)
+            Arrays.sort(files, Comparator.comparingLong(File::lastModified));
+
+            // حذف قدیمی‌ترین فایل‌ها تا زمانی که فضای کافی ایجاد شود
+            for (File file : files) {
+                if (totalSize < MAX_CACHE_SIZE) break;
+                long fileSize = file.length();
+                if (file.delete()) {
+                    totalSize -= fileSize;
+                }
+            }
         }
     }
 
@@ -187,7 +276,7 @@ public class GhazalDetailActivity extends AppCompatActivity {
         }
     }
 
-    private void stopAudio() {
+    private void resetAudio() {
         if (mediaPlayer != null) {
             if (mediaPlayer.isPlaying()) {
                 mediaPlayer.pause();
@@ -226,7 +315,7 @@ public class GhazalDetailActivity extends AppCompatActivity {
             audioSeekBar.setProgress(currentPosition);
             int remaining = mediaPlayer.getDuration() - currentPosition;
             remainingTime.setText("-" + formatTime(remaining));
-            handler.postDelayed(this::updateSeekBar, 1000); // به‌روزرسانی هر ثانیه
+            handler.postDelayed(this::updateSeekBar, 1000);
         }
     }
 

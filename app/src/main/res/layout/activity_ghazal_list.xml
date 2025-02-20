@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:text="غزلیات حافظ"
             android:textSize="20sp"
-            android:textColor="@android:color/white"
+            android:textColor="@android:color/black"
             android:layout_gravity="center"
             android:padding="8dp" />
     </androidx.appcompat.widget.Toolbar>
