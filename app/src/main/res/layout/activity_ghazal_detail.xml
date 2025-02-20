@@ -40,6 +40,43 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:padding="8dp" />
+
+    <!-- میدیا پلیر کوچک -->
+    <LinearLayout
+        android:id="@+id/media_player_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/colorPrimary"
+        android:padding="8dp"
+        android:gravity="center_vertical">
+
+        <!-- دکمه پخش/توقف -->
+        <ImageButton
+            android:id="@+id/play_pause_button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_play"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Play/Pause" />
+
+        <!-- نشانگر پیشرفت صوت -->
+        <SeekBar
+            android:id="@+id/audio_seekbar"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp" />
+
+        <!-- انیمیشن دانلود -->
+        <ProgressBar
+            android:id="@+id/download_progress"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="8dp"
+            android:visibility="gone" />
+    </LinearLayout>
 </LinearLayout>
