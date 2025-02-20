@@ -2,7 +2,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
+    android:layout_margin="4dp"
     app:cardCornerRadius="8dp"
     app:cardElevation="4dp"
     app:cardBackgroundColor="@color/cardBackground">
@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="5dp">
 
         <!-- مصرع اول -->
         <TextView
@@ -33,6 +33,15 @@
             android:textAlignment="center"
             android:textColor="@color/textColor"
             android:textSize="16sp" />
+
+        <!-- نشانک برای گسترش/جمع کردن تفسیر -->
+        <ImageView
+            android:id="@+id/expand_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_expand_down"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="0dp" />
 
         <!-- تفسیر بیت -->
         <TextView

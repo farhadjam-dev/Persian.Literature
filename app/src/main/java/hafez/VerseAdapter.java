@@ -3,12 +3,11 @@ package hafez;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.jamlab.adab.R;
-
 import java.util.List;
 
 public class VerseAdapter extends RecyclerView.Adapter<VerseAdapter.VerseViewHolder> {
@@ -43,15 +42,16 @@ public class VerseAdapter extends RecyclerView.Adapter<VerseAdapter.VerseViewHol
         // تنظیم تفسیر بیت
         holder.explanation.setText(verse.getExplanation());
 
-        // مدیریت کلیک روی کارت بیت
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (holder.explanation.getVisibility() == View.GONE) {
-                    holder.explanation.setVisibility(View.VISIBLE);
-                } else {
-                    holder.explanation.setVisibility(View.GONE);
-                }
+        // مدیریت کلیک روی نشانک
+        holder.expandIcon.setOnClickListener(v -> {
+            if (holder.explanation.getVisibility() == View.GONE) {
+                // نمایش تفسیر و تغییر جهت نشانک به بالا
+                holder.explanation.setVisibility(View.VISIBLE);
+                holder.expandIcon.setImageResource(R.drawable.ic_expand_up);
+            } else {
+                // مخفی کردن تفسیر و تغییر جهت نشانک به پایین
+                holder.explanation.setVisibility(View.GONE);
+                holder.expandIcon.setImageResource(R.drawable.ic_expand_down);
             }
         });
     }
@@ -65,12 +65,14 @@ public class VerseAdapter extends RecyclerView.Adapter<VerseAdapter.VerseViewHol
         TextView line1; // مصرع اول
         TextView line2; // مصرع دوم
         TextView explanation; // تفسیر بیت
+        ImageView expandIcon; // نشانک
 
         public VerseViewHolder(@NonNull View itemView) {
             super(itemView);
             line1 = itemView.findViewById(R.id.line1);
             line2 = itemView.findViewById(R.id.line2);
             explanation = itemView.findViewById(R.id.explanation);
+            expandIcon = itemView.findViewById(R.id.expand_icon);
         }
     }
 }
