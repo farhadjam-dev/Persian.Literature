@@ -37,16 +37,18 @@ public class GhazalDetailActivity extends AppCompatActivity {
     private ImageButton playPauseButton;
     private SeekBar audioSeekBar;
     private ProgressBar downloadProgress;
+    private TextView remainingTime;
     private boolean isFavorite = false;
     private String ghazalTitle;
     private MediaPlayer mediaPlayer;
     private Handler handler = new Handler(Looper.getMainLooper());
     private boolean isPlaying = false;
-    private boolean isPrepared = false; // برای بررسی آماده بودن MediaPlayer
+    private boolean isPrepared = false;
 
     // نگاشت عنوان غزل به لینک صوتی Google Drive
     private static final Map<String, String> AUDIO_URLS = new HashMap<String, String>() {{
         put("غزل شماره ۱", "https://drive.google.com/uc?export=download&id=1aGP2JQIOU0r0V_nupxacJBRC7W3IHBJl");
+        put("غزل شماره ۲", "https://drive.google.com/uc?export=download&id=1zjIUShd6E8TQeiR-6DjqA9d4KwvwnQSI");
         // برای غزل‌های دیگر، FILE_ID واقعی را اضافه کنید
     }};
 
@@ -68,6 +70,7 @@ public class GhazalDetailActivity extends AppCompatActivity {
         playPauseButton = findViewById(R.id.play_pause_button);
         audioSeekBar = findViewById(R.id.audio_seekbar);
         downloadProgress = findViewById(R.id.download_progress);
+        remainingTime = findViewById(R.id.remaining_time);
 
         // اتصال RecyclerView
         recyclerView = findViewById(R.id.recyclerView);
@@ -143,9 +146,11 @@ public class GhazalDetailActivity extends AppCompatActivity {
                     downloadProgress.setVisibility(View.GONE);
                     playPauseButton.setEnabled(true);
                     audioSeekBar.setMax(mp.getDuration());
+                    int remaining = mp.getDuration();
+                    remainingTime.setText("-" + formatTime(remaining)); // زمان باقی‌مانده اولیه
                     mp.start();
                     isPlaying = true;
-                    isPrepared = true; // صوت آماده پخش شده است
+                    isPrepared = true;
                     playPauseButton.setImageResource(R.drawable.ic_pause);
                     updateSeekBar();
                 });
@@ -166,7 +171,6 @@ public class GhazalDetailActivity extends AppCompatActivity {
                 Toast.makeText(this, "خطا در دانلود صوت", Toast.LENGTH_SHORT).show();
             }
         } else if (!mediaPlayer.isPlaying() && isPrepared) {
-            // ادامه پخش از موقعیت فعلی
             mediaPlayer.start();
             isPlaying = true;
             playPauseButton.setImageResource(R.drawable.ic_pause);
@@ -188,10 +192,11 @@ public class GhazalDetailActivity extends AppCompatActivity {
             if (mediaPlayer.isPlaying()) {
                 mediaPlayer.pause();
             }
-            mediaPlayer.seekTo(0); // بازگشت به ابتدا
+            mediaPlayer.seekTo(0);
             isPlaying = false;
             playPauseButton.setImageResource(R.drawable.ic_play);
             audioSeekBar.setProgress(0);
+            remainingTime.setText("-" + formatTime(mediaPlayer.getDuration()));
             handler.removeCallbacksAndMessages(null);
         }
     }
@@ -202,6 +207,8 @@ public class GhazalDetailActivity extends AppCompatActivity {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if (fromUser && mediaPlayer != null) {
                     mediaPlayer.seekTo(progress);
+                    int remaining = mediaPlayer.getDuration() - progress;
+                    remainingTime.setText("-" + formatTime(remaining));
                 }
             }
 
@@ -215,9 +222,18 @@ public class GhazalDetailActivity extends AppCompatActivity {
 
     private void updateSeekBar() {
         if (mediaPlayer != null && isPlaying) {
-            audioSeekBar.setProgress(mediaPlayer.getCurrentPosition());
+            int currentPosition = mediaPlayer.getCurrentPosition();
+            audioSeekBar.setProgress(currentPosition);
+            int remaining = mediaPlayer.getDuration() - currentPosition;
+            remainingTime.setText("-" + formatTime(remaining));
             handler.postDelayed(this::updateSeekBar, 1000); // به‌روزرسانی هر ثانیه
         }
+    }
+
+    private String formatTime(int milliseconds) {
+        int seconds = (milliseconds / 1000) % 60;
+        int minutes = (milliseconds / (1000 * 60)) % 60;
+        return String.format("%02d:%02d", minutes, seconds);
     }
 
     @Override

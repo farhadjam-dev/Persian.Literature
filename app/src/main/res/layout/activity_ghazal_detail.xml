@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:text="عنوان غزل"
             android:textSize="20sp"
-            android:textColor="@android:color/white"
+            android:textColor="@android:color/black"
             android:layout_gravity="end"
             android:padding="8dp" />
     </androidx.appcompat.widget.Toolbar>
@@ -49,34 +49,60 @@
         android:id="@+id/media_player_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:background="@color/colorPrimary"
         android:padding="8dp"
-        android:gravity="center_vertical">
+        android:gravity="center_horizontal">
 
-        <!-- دکمه پخش/توقف -->
-        <ImageButton
-            android:id="@+id/play_pause_button"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/ic_play"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Play/Pause" />
+        <!-- دکمه پخش/توقف و انیمیشن دانلود -->
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
-        <!-- نشانگر پیشرفت صوت -->
-        <SeekBar
-            android:id="@+id/audio_seekbar"
-            android:layout_width="0dp"
-            android:layout_weight="1"
+            <!-- دکمه پخش/توقف در وسط -->
+            <ImageButton
+                android:id="@+id/play_pause_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_play"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Play/Pause"
+                android:layout_gravity="center" />
+
+            <!-- انیمیشن دانلود دور دکمه -->
+            <ProgressBar
+                android:id="@+id/download_progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:indeterminateTint="@android:color/white"
+                android:visibility="gone" />
+        </FrameLayout>
+
+        <!-- SeekBar و زمان باقی‌مانده -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="8dp">
 
-        <!-- انیمیشن دانلود -->
-        <ProgressBar
-            android:id="@+id/download_progress"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginStart="8dp"
-            android:visibility="gone" />
+            <!-- نشانگر پیشرفت صوت -->
+            <SeekBar
+                android:id="@+id/audio_seekbar"
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:layout_height="wrap_content" />
+
+            <!-- زمان باقی‌مانده -->
+            <TextView
+                android:id="@+id/remaining_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="-00:00"
+                android:textColor="@android:color/white"
+                android:textSize="12sp"
+                android:layout_marginStart="8dp" />
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>
