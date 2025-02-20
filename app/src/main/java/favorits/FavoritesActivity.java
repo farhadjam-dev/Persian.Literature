@@ -1,5 +1,6 @@
 package favorits;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -14,7 +15,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import android.content.SharedPreferences;
 
 import com.jamlab.adab.R;
 
@@ -45,7 +45,25 @@ public class FavoritesActivity extends AppCompatActivity {
         // بارگذاری غزلیات علاقه‌مندی
         favoriteGhazals = loadFavoriteGhazals();
 
+        // تنظیم آداپتر
+        favoriteAdapter = new FavoriteAdapter(this, favoriteGhazals);
+        recyclerView.setAdapter(favoriteAdapter);
+
         // بررسی وضعیت لیست
+        updateFavoritesVisibility();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // به‌روزرسانی لیست علاقه‌مندی‌ها هنگام بازگشت به این اکتیویتی
+        favoriteGhazals = loadFavoriteGhazals();
+        favoriteAdapter.updateFavorites(favoriteGhazals);
+        updateFavoritesVisibility();
+    }
+
+    // به‌روزرسانی نمایش بر اساس وضعیت لیست
+    private void updateFavoritesVisibility() {
         if (favoriteGhazals.isEmpty()) {
             recyclerView.setVisibility(View.GONE);
             emptyTextView.setVisibility(View.VISIBLE);
@@ -53,10 +71,6 @@ public class FavoritesActivity extends AppCompatActivity {
             recyclerView.setVisibility(View.VISIBLE);
             emptyTextView.setVisibility(View.GONE);
         }
-
-        // تنظیم آداپتر
-        favoriteAdapter = new FavoriteAdapter(this, favoriteGhazals);
-        recyclerView.setAdapter(favoriteAdapter);
     }
 
     // بارگذاری غزلیات علاقه‌مندی

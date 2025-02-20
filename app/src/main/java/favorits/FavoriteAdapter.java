@@ -52,6 +52,12 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
         return favoriteGhazals.size();
     }
 
+    // متد برای به‌روزرسانی لیست علاقه‌مندی‌ها
+    public void updateFavorites(List<Ghazal> newFavoriteGhazals) {
+        this.favoriteGhazals = newFavoriteGhazals;
+        notifyDataSetChanged();
+    }
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView poemTitle, poemExcerpt;
 

@@ -97,28 +97,27 @@ public class GhazalDetailActivity extends AppCompatActivity {
         // مدیریت علاقه‌مندی‌ها
         SharedPreferences sharedPreferences = getSharedPreferences("Favorites", MODE_PRIVATE);
         Set<String> favorites = sharedPreferences.getStringSet("favorites", new HashSet<>());
-        if (favorites.contains(ghazalTitle)) {
-            isFavorite = true;
-            favoriteButton.setImageResource(R.drawable.ic_star_filled);
-        } else {
-            favoriteButton.setImageResource(R.drawable.ic_star_outline);
-        }
+        Set<String> mutableFavorites = new HashSet<>(favorites); // کپی قابل تغییر
+
+        // بررسی وضعیت علاقه‌مندی برای غزل فعلی
+        isFavorite = mutableFavorites.contains(ghazalTitle);
+        favoriteButton.setImageResource(isFavorite ? R.drawable.ic_star_filled : R.drawable.ic_star_outline);
 
         favoriteButton.setOnClickListener(v -> {
             SharedPreferences.Editor editor = sharedPreferences.edit();
             if (isFavorite) {
                 isFavorite = false;
+                mutableFavorites.remove(ghazalTitle);
                 favoriteButton.setImageResource(R.drawable.ic_star_outline);
-                favorites.remove(ghazalTitle);
                 Toast.makeText(this, "از علاقه‌مندی‌ها حذف شد", Toast.LENGTH_SHORT).show();
             } else {
                 isFavorite = true;
+                mutableFavorites.add(ghazalTitle);
                 favoriteButton.setImageResource(R.drawable.ic_star_filled);
-                favorites.add(ghazalTitle);
                 Toast.makeText(this, "به علاقه‌مندی‌ها اضافه شد", Toast.LENGTH_SHORT).show();
             }
-            editor.putStringSet("favorites", favorites);
-            editor.apply();
+            editor.putStringSet("favorites", mutableFavorites);
+            editor.apply(); // ذخیره تغییرات
         });
 
         // تنظیم دکمه Play/Pause
@@ -143,16 +142,13 @@ public class GhazalDetailActivity extends AppCompatActivity {
         File cacheFile = new File(getCacheDir(), ghazalTitle.replace(" ", "_") + ".mp3");
 
         if (mediaPlayer != null && !mediaPlayer.isPlaying()) {
-            // اگر MediaPlayer وجود دارد و پخش نمی‌شود، از موقعیت فعلی ادامه بده
             mediaPlayer.start();
             isPlaying = true;
             playPauseButton.setImageResource(R.drawable.ic_pause);
             updateSeekBar();
         } else if (cacheFile.exists()) {
-            // اگر فایل در کش موجود است، از کش پخش کن
             playFromCache(cacheFile);
         } else {
-            // دانلود و پخش خودکار پس از دانلود
             manageCacheSpace();
             downloadAndPlay(audioUrl, cacheFile);
         }
@@ -229,7 +225,7 @@ public class GhazalDetailActivity extends AppCompatActivity {
                 runOnUiThread(() -> {
                     downloadProgress.setVisibility(View.GONE);
                     playPauseButton.setEnabled(true);
-                    playFromCache(cacheFile); // پخش خودکار پس از دانلود
+                    playFromCache(cacheFile);
                 });
             } catch (IOException e) {
                 e.printStackTrace();
@@ -253,10 +249,7 @@ public class GhazalDetailActivity extends AppCompatActivity {
         }
 
         if (totalSize >= MAX_CACHE_SIZE) {
-            // مرتب‌سازی فایل‌ها بر اساس زمان آخرین تغییر (قدیمی‌ترین اول)
             Arrays.sort(files, Comparator.comparingLong(File::lastModified));
-
-            // حذف قدیمی‌ترین فایل‌ها تا زمانی که فضای کافی ایجاد شود
             for (File file : files) {
                 if (totalSize < MAX_CACHE_SIZE) break;
                 long fileSize = file.length();
