@@ -2,6 +2,8 @@ package com.jamlab.adab;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -9,6 +11,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -33,6 +36,10 @@ public class MainActivity extends AppCompatActivity {
     private EditText searchField;
     private ImageView searchIcon, favoriteIcon, menuIcon;
     private List<Poem> poems;
+
+    // متغیرها برای مدیریت دوبار فشار Back
+    private boolean doubleBackToExitPressedOnce = false;
+    private static final int DOUBLE_BACK_DELAY = 2000; // زمان 2 ثانیه برای فشار دوم
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -199,7 +206,16 @@ public class MainActivity extends AppCompatActivity {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            if (doubleBackToExitPressedOnce) {
+                super.onBackPressed(); // خروج از برنامه
+                return;
+            }
+
+            this.doubleBackToExitPressedOnce = true;
+            Toast.makeText(this, "برای خروج دو بار ضربه بزنید", Toast.LENGTH_SHORT).show();
+
+            // ریست کردن وضعیت پس از 2 ثانیه اگر فشار دوم انجام نشود
+            new Handler(Looper.getMainLooper()).postDelayed(() -> doubleBackToExitPressedOnce = false, DOUBLE_BACK_DELAY);
         }
     }
 }
