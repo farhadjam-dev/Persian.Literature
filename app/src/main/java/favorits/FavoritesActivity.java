@@ -33,7 +33,10 @@ public class FavoritesActivity extends AppCompatActivity {
         // تنظیم Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false); // حذف دکمه Back
+            getSupportActionBar().setDisplayShowTitleEnabled(false); // حذف عنوان پیش‌فرض
+        }
 
         // اتصال RecyclerView
         recyclerView = findViewById(R.id.favorites_recycler_view);

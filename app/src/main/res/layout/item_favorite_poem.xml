@@ -1,8 +1,9 @@
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="8dp"
+    android:layout_margin="4dp"
     android:elevation="4dp">
 
     <LinearLayout
@@ -19,7 +20,10 @@
             android:text="عنوان غزل"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:textColor="@android:color/black" />
+            android:textColor="@android:color/black"
+            android:layout_gravity="end"
+        android:gravity="right"
+        android:textAlignment="gravity" />
 
         <!-- بخشی از شعر -->
         <TextView
@@ -29,6 +33,9 @@
             android:text="بخشی از شعر..."
             android:textSize="14sp"
             android:textColor="@android:color/darker_gray"
-            android:paddingTop="8dp" />
+            android:paddingTop="8dp"
+            android:layout_gravity="end"
+        android:gravity="right"
+        android:textAlignment="gravity" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>
