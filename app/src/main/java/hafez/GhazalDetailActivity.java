@@ -6,8 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import android.view.View;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import com.jamlab.adab.R;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,7 +35,14 @@ public class GhazalDetailActivity extends AppCompatActivity {
         // تنظیم Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        // غیرفعال کردن نمایش عنوان پیش‌فرض (نام نرم‌افزار)
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
+
+        // پیدا کردن TextView عنوان در Toolbar و تنظیم آن
+        TextView toolbarTitle = findViewById(R.id.toolbar_title);
 
         // اتصال RecyclerView
         recyclerView = findViewById(R.id.recyclerView);
@@ -44,7 +51,7 @@ public class GhazalDetailActivity extends AppCompatActivity {
         // دریافت عنوان غزل از Intent
         ghazalTitle = getIntent().getStringExtra("ghazalTitle");
         if (ghazalTitle != null) {
-            getSupportActionBar().setTitle(ghazalTitle); // تنظیم عنوان Toolbar
+            toolbarTitle.setText(ghazalTitle); // تنظیم عنوان در TextView سفارشی
         }
 
         // بارگذاری ابیات غزل
@@ -54,7 +61,7 @@ public class GhazalDetailActivity extends AppCompatActivity {
         verseAdapter = new VerseAdapter(verseList);
         recyclerView.setAdapter(verseAdapter);
 
-        // اتصال دکمه علاقه‌مندی
+        // اتصال دکمه ستاره
         favoriteButton = findViewById(R.id.favorite_button);
         SharedPreferences sharedPreferences = getSharedPreferences("Favorites", MODE_PRIVATE);
         Set<String> favorites = sharedPreferences.getStringSet("favorites", new HashSet<>());
@@ -112,11 +119,5 @@ public class GhazalDetailActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return verseList;
-    }
-
-    @Override
-    public boolean onSupportNavigateUp() {
-        finish();
-        return true;
     }
 }
