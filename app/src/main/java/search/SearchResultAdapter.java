@@ -1,5 +1,7 @@
 package search;
 
+import android.text.SpannableString;
+import android.text.style.BackgroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,7 +45,20 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
 
         // پیدا کردن بیتی که شامل عبارت جست‌وجو است
         String matchingVerse = findMatchingVerse(poem.getText(), searchQuery);
-        holder.verseTextView.setText(matchingVerse);
+
+        // هایلایت کردن عبارت جست‌وجو در بیت مرتبط
+        SpannableString spannableString = new SpannableString(matchingVerse);
+        int startIndex = matchingVerse.indexOf(searchQuery);
+        if (startIndex != -1) { // اگر عبارت جست‌وجو در بیت پیدا شد
+            int endIndex = startIndex + searchQuery.length();
+            spannableString.setSpan(
+                    new BackgroundColorSpan(0xFFFFFF00), // رنگ زرد برای هایلایت
+                    startIndex,
+                    endIndex,
+                    SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE
+            );
+        }
+        holder.verseTextView.setText(spannableString);
 
         // تنظیم کلیک روی کارت
         holder.cardView.setOnClickListener(v -> onItemClickListener.onItemClick(poem));

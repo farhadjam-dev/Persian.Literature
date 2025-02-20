@@ -24,7 +24,10 @@ public class SearchResultsActivity extends AppCompatActivity {
         // تنظیم Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false); // حذف دکمه Back
+            getSupportActionBar().setDisplayShowTitleEnabled(false); // حذف عنوان پیش‌فرض
+        }
 
         recyclerView = findViewById(R.id.search_results_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
