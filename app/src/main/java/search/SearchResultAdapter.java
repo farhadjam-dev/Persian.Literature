@@ -7,23 +7,23 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.jamlab.adab.Poem;
 import com.jamlab.adab.R;
-
 import java.util.List;
 
 public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapter.ViewHolder> {
 
     private List<Poem> searchResults;
     private OnItemClickListener onItemClickListener;
+    private String searchQuery; // عبارت جست‌وجو
 
     public interface OnItemClickListener {
         void onItemClick(Poem poem);
     }
 
-    public SearchResultAdapter(List<Poem> searchResults, OnItemClickListener onItemClickListener) {
+    public SearchResultAdapter(List<Poem> searchResults, String searchQuery, OnItemClickListener onItemClickListener) {
         this.searchResults = searchResults;
+        this.searchQuery = searchQuery;
         this.onItemClickListener = onItemClickListener;
     }
 
@@ -37,7 +37,15 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Poem poem = searchResults.get(position);
-        holder.textView.setText(poem.getText());
+
+        // تنظیم عنوان غزل
+        holder.titleTextView.setText(poem.getTitle());
+
+        // پیدا کردن بیتی که شامل عبارت جست‌وجو است
+        String matchingVerse = findMatchingVerse(poem.getText(), searchQuery);
+        holder.verseTextView.setText(matchingVerse);
+
+        // تنظیم کلیک روی کارت
         holder.cardView.setOnClickListener(v -> onItemClickListener.onItemClick(poem));
     }
 
@@ -46,14 +54,27 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
         return searchResults.size();
     }
 
+    // یافتن بیت مرتبط با عبارت جست‌وجو
+    private String findMatchingVerse(String poemText, String query) {
+        String[] verses = poemText.split("\n"); // فرض می‌کنیم بیت‌ها با خط جدید جدا شده‌اند
+        for (String verse : verses) {
+            if (verse.contains(query)) {
+                return verse.trim();
+            }
+        }
+        return poemText.split("\n")[0]; // در صورت عدم یافتن، بیت اول را برگردان
+    }
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
         CardView cardView;
-        TextView textView;
+        TextView titleTextView;
+        TextView verseTextView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             cardView = itemView.findViewById(R.id.card_view);
-            textView = itemView.findViewById(R.id.poem_text);
+            titleTextView = itemView.findViewById(R.id.poem_title);
+            verseTextView = itemView.findViewById(R.id.poem_verse);
         }
     }
 }

@@ -16,12 +16,10 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.android.material.navigation.NavigationView;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-
 import favorits.FavoritesActivity;
 import hafez.HafezActivity;
 import search.SearchResultsActivity;
@@ -34,23 +32,19 @@ public class MainActivity extends AppCompatActivity {
     private NavigationView navigationView;
     private EditText searchField;
     private ImageView searchIcon, favoriteIcon, menuIcon;
-    private List<Poem> poems; // لیست اشعار با اطلاعات کامل
+    private List<Poem> poems;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // اتصال Toolbar به layout
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        // حذف عنوان از Toolbar
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayShowTitleEnabled(false); // غیرفعال کردن نمایش عنوان
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
 
-        // اتصال عناصر UI
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         searchField = findViewById(R.id.search_field);
@@ -58,144 +52,96 @@ public class MainActivity extends AppCompatActivity {
         favoriteIcon = findViewById(R.id.favorite_icon);
         menuIcon = findViewById(R.id.menu_icon);
 
-        // مدیریت کلیک روی آیکون منوی کشویی
         menuIcon.setOnClickListener(v -> drawerLayout.openDrawer(GravityCompat.START));
 
-        // مدیریت باز شدن صفحه اصلی وقتی منو بسته می‌شود
         drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {}
-
             @Override
             public void onDrawerOpened(@NonNull View drawerView) {}
-
             @Override
-            public void onDrawerClosed(@NonNull View drawerView) {
-                // عملیاتی که باید بعد از بستن منو انجام شود
-            }
-
+            public void onDrawerClosed(@NonNull View drawerView) {}
             @Override
             public void onDrawerStateChanged(int newState) {}
         });
 
-        // تنظیم RecyclerView
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // ایجاد لیست شاعران
         List<Poet> poetList = new ArrayList<>();
         poetList.add(new Poet("حافظ", R.drawable.hafez));
         poetList.add(new Poet("سعدی", R.drawable.saadi));
         poetList.add(new Poet("مولوی", R.drawable.molavi));
 
-        // ایجاد Adapter و تنظیم listener برای کلیک روی آیتم‌ها
-        poetAdapter = new PoetAdapter(poetList, new PoetAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(Poet poet) {
-                // بررسی نام شاعر و انتقال به صفحه مربوطه
-                if (poet.getName().equals("حافظ")) {
-                    Intent intent = new Intent(MainActivity.this, HafezActivity.class);
-                    startActivity(intent);
-                } else if (poet.getName().equals("سعدی")) {
-                    Intent intent = new Intent(MainActivity.this, SaadiActivity.class);
-                    startActivity(intent);
-                } else if (poet.getName().equals("مولوی")) {
-                    Intent intent = new Intent(MainActivity.this, MolaviActivity.class);
-                    startActivity(intent);
-                }
+        poetAdapter = new PoetAdapter(poetList, poet -> {
+            if (poet.getName().equals("حافظ")) {
+                startActivity(new Intent(MainActivity.this, HafezActivity.class));
+            } else if (poet.getName().equals("سعدی")) {
+                startActivity(new Intent(MainActivity.this, SaadiActivity.class));
+            } else if (poet.getName().equals("مولوی")) {
+                startActivity(new Intent(MainActivity.this, MolaviActivity.class));
             }
         });
 
-        // مدیریت کلیک روی آیکون علاقه‌مندی‌ها
-        favoriteIcon.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, FavoritesActivity.class);
-            startActivity(intent);
-        });
-
-        // تنظیم Adapter برای RecyclerView
+        favoriteIcon.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, FavoritesActivity.class)));
         recyclerView.setAdapter(poetAdapter);
 
-        // خواندن داده‌ها از فایل JSON
         InputStream inputStream = getResources().openRawResource(R.raw.hafez_ghazals);
         poems = PoemLoader.loadPoemsFromJson(inputStream);
 
-        // مدیریت انتخاب گزینه‌های منوی کشویی
         navigationView.setNavigationItemSelectedListener(item -> {
             int id = item.getItemId();
-
-            // بررسی گزینه انتخابی
             if (id == R.id.nav_favorites) {
-                // انتقال به صفحه علاقه‌مندی‌ها
-                Intent intent = new Intent(MainActivity.this, FavoritesActivity.class);
-                startActivity(intent);
-                drawerLayout.closeDrawer(GravityCompat.START); // بستن منو بعد از انتخاب
+                startActivity(new Intent(MainActivity.this, FavoritesActivity.class));
+                drawerLayout.closeDrawer(GravityCompat.START);
             } else if (id == R.id.nav_settings) {
-                // انتقال به صفحه تنظیمات
-                Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
-                startActivity(intent);
-                drawerLayout.closeDrawer(GravityCompat.START); // بستن منو بعد از انتخاب
+                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+                drawerLayout.closeDrawer(GravityCompat.START);
             }
-
-            return true; // نشان می‌دهد که گزینه پردازش شده است
+            return true;
         });
 
-        // مدیریت کلیک روی آیکون جست‌وجو
         searchIcon.setOnClickListener(v -> {
             LinearLayout searchLayout = findViewById(R.id.search_layout);
             if (searchLayout.getVisibility() == View.GONE) {
-                // نمایش فیلد جست‌جو با انیمیشن Slide-In
                 Animation slideIn = AnimationUtils.loadAnimation(this, R.anim.slide_in);
                 searchLayout.setVisibility(View.VISIBLE);
                 searchLayout.startAnimation(slideIn);
-
-                // محو کردن آیکون‌های دیگر با انیمیشن Fade-Out
                 Animation fadeOut = AnimationUtils.loadAnimation(this, R.anim.fade_out);
                 fadeOut.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {}
-
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
+                    @Override public void onAnimationStart(Animation animation) {}
+                    @Override public void onAnimationEnd(Animation animation) {
                         favoriteIcon.setVisibility(View.GONE);
                         menuIcon.setVisibility(View.GONE);
                     }
-
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {}
+                    @Override public void onAnimationRepeat(Animation animation) {}
                 });
                 favoriteIcon.startAnimation(fadeOut);
                 menuIcon.startAnimation(fadeOut);
             }
         });
 
-        // مدیریت کلیک روی دکمه برگشت
         ImageView backButton = findViewById(R.id.back_button);
         backButton.setOnClickListener(v -> {
             LinearLayout searchLayout = findViewById(R.id.search_layout);
             if (searchLayout.getVisibility() == View.VISIBLE) {
-                // مخفی کردن فیلد جست‌جو با انیمیشن Slide-Out
                 Animation slideOut = AnimationUtils.loadAnimation(this, R.anim.slide_out);
                 searchLayout.startAnimation(slideOut);
                 searchLayout.setVisibility(View.GONE);
-
-                // نمایش آیکون‌های دیگر با انیمیشن Fade-In
                 Animation fadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in);
                 favoriteIcon.setVisibility(View.VISIBLE);
                 menuIcon.setVisibility(View.VISIBLE);
                 favoriteIcon.startAnimation(fadeIn);
                 menuIcon.startAnimation(fadeIn);
-
-                // پاک کردن متن جست‌جو
                 searchField.setText("");
             }
         });
 
-        // مدیریت کلیک روی آیکون داخل فیلد جست‌جو
         searchField.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_UP) {
-                int padding = searchField.getPaddingLeft(); // فاصله از سمت چپ
-                int iconWidth = searchField.getCompoundDrawables()[0].getBounds().width(); // عرض آیکون
-                float touchX = event.getX(); // مختصات X کلیک
+                int padding = searchField.getPaddingLeft();
+                int iconWidth = searchField.getCompoundDrawables()[0].getBounds().width();
+                float touchX = event.getX();
                 if (touchX <= (padding + iconWidth)) {
                     performSearchAndNavigate();
                     return true;
@@ -204,7 +150,6 @@ public class MainActivity extends AppCompatActivity {
             return false;
         });
 
-        // مدیریت کلید Enter در کیبورد
         searchField.setOnEditorActionListener((v, actionId, event) -> {
             performSearchAndNavigate();
             return true;
@@ -214,21 +159,16 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        // بررسی وضعیت فیلد جست‌جو و مخفی کردن آن در صورت نمایش
         LinearLayout searchLayout = findViewById(R.id.search_layout);
         if (searchLayout.getVisibility() == View.VISIBLE) {
             Animation slideOut = AnimationUtils.loadAnimation(this, R.anim.slide_out);
             searchLayout.startAnimation(slideOut);
-            searchLayout.setVisibility(View.GONE); // مخفی کردن فیلد جست‌جو
-
-            // نمایش آیکون‌های دیگر با انیمیشن Fade-In
+            searchLayout.setVisibility(View.GONE);
             Animation fadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in);
             favoriteIcon.setVisibility(View.VISIBLE);
             menuIcon.setVisibility(View.VISIBLE);
             favoriteIcon.startAnimation(fadeIn);
             menuIcon.startAnimation(fadeIn);
-
-            // پاک کردن متن جست‌جو
             searchField.setText("");
         }
     }
@@ -237,9 +177,9 @@ public class MainActivity extends AppCompatActivity {
         String query = searchField.getText().toString().trim();
         if (!query.isEmpty()) {
             List<Poem> searchResults = performSearch(poems, query);
-            // انتقال نتایج جست‌وجو به صفحه جدید
             Intent intent = new Intent(MainActivity.this, SearchResultsActivity.class);
             intent.putParcelableArrayListExtra("search_results", new ArrayList<>(searchResults));
+            intent.putExtra("search_query", query); // ارسال عبارت جست‌وجو
             startActivity(intent);
         }
     }
