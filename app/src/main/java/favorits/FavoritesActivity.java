@@ -1,4 +1,4 @@
-package com.jamlab.adab;
+package favorits;
 
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,6 +15,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import android.content.SharedPreferences;
+
+import com.jamlab.adab.R;
 
 public class FavoritesActivity extends AppCompatActivity {
 

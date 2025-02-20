@@ -1,4 +1,4 @@
-package com.jamlab.adab;
+package favorits;
 
 public class Verse {
     private String text;

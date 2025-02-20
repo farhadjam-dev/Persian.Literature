@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import favorits.FavoritesActivity;
 import hafez.HafezActivity;
 import search.SearchResultsActivity;
 

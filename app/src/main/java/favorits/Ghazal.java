@@ -1,4 +1,4 @@
-package com.jamlab.adab;
+package favorits;
 
 import java.util.List;
 
