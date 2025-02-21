@@ -1,10 +1,8 @@
 package hafez;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import com.jamlab.adab.R;
 
 public class MasnaviListActivity extends AppCompatActivity {
@@ -12,21 +10,10 @@ public class MasnaviListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_masnavi_list);
-
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowTitleEnabled(false);
-        }
-
-        toolbar.findViewById(R.id.toolbar_title).setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public boolean onSupportNavigateUp() {
-        finish();
-        return true;
+        // به جای تنظیم محتوا، مستقیم به صفحه جزییات هدایت می‌شه
+        Intent intent = new Intent(MasnaviListActivity.this, MasnaviDetailActivity.class);
+        intent.putExtra("masnaviTitle", "مثنوی حافظ"); // عنوان ثابت برای مثنوی
+        startActivity(intent);
+        finish(); // این اکتیویتی بسته می‌شه تا کاربر بهش برنگرده
     }
 }
