@@ -17,6 +17,9 @@
         <activity android:name="hafez.GhasaidListActivity"
             android:exported="false"/>
 
+        <activity android:name="hafez.GhitaatDetailActivity"
+            android:exported="false"/>
+
         <activity android:name="hafez.GhitaatListActivity"
             android:exported="false"/>
 

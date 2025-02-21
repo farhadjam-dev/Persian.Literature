@@ -24,13 +24,10 @@
             android:layout_gravity="center" />
     </androidx.appcompat.widget.Toolbar>
 
-    <!-- محتوای موقت -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="قطعات حافظ (به‌زودی طراحی می‌شود)"
-        android:textSize="18sp"
-        android:textColor="@color/textColor"
-        android:layout_gravity="center"
-        android:padding="16dp" />
+    <!-- RecyclerView برای نمایش لیست قطعات -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="8dp" />
 </LinearLayout>
