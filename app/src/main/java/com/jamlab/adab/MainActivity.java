@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -36,10 +37,9 @@ public class MainActivity extends AppCompatActivity {
     private EditText searchField;
     private ImageView searchIcon, favoriteIcon, menuIcon;
     private List<Poem> poems;
-
-    // متغیرها برای مدیریت دوبار فشار Back
     private boolean doubleBackToExitPressedOnce = false;
-    private static final int DOUBLE_BACK_DELAY = 2000; // زمان 2 ثانیه برای فشار دوم
+    private static final int DOUBLE_BACK_DELAY = 2000;
+    private boolean isSearchInProgress = false; // متغیر برای جلوگیری از جست‌وجوی تکراری
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,14 +62,10 @@ public class MainActivity extends AppCompatActivity {
         menuIcon.setOnClickListener(v -> drawerLayout.openDrawer(GravityCompat.START));
 
         drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
-            @Override
-            public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {}
-            @Override
-            public void onDrawerOpened(@NonNull View drawerView) {}
-            @Override
-            public void onDrawerClosed(@NonNull View drawerView) {}
-            @Override
-            public void onDrawerStateChanged(int newState) {}
+            @Override public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {}
+            @Override public void onDrawerOpened(@NonNull View drawerView) {}
+            @Override public void onDrawerClosed(@NonNull View drawerView) {}
+            @Override public void onDrawerStateChanged(int newState) {}
         });
 
         recyclerView = findViewById(R.id.recyclerView);
@@ -125,6 +121,8 @@ public class MainActivity extends AppCompatActivity {
                 });
                 favoriteIcon.startAnimation(fadeOut);
                 menuIcon.startAnimation(fadeOut);
+            } else {
+                performSearchAndNavigate(); // جست‌وجو با کلیک روی آیکون وقتی نوار بازه
             }
         });
 
@@ -149,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
                 int padding = searchField.getPaddingLeft();
                 int iconWidth = searchField.getCompoundDrawables()[0].getBounds().width();
                 float touchX = event.getX();
-                if (touchX <= (padding + iconWidth)) {
+                if (touchX <= (padding + iconWidth) && !isSearchInProgress) {
                     performSearchAndNavigate();
                     return true;
                 }
@@ -158,8 +156,13 @@ public class MainActivity extends AppCompatActivity {
         });
 
         searchField.setOnEditorActionListener((v, actionId, event) -> {
-            performSearchAndNavigate();
-            return true;
+            if ((event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER) || actionId == android.view.inputmethod.EditorInfo.IME_ACTION_SEARCH) {
+                if (!isSearchInProgress) {
+                    performSearchAndNavigate();
+                }
+                return true;
+            }
+            return false;
         });
     }
 
@@ -181,24 +184,35 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void performSearchAndNavigate() {
+        if (isSearchInProgress) return; // جلوگیری از اجرای همزمان
+
         String query = searchField.getText().toString().trim();
         if (!query.isEmpty()) {
+            isSearchInProgress = true; // قفل کردن تا پایان جست‌وجو
             List<Poem> searchResults = performSearch(poems, query);
             Intent intent = new Intent(MainActivity.this, SearchResultsActivity.class);
             intent.putParcelableArrayListExtra("search_results", new ArrayList<>(searchResults));
-            intent.putExtra("search_query", query); // ارسال عبارت جست‌وجو
+            intent.putExtra("search_query", query);
             startActivity(intent);
+            // ریست کردن قفل بعد از یه تأخیر کوتاه
+            new Handler(Looper.getMainLooper()).postDelayed(() -> isSearchInProgress = false, 500);
         }
     }
 
     private List<Poem> performSearch(List<Poem> poems, String query) {
         List<Poem> results = new ArrayList<>();
+        String normalizedQuery = normalizeText(query);
         for (Poem poem : poems) {
-            if (poem.getText().contains(query)) {
+            String normalizedPoemText = normalizeText(poem.getText());
+            if (normalizedPoemText.contains(normalizedQuery)) {
                 results.add(poem);
             }
         }
         return results;
+    }
+
+    private String normalizeText(String text) {
+        return text.replaceAll("[\\u064B-\\u065F]", "");
     }
 
     @Override
@@ -207,14 +221,11 @@ public class MainActivity extends AppCompatActivity {
             drawerLayout.closeDrawer(GravityCompat.START);
         } else {
             if (doubleBackToExitPressedOnce) {
-                super.onBackPressed(); // خروج از برنامه
+                super.onBackPressed();
                 return;
             }
-
             this.doubleBackToExitPressedOnce = true;
             Toast.makeText(this, "برای خروج دو بار ضربه بزنید", Toast.LENGTH_SHORT).show();
-
-            // ریست کردن وضعیت پس از 2 ثانیه اگر فشار دوم انجام نشود
             new Handler(Looper.getMainLooper()).postDelayed(() -> doubleBackToExitPressedOnce = false, DOUBLE_BACK_DELAY);
         }
     }

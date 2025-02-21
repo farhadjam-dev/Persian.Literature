@@ -11,6 +11,8 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.jamlab.adab.Poem;
 import com.jamlab.adab.R;
+
+import java.util.Arrays;
 import java.util.List;
 
 public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapter.ViewHolder> {
@@ -48,15 +50,21 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
 
         // هایلایت کردن عبارت جست‌وجو در بیت مرتبط
         SpannableString spannableString = new SpannableString(matchingVerse);
-        int startIndex = matchingVerse.indexOf(searchQuery);
-        if (startIndex != -1) { // اگر عبارت جست‌وجو در بیت پیدا شد
-            int endIndex = startIndex + searchQuery.length();
-            spannableString.setSpan(
-                    new BackgroundColorSpan(0xFFFFFF00), // رنگ زرد برای هایلایت
-                    startIndex,
-                    endIndex,
-                    SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE
-            );
+        String normalizedVerse = normalizeText(matchingVerse);
+        String normalizedQuery = normalizeText(searchQuery);
+        List<String> queryParts = Arrays.asList(normalizedQuery.split("\\s+")); // تقسیم عبارت جست‌وجو به بخش‌ها
+        for (String part : queryParts) {
+            int startIndex = normalizedVerse.indexOf(part);
+            while (startIndex != -1) { // هایلایت همه رخدادها
+                int endIndex = startIndex + part.length();
+                spannableString.setSpan(
+                        new BackgroundColorSpan(0xFFFFFF00), // رنگ زرد برای هایلایت
+                        startIndex,
+                        endIndex,
+                        SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE
+                );
+                startIndex = normalizedVerse.indexOf(part, endIndex); // جست‌وجوی رخداد بعدی
+            }
         }
         holder.verseTextView.setText(spannableString);
 
@@ -71,13 +79,29 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
 
     // یافتن بیت مرتبط با عبارت جست‌وجو
     private String findMatchingVerse(String poemText, String query) {
-        String[] verses = poemText.split("\n"); // فرض می‌کنیم بیت‌ها با خط جدید جدا شده‌اند
-        for (String verse : verses) {
-            if (verse.contains(query)) {
-                return verse.trim();
+        String normalizedPoemText = normalizeText(poemText);
+        String normalizedQuery = normalizeText(query);
+        List<String> queryParts = Arrays.asList(normalizedQuery.split("\\s+"));
+        String[] verses = poemText.split("\n");
+        String[] normalizedVerses = normalizedPoemText.split("\n");
+        for (int i = 0; i < normalizedVerses.length; i++) {
+            boolean matchesAll = true;
+            for (String part : queryParts) {
+                if (!normalizedVerses[i].contains(part)) {
+                    matchesAll = false;
+                    break;
+                }
+            }
+            if (matchesAll) {
+                return verses[i].trim(); // برگرداندن بیت اصلی با اعراب
             }
         }
-        return poemText.split("\n")[0]; // در صورت عدم یافتن، بیت اول را برگردان
+        return verses[0]; // در صورت عدم یافتن، بیت اول
+    }
+
+    // تابع برای حذف اعراب از متن
+    private String normalizeText(String text) {
+        return text.replaceAll("[\\u064B-\\u065F]", ""); // حذف تمام اعراب یونی‌کد
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

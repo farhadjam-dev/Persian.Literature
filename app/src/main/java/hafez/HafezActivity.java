@@ -20,6 +20,7 @@ import favorits.FavoritesActivity;
 import search.SearchResultsActivity;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class HafezActivity extends AppCompatActivity {
@@ -81,19 +82,7 @@ public class HafezActivity extends AppCompatActivity {
                     public void onAnimationRepeat(Animation animation) {}
                 });
             } else {
-                // مخفی کردن فیلد جست‌وجو
-                Animation slideOut = AnimationUtils.loadAnimation(this, R.anim.slide_out_right);
-                searchField.startAnimation(slideOut);
-                searchField.setVisibility(View.GONE);
-                searchButton.setImageResource(R.drawable.ic_search);
-                searchField.setText("");
-
-                // نمایش دوباره آیکون علاقه‌مندی‌ها و عنوان
-                Animation fadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in);
-                favoriteButton.setVisibility(View.VISIBLE);
-                toolbarTitle.setVisibility(View.VISIBLE);
-                favoriteButton.startAnimation(fadeIn);
-                toolbarTitle.startAnimation(fadeIn);
+                performSearchAndNavigate();
             }
         });
 
@@ -177,11 +166,29 @@ public class HafezActivity extends AppCompatActivity {
     // متد جست‌وجو در لیست اشعار
     private List<Poem> performSearch(List<Poem> poems, String query) {
         List<Poem> results = new ArrayList<>();
+        // پاکسازی عبارت جست‌وجو از اعراب و تقسیم به بخش‌ها
+        String normalizedQuery = normalizeText(query);
+        List<String> queryParts = Arrays.asList(normalizedQuery.split("\\s+")); // تقسیم با فاصله
+
         for (Poem poem : poems) {
-            if (poem.getText().contains(query)) {
+            String normalizedPoemText = normalizeText(poem.getText());
+            boolean matchesAll = true;
+            // چک کردن اینکه آیا همه بخش‌های عبارت جست‌وجو در متن هستن
+            for (String part : queryParts) {
+                if (!normalizedPoemText.contains(part)) {
+                    matchesAll = false;
+                    break;
+                }
+            }
+            if (matchesAll) {
                 results.add(poem);
             }
         }
         return results;
+    }
+
+    // تابع برای حذف اعراب از متن
+    private String normalizeText(String text) {
+        return text.replaceAll("[\\u064B-\\u065F]", ""); // حذف تمام اعراب یونی‌کد
     }
 }
