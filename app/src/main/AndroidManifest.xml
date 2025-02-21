@@ -104,6 +104,8 @@
             android:exported="false"/>
         <activity android:name="saadi.SaadiGhazalDetailActivity"
             android:exported="false"/>
+        <activity android:name="saadi.SaadiRubaiyatDetailActivity"
+            android:exported="false"/>
 
 
 
