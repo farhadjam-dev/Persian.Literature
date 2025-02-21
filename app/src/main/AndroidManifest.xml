@@ -35,6 +35,11 @@
         <activity android:name="favorits.FavoritesActivity"
             android:exported="false"/>
 
+        <activity android:name="hafez.RubaiyatDetailActivity"
+            android:exported="false"/>
+
+
+
 
         <activity android:name=".PoemDetailActivity"
             android:exported="false"/>
