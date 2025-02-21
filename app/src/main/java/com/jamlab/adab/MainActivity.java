@@ -27,6 +27,7 @@ import java.util.Arrays;
 import java.util.List;
 import favorits.FavoritesActivity;
 import hafez.HafezActivity;
+import saadi.SaadiActivity;
 import search.SearchResultsActivity;
 
 public class MainActivity extends AppCompatActivity {

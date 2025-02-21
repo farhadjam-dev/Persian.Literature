@@ -78,8 +78,22 @@
             android:name=".MainActivity"
             android:exported="false" />
         <activity
-            android:name=".SaadiActivity"
+            android:name="saadi.SaadiActivity"
             android:exported="false" />
+        <activity android:name="saadi.DivanListActivity"
+            android:exported="false"/>
+        <activity android:name="saadi.BustanDetailActivity"
+            android:exported="false"/>
+        <activity android:name="saadi.GulistanDetailActivity"
+            android:exported="false"/>
+        <activity android:name="saadi.RasaelDetailActivity"
+            android:exported="false"/>
+        <activity android:name="saadi.MajalesDetailActivity"
+            android:exported="false"/>
+        <activity android:name="saadi.MavaezListActivity"
+            android:exported="false"/>
+
+
         <activity
             android:name=".MolaviActivity"
             android:exported="false" />

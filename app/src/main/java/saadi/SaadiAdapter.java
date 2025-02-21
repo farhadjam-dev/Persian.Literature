@@ -1,5 +1,4 @@
-package com.jamlab.adab;
-
+package saadi;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,14 +7,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import com.jamlab.adab.R;
 import java.util.List;
 
 public class SaadiAdapter extends RecyclerView.Adapter<SaadiAdapter.SaadiViewHolder> {
 
     private List<SaadiItem> saadiItemList;
+    private OnItemClickListener listener;
 
-    public SaadiAdapter(List<SaadiItem> saadiItemList) {
+    public SaadiAdapter(List<SaadiItem> saadiItemList, OnItemClickListener listener) {
         this.saadiItemList = saadiItemList;
+        this.listener = listener;
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(SaadiItem saadiItem);
     }
 
     @NonNull
@@ -30,6 +36,8 @@ public class SaadiAdapter extends RecyclerView.Adapter<SaadiAdapter.SaadiViewHol
         SaadiItem saadiItem = saadiItemList.get(position);
         holder.title.setText(saadiItem.getTitle());
         holder.icon.setImageResource(saadiItem.getIconResId());
+
+        holder.itemView.setOnClickListener(v -> listener.onItemClick(saadiItem));
     }
 
     @Override

@@ -1,9 +1,8 @@
-package com.jamlab.adab;
-
+package saadi;
 
 public class SaadiItem {
-    private String title; // عنوان بخش (مثل زندگی‌نامه، غزلیات و ...)
-    private int iconResId; // آدرس تصویر مربوط به بخش
+    private String title;
+    private int iconResId;
 
     public SaadiItem(String title, int iconResId) {
         this.title = title;
