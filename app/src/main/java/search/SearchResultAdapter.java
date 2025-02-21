@@ -19,7 +19,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
 
     private List<Poem> searchResults;
     private OnItemClickListener onItemClickListener;
-    private String searchQuery; // عبارت جست‌وجو
+    private String searchQuery;
 
     public interface OnItemClickListener {
         void onItemClick(Poem poem);
@@ -42,33 +42,29 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Poem poem = searchResults.get(position);
 
-        // تنظیم عنوان غزل
         holder.titleTextView.setText(poem.getTitle());
 
-        // پیدا کردن بیتی که شامل عبارت جست‌وجو است
         String matchingVerse = findMatchingVerse(poem.getText(), searchQuery);
 
-        // هایلایت کردن عبارت جست‌وجو در بیت مرتبط
         SpannableString spannableString = new SpannableString(matchingVerse);
         String normalizedVerse = normalizeText(matchingVerse);
         String normalizedQuery = normalizeText(searchQuery);
-        List<String> queryParts = Arrays.asList(normalizedQuery.split("\\s+")); // تقسیم عبارت جست‌وجو به بخش‌ها
+        List<String> queryParts = Arrays.asList(normalizedQuery.split("\\s+"));
         for (String part : queryParts) {
             int startIndex = normalizedVerse.indexOf(part);
-            while (startIndex != -1) { // هایلایت همه رخدادها
+            while (startIndex != -1) {
                 int endIndex = startIndex + part.length();
                 spannableString.setSpan(
-                        new BackgroundColorSpan(0xFFFFFF00), // رنگ زرد برای هایلایت
+                        new BackgroundColorSpan(0xFFFFFF00),
                         startIndex,
                         endIndex,
                         SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE
                 );
-                startIndex = normalizedVerse.indexOf(part, endIndex); // جست‌وجوی رخداد بعدی
+                startIndex = normalizedVerse.indexOf(part, endIndex);
             }
         }
         holder.verseTextView.setText(spannableString);
 
-        // تنظیم کلیک روی کارت
         holder.cardView.setOnClickListener(v -> onItemClickListener.onItemClick(poem));
     }
 
@@ -77,7 +73,6 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
         return searchResults.size();
     }
 
-    // یافتن بیت مرتبط با عبارت جست‌وجو
     private String findMatchingVerse(String poemText, String query) {
         String normalizedPoemText = normalizeText(poemText);
         String normalizedQuery = normalizeText(query);
@@ -93,15 +88,14 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
                 }
             }
             if (matchesAll) {
-                return verses[i].trim(); // برگرداندن بیت اصلی با اعراب
+                return verses[i].trim();
             }
         }
-        return verses[0]; // در صورت عدم یافتن، بیت اول
+        return verses[0];
     }
 
-    // تابع برای حذف اعراب از متن
     private String normalizeText(String text) {
-        return text.replaceAll("[\\u064B-\\u065F]", ""); // حذف تمام اعراب یونی‌کد
+        return text.replaceAll("[\\u064B-\\u065F]", "");
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.navigation.NavigationView;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import favorits.FavoritesActivity;
 import hafez.HafezActivity;
@@ -36,10 +37,10 @@ public class MainActivity extends AppCompatActivity {
     private NavigationView navigationView;
     private EditText searchField;
     private ImageView searchIcon, favoriteIcon, menuIcon;
-    private List<Poem> poems;
+    private List<Poem> allPoems; // لیست کل اشعار از همه فایل‌ها
     private boolean doubleBackToExitPressedOnce = false;
     private static final int DOUBLE_BACK_DELAY = 2000;
-    private boolean isSearchInProgress = false; // متغیر برای جلوگیری از جست‌وجوی تکراری
+    private boolean isSearchInProgress = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,8 +90,8 @@ public class MainActivity extends AppCompatActivity {
         favoriteIcon.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, FavoritesActivity.class)));
         recyclerView.setAdapter(poetAdapter);
 
-        InputStream inputStream = getResources().openRawResource(R.raw.hafez_ghazals);
-        poems = PoemLoader.loadPoemsFromJson(inputStream);
+        // بارگذاری همه اشعار از فایل‌های JSON
+        loadAllPoems();
 
         navigationView.setNavigationItemSelectedListener(item -> {
             int id = item.getItemId();
@@ -122,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
                 favoriteIcon.startAnimation(fadeOut);
                 menuIcon.startAnimation(fadeOut);
             } else {
-                performSearchAndNavigate(); // جست‌وجو با کلیک روی آیکون وقتی نوار بازه
+                performSearchAndNavigate();
             }
         });
 
@@ -183,28 +184,75 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // بارگذاری همه اشعار از فایل‌های JSON
+    private void loadAllPoems() {
+        allPoems = new ArrayList<>();
+        int[] rawFiles = {
+                R.raw.hafez_ghazals,
+                R.raw.hafez_rubaiyat,
+                R.raw.hafez_ghitaat,
+                R.raw.hafez_ghasaid,
+                R.raw.hafez_masnavi,
+                R.raw.hafez_saghinameh,
+                R.raw.hafez_montasab
+                // اگه فایل‌های سعدی یا مولوی دارید، اینجا اضافه کنید
+                // مثلاً: R.raw.saadi_ghazals, R.raw.molavi_masnavi
+        };
+
+        for (int resId : rawFiles) {
+            try {
+                InputStream inputStream = getResources().openRawResource(resId);
+                List<Poem> poems = PoemLoader.loadPoemsFromJson(inputStream);
+                allPoems.addAll(poems);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     private void performSearchAndNavigate() {
-        if (isSearchInProgress) return; // جلوگیری از اجرای همزمان
+        if (isSearchInProgress) return;
 
         String query = searchField.getText().toString().trim();
         if (!query.isEmpty()) {
-            isSearchInProgress = true; // قفل کردن تا پایان جست‌وجو
-            List<Poem> searchResults = performSearch(poems, query);
+            isSearchInProgress = true;
+            List<Poem> searchResults = performSearch(allPoems, query);
             Intent intent = new Intent(MainActivity.this, SearchResultsActivity.class);
             intent.putParcelableArrayListExtra("search_results", new ArrayList<>(searchResults));
             intent.putExtra("search_query", query);
             startActivity(intent);
-            // ریست کردن قفل بعد از یه تأخیر کوتاه
+            // ریست کردن قفل بعد از تأخیر کوتاه
             new Handler(Looper.getMainLooper()).postDelayed(() -> isSearchInProgress = false, 500);
+
+            // مخفی کردن نوار جست‌وجو پس از جست‌وجو
+            LinearLayout searchLayout = findViewById(R.id.search_layout);
+            Animation slideOut = AnimationUtils.loadAnimation(this, R.anim.slide_out);
+            searchLayout.startAnimation(slideOut);
+            searchLayout.setVisibility(View.GONE);
+            Animation fadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in);
+            favoriteIcon.setVisibility(View.VISIBLE);
+            menuIcon.setVisibility(View.VISIBLE);
+            favoriteIcon.startAnimation(fadeIn);
+            menuIcon.startAnimation(fadeIn);
+            searchField.setText("");
         }
     }
 
     private List<Poem> performSearch(List<Poem> poems, String query) {
         List<Poem> results = new ArrayList<>();
         String normalizedQuery = normalizeText(query);
+        List<String> queryParts = Arrays.asList(normalizedQuery.split("\\s+")); // تقسیم با فاصله
+
         for (Poem poem : poems) {
             String normalizedPoemText = normalizeText(poem.getText());
-            if (normalizedPoemText.contains(normalizedQuery)) {
+            boolean matchesAll = true;
+            for (String part : queryParts) {
+                if (!normalizedPoemText.contains(part)) {
+                    matchesAll = false;
+                    break;
+                }
+            }
+            if (matchesAll) {
                 results.add(poem);
             }
         }
@@ -212,7 +260,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private String normalizeText(String text) {
-        return text.replaceAll("[\\u064B-\\u065F]", "");
+        return text.replaceAll("[\\u064B-\\u065F]", ""); // حذف تمام اعراب یونی‌کد
     }
 
     @Override

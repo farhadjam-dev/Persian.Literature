@@ -8,8 +8,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.jamlab.adab.Poem;
 import com.jamlab.adab.R;
-import java.util.List;
 import hafez.GhazalDetailActivity;
+import hafez.RubaiyatDetailActivity;
+import hafez.GhitaatDetailActivity;
+import hafez.GhasaidDetailActivity;
+import hafez.MasnaviDetailActivity;
+import hafez.SaghinamehDetailActivity;
+import hafez.MontasabDetailActivity;
+
+import java.util.List;
 
 public class SearchResultsActivity extends AppCompatActivity {
 
@@ -25,8 +32,8 @@ public class SearchResultsActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(false); // حذف دکمه Back
-            getSupportActionBar().setDisplayShowTitleEnabled(false); // حذف عنوان پیش‌فرض
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true); // فعال کردن دکمه بازگشت
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
 
         recyclerView = findViewById(R.id.search_results_recycler_view);
@@ -38,8 +45,35 @@ public class SearchResultsActivity extends AppCompatActivity {
 
         // تنظیم آداپتر
         searchResultAdapter = new SearchResultAdapter(searchResults, searchQuery, poem -> {
-            Intent intent = new Intent(SearchResultsActivity.this, GhazalDetailActivity.class);
-            intent.putExtra("ghazalTitle", poem.getTitle()); // ارسال عنوان غزل
+            Intent intent;
+            // تعیین نوع شعر بر اساس منبع یا عنوان
+            String title = poem.getTitle().toLowerCase();
+            if (title.contains("غزل")) {
+                intent = new Intent(SearchResultsActivity.this, GhazalDetailActivity.class);
+                intent.putExtra("ghazalTitle", poem.getTitle());
+            } else if (title.contains("رباعی")) {
+                intent = new Intent(SearchResultsActivity.this, RubaiyatDetailActivity.class);
+                intent.putExtra("rubaiyatTitle", poem.getTitle());
+            } else if (title.contains("قطعه")) {
+                intent = new Intent(SearchResultsActivity.this, GhitaatDetailActivity.class);
+                intent.putExtra("ghitaatTitle", poem.getTitle());
+            } else if (title.contains("قصیده")) {
+                intent = new Intent(SearchResultsActivity.this, GhasaidDetailActivity.class);
+                intent.putExtra("ghasaidTitle", poem.getTitle());
+            } else if (title.contains("مثنوی")) {
+                intent = new Intent(SearchResultsActivity.this, MasnaviDetailActivity.class);
+                intent.putExtra("masnaviTitle", poem.getTitle());
+            } else if (title.contains("ساقی‌نامه")) {
+                intent = new Intent(SearchResultsActivity.this, SaghinamehDetailActivity.class);
+                intent.putExtra("saghinamehTitle", poem.getTitle());
+            } else if (title.contains("منتسب")) {
+                intent = new Intent(SearchResultsActivity.this, MontasabDetailActivity.class);
+                intent.putExtra("montasabTitle", poem.getTitle());
+            } else {
+                // پیش‌فرض: غزل
+                intent = new Intent(SearchResultsActivity.this, GhazalDetailActivity.class);
+                intent.putExtra("ghazalTitle", poem.getTitle());
+            }
             startActivity(intent);
         });
 
