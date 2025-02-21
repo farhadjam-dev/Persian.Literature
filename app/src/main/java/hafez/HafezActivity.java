@@ -60,26 +60,20 @@ public class HafezActivity extends AppCompatActivity {
         // مدیریت دکمه جست‌وجو و کشویی
         searchButton.setOnClickListener(v -> {
             if (searchField.getVisibility() == View.GONE) {
-                // نمایش فیلد جست‌وجو از راست به چپ
                 Animation slideIn = AnimationUtils.loadAnimation(this, R.anim.slide_in_right);
                 searchField.setVisibility(View.VISIBLE);
                 searchField.startAnimation(slideIn);
                 searchButton.setImageResource(R.drawable.ic_close);
-
-                // محو کردن آیکون علاقه‌مندی‌ها و عنوان
                 Animation fadeOut = AnimationUtils.loadAnimation(this, R.anim.fade_out);
                 favoriteButton.startAnimation(fadeOut);
                 toolbarTitle.startAnimation(fadeOut);
                 fadeOut.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {}
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
+                    @Override public void onAnimationStart(Animation animation) {}
+                    @Override public void onAnimationEnd(Animation animation) {
                         favoriteButton.setVisibility(View.GONE);
                         toolbarTitle.setVisibility(View.GONE);
                     }
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {}
+                    @Override public void onAnimationRepeat(Animation animation) {}
                 });
             } else {
                 performSearchAndNavigate();
@@ -114,20 +108,47 @@ public class HafezActivity extends AppCompatActivity {
         List<HafezItem> hafezItemList = new ArrayList<>();
         hafezItemList.add(new HafezItem("زندگی‌نامه", R.drawable.ic_bio));
         hafezItemList.add(new HafezItem("غزلیات", R.drawable.ic_ghazal));
-        hafezItemList.add(new HafezItem("قصاید", R.drawable.ic_ghaside));
+        hafezItemList.add(new HafezItem("رباعیات", R.drawable.ic_rubai));       // اضافه شده
+        hafezItemList.add(new HafezItem("قطعات", R.drawable.ic_ghita));         // اضافه شده
+        hafezItemList.add(new HafezItem("قصاید", R.drawable.ic_ghaside));       // موجود بود
+        hafezItemList.add(new HafezItem("مثنوی", R.drawable.ic_masnavi));       // اضافه شده
+        hafezItemList.add(new HafezItem("ساقی‌نامه", R.drawable.ic_saghi));    // اضافه شده
+        hafezItemList.add(new HafezItem("اشعار منتسب", R.drawable.ic_montasab));// اضافه شده
 
         // ایجاد Adapter و تنظیم listener برای کلیک روی آیتم‌ها
         hafezAdapter = new HafezAdapter(hafezItemList, new HafezAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(HafezItem hafezItem) {
-                if (hafezItem.getTitle().equals("زندگی‌نامه")) {
-                    Intent intent = new Intent(HafezActivity.this, HafezBioActivity.class);
-                    startActivity(intent);
+                Intent intent;
+                switch (hafezItem.getTitle()) {
+                    case "زندگی‌نامه":
+                        intent = new Intent(HafezActivity.this, HafezBioActivity.class);
+                        break;
+                    case "غزلیات":
+                        intent = new Intent(HafezActivity.this, GhazalListActivity.class);
+                        break;
+                    case "رباعیات":
+                        intent = new Intent(HafezActivity.this, RubaiyatListActivity.class);
+                        break;
+                    case "قطعات":
+                        intent = new Intent(HafezActivity.this, GhitaatListActivity.class);
+                        break;
+                    case "قصاید":
+                        intent = new Intent(HafezActivity.this, GhasaidListActivity.class);
+                        break;
+                    case "مثنوی":
+                        intent = new Intent(HafezActivity.this, MasnaviListActivity.class);
+                        break;
+                    case "ساقی‌نامه":
+                        intent = new Intent(HafezActivity.this, SaghinamehListActivity.class);
+                        break;
+                    case "اشعار منتسب":
+                        intent = new Intent(HafezActivity.this, MontasabListActivity.class);
+                        break;
+                    default:
+                        return; // در صورت عدم تطابق، کاری انجام نشود
                 }
-                if (hafezItem.getTitle().equals("غزلیات")) {
-                    Intent intent = new Intent(HafezActivity.this, GhazalListActivity.class);
-                    startActivity(intent);
-                }
+                startActivity(intent);
             }
         });
 
@@ -166,14 +187,11 @@ public class HafezActivity extends AppCompatActivity {
     // متد جست‌وجو در لیست اشعار
     private List<Poem> performSearch(List<Poem> poems, String query) {
         List<Poem> results = new ArrayList<>();
-        // پاکسازی عبارت جست‌وجو از اعراب و تقسیم به بخش‌ها
         String normalizedQuery = normalizeText(query);
-        List<String> queryParts = Arrays.asList(normalizedQuery.split("\\s+")); // تقسیم با فاصله
-
+        List<String> queryParts = Arrays.asList(normalizedQuery.split("\\s+"));
         for (Poem poem : poems) {
             String normalizedPoemText = normalizeText(poem.getText());
             boolean matchesAll = true;
-            // چک کردن اینکه آیا همه بخش‌های عبارت جست‌وجو در متن هستن
             for (String part : queryParts) {
                 if (!normalizedPoemText.contains(part)) {
                     matchesAll = false;
@@ -189,6 +207,6 @@ public class HafezActivity extends AppCompatActivity {
 
     // تابع برای حذف اعراب از متن
     private String normalizeText(String text) {
-        return text.replaceAll("[\\u064B-\\u065F]", ""); // حذف تمام اعراب یونی‌کد
+        return text.replaceAll("[\\u064B-\\u065F]", "");
     }
 }
