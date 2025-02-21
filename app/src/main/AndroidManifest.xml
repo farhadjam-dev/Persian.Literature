@@ -102,6 +102,8 @@
             android:exported="false"/>
         <activity android:name="saadi.SaadiTarjibandListActivity"
             android:exported="false"/>
+        <activity android:name="saadi.SaadiGhazalDetailActivity"
+            android:exported="false"/>
 
 
 
