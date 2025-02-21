@@ -32,6 +32,9 @@
         <activity android:name="hafez.MontasabListActivity"
             android:exported="false"/>
 
+        <activity android:name="hafez.MontasabDetailActivity"
+            android:exported="false"/>
+
         <activity android:name="hafez.RubaiyatListActivity"
             android:exported="false"/>
 
