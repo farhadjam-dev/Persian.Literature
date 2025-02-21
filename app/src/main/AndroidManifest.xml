@@ -92,6 +92,17 @@
             android:exported="false"/>
         <activity android:name="saadi.MavaezListActivity"
             android:exported="false"/>
+        <activity android:name="saadi.SaadiGhazalListActivity"
+            android:exported="false"/>
+        <activity android:name="saadi.SaadiRubaiyatListActivity"
+            android:exported="false"/>
+        <activity android:name="saadi.SaadiGhitaatListActivity"
+            android:exported="false"/>
+        <activity android:name="saadi.SaadiMalhaghatListActivity"
+            android:exported="false"/>
+        <activity android:name="saadi.SaadiTarjibandListActivity"
+            android:exported="false"/>
+
 
 
         <activity
