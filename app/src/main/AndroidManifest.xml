@@ -44,6 +44,9 @@
         <activity android:name="hafez.SaghinamehListActivity"
             android:exported="false"/>
 
+        <activity android:name="hafez.SaghinamehDetailActivity"
+            android:exported="false"/>
+
         <activity android:name="favorits.FavoritesActivity"
             android:exported="false"/>
 

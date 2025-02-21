@@ -1,10 +1,8 @@
 package hafez;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import com.jamlab.adab.R;
 
 public class SaghinamehListActivity extends AppCompatActivity {
@@ -12,21 +10,10 @@ public class SaghinamehListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_saghinameh_list);
-
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowTitleEnabled(false);
-        }
-
-        toolbar.findViewById(R.id.toolbar_title).setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public boolean onSupportNavigateUp() {
-        finish();
-        return true;
+        // به جای تنظیم محتوا، مستقیم به صفحه جزییات هدایت می‌شه
+        Intent intent = new Intent(SaghinamehListActivity.this, SaghinamehDetailActivity.class);
+        intent.putExtra("saghinamehTitle", "ساقی‌نامه حافظ"); // عنوان ثابت برای ساقی‌نامه
+        startActivity(intent);
+        finish(); // این اکتیویتی بسته می‌شه تا کاربر بهش برنگرده
     }
 }
