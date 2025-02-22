@@ -134,11 +134,21 @@
             android:exported="false"/>
 
 
-        <activity android:name="saadi.Bab8Activity"
+        <activity android:name="saadi.BustanBab8ListActivity"
             android:exported="false"/>
-        <activity android:name="saadi.Bab9Activity"
+        <activity android:name="saadi.BustanBab8DetailActivity"
             android:exported="false"/>
-        <activity android:name="saadi.Bab10Activity"
+
+
+        <activity android:name="saadi.BustanBab9ListActivity"
+            android:exported="false"/>
+        <activity android:name="saadi.BustanBab9DetailActivity"
+            android:exported="false"/>
+
+
+        <activity android:name="saadi.BustanBab10ListActivity"
+            android:exported="false"/>
+        <activity android:name="saadi.BustanBab10DetailActivity"
             android:exported="false"/>
 
 

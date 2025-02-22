@@ -149,13 +149,13 @@ public class BustanDetailActivity extends AppCompatActivity {
                     intent = new Intent(BustanDetailActivity.this, BustanBab7ListActivity.class);
                     break;
                 case "باب هشتم بوستان":
-                    intent = new Intent(BustanDetailActivity.this, Bab8Activity.class);
+                    intent = new Intent(BustanDetailActivity.this, BustanBab8ListActivity.class);
                     break;
                 case "باب نهم بوستان":
-                    intent = new Intent(BustanDetailActivity.this, Bab9Activity.class);
+                    intent = new Intent(BustanDetailActivity.this, BustanBab9ListActivity.class);
                     break;
                 case "باب دهم بوستان":
-                    intent = new Intent(BustanDetailActivity.this, Bab10Activity.class);
+                    intent = new Intent(BustanDetailActivity.this, BustanBab10ListActivity.class);
                     break;
                 default:
                     return;
