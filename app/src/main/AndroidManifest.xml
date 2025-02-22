@@ -104,8 +104,12 @@
             android:exported="false"/>
 
 
-        <activity android:name="saadi.Bab3Activity"
+        <activity android:name="saadi.BustanBab3ListActivity"
             android:exported="false"/>
+        <activity android:name="saadi.BustanBab3DetailActivity"
+            android:exported="false"/>
+
+
         <activity android:name="saadi.Bab4Activity"
             android:exported="false"/>
         <activity android:name="saadi.Bab5Activity"
