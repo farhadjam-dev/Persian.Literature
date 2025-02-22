@@ -135,8 +135,31 @@
             android:exported="false"/>
         <activity android:name="saadi.MajalesDetailActivity"
             android:exported="false"/>
-        <activity android:name="saadi.MavaezListActivity"
+
+
+        <activity android:name="saadi.MavaezDetailActivity"
             android:exported="false"/>
+        <activity android:name="saadi.MavaezGhazaliyatActivity"
+            android:exported="false"/>
+        <activity android:name="saadi.MavaezQasaedActivity"
+            android:exported="false"/>
+        <activity android:name="saadi.MavaezQetaatActivity"
+            android:exported="false"/>
+        <activity android:name="saadi.MavaezMarasieActivity"
+            android:exported="false"/>
+        <activity android:name="saadi.MavaezMasnaviatActivity"
+            android:exported="false"/>
+        <activity android:name="saadi.MavaezRubaiyatActivity"
+            android:exported="false"/>
+        <activity android:name="saadi.MavaezArabicActivity"
+            android:exported="false"/>
+        <activity android:name="saadi.MavaezMosalasatActivity"
+            android:exported="false"/>
+        <activity android:name="saadi.MavaezMofradatActivity"
+            android:exported="false"/>
+
+
+
         <activity android:name="saadi.SaadiGhazalListActivity"
             android:exported="false"/>
         <activity android:name="saadi.SaadiRubaiyatListActivity"
