@@ -84,8 +84,14 @@
             android:exported="false"/>
         <activity android:name="saadi.BustanDetailActivity"
             android:exported="false"/>
-        <activity android:name="saadi.NiyayeshActivity"
+
+
+        <activity android:name="saadi.BustanNiyayeshListActivity"
             android:exported="false"/>
+        <activity android:name="saadi.BustanNiyayeshDetailActivity"
+            android:exported="false"/>
+
+
         <activity android:name="saadi.Bab1Activity"
             android:exported="false"/>
         <activity android:name="saadi.Bab2Activity"

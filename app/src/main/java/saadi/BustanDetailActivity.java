@@ -125,7 +125,7 @@ public class BustanDetailActivity extends AppCompatActivity {
             Intent intent;
             switch (bustanItem.getTitle()) {
                 case "نیایش خدا بوستان":
-                    intent = new Intent(BustanDetailActivity.this, NiyayeshActivity.class);
+                    intent = new Intent(BustanDetailActivity.this, BustanNiyayeshListActivity.class);
                     break;
                 case "باب اول بوستان":
                     intent = new Intent(BustanDetailActivity.this, Bab1Activity.class);
