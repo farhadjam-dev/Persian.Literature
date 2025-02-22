@@ -4,15 +4,23 @@
     android:orientation="vertical"
     android:background="@color/background">
 
-    <!-- Toolbar -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/colorPrimary"
         android:elevation="4dp"
-        android:padding="0dp"
-        android:layout_margin="0dp">
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+        <ImageButton
+            android:id="@+id/favorite_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_favorite"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:layout_gravity="start"
+            android:padding="8dp" />
 
         <TextView
             android:id="@+id/toolbar_title"
@@ -21,16 +29,38 @@
             android:text="بوستان سعدی"
             android:textSize="20sp"
             android:textColor="@android:color/black"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            android:padding="8dp" />
+
+        <ImageButton
+            android:id="@+id/search_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_search"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:layout_gravity="end"
+            android:padding="8dp" />
+
+        <EditText
+            android:id="@+id/search_field"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="جست‌وجو..."
+            android:textColorHint="#888888"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:drawableStart="@drawable/ic_search"
+            android:drawablePadding="8dp"
+            android:background="@drawable/rounded_edittext"
+            android:visibility="gone"
+            android:layout_gravity="center_vertical"
+            android:padding="8dp" />
     </androidx.appcompat.widget.Toolbar>
 
-    <!-- محتوای موقت -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="بوستان سعدی (به‌زودی طراحی می‌شود)"
-        android:textSize="18sp"
-        android:textColor="@color/textColor"
-        android:layout_gravity="center"
-        android:padding="16dp" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="8dp" />
 </LinearLayout>

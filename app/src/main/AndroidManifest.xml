@@ -84,6 +84,30 @@
             android:exported="false"/>
         <activity android:name="saadi.BustanDetailActivity"
             android:exported="false"/>
+        <activity android:name="saadi.NiyayeshActivity"
+            android:exported="false"/>
+        <activity android:name="saadi.Bab1Activity"
+            android:exported="false"/>
+        <activity android:name="saadi.Bab2Activity"
+            android:exported="false"/>
+        <activity android:name="saadi.Bab3Activity"
+            android:exported="false"/>
+        <activity android:name="saadi.Bab4Activity"
+            android:exported="false"/>
+        <activity android:name="saadi.Bab5Activity"
+            android:exported="false"/>
+        <activity android:name="saadi.Bab6Activity"
+            android:exported="false"/>
+        <activity android:name="saadi.Bab7Activity"
+            android:exported="false"/>
+        <activity android:name="saadi.Bab8Activity"
+            android:exported="false"/>
+        <activity android:name="saadi.Bab9Activity"
+            android:exported="false"/>
+        <activity android:name="saadi.Bab10Activity"
+            android:exported="false"/>
+
+
         <activity android:name="saadi.GulistanDetailActivity"
             android:exported="false"/>
         <activity android:name="saadi.RasaelDetailActivity"
