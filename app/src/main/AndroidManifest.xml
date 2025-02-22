@@ -110,10 +110,18 @@
             android:exported="false"/>
 
 
-        <activity android:name="saadi.Bab4Activity"
+        <activity android:name="saadi.BustanBab4ListActivity"
             android:exported="false"/>
-        <activity android:name="saadi.Bab5Activity"
+        <activity android:name="saadi.BustanBab4DetailActivity"
             android:exported="false"/>
+
+
+        <activity android:name="saadi.BustanBab5ListActivity"
+            android:exported="false"/>
+        <activity android:name="saadi.BustanBab5DetailActivity"
+            android:exported="false"/>
+
+
         <activity android:name="saadi.Bab6Activity"
             android:exported="false"/>
         <activity android:name="saadi.Bab7Activity"
