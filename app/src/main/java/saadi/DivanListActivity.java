@@ -115,8 +115,8 @@ public class DivanListActivity extends AppCompatActivity {
         saadiDivanItemList.add(new SaadiDivanItem("غزلیات سعدی", R.drawable.ic_ghazal));
         saadiDivanItemList.add(new SaadiDivanItem("رباعیات سعدی", R.drawable.ic_rubai));
         saadiDivanItemList.add(new SaadiDivanItem("قطعات سعدی", R.drawable.ic_ghita));
-        saadiDivanItemList.add(new SaadiDivanItem("ملحقات", R.drawable.ic_malhaghat));
-        saadiDivanItemList.add(new SaadiDivanItem("مفردات سعدی", R.drawable.ic_mofradat));
+        saadiDivanItemList.add(new SaadiDivanItem("ملحقات و مفردات سعدی", R.drawable.ic_malhaghat));
+       // saadiDivanItemList.add(new SaadiDivanItem("مفردات سعدی", R.drawable.ic_mofradat));
         saadiDivanItemList.add(new SaadiDivanItem("ترجیع‌بند سعدی", R.drawable.ic_tarjiband));
 
         // ایجاد Adapter و تنظیم listener برای کلیک روی آیتم‌ها
@@ -132,7 +132,7 @@ public class DivanListActivity extends AppCompatActivity {
                 case "قطعات سعدی":
                     intent = new Intent(DivanListActivity.this, SaadiGhitaatListActivity.class);
                     break;
-                case "ملحقات":
+                case "ملحقات و مفردات سعدی":
                     intent = new Intent(DivanListActivity.this, SaadiMalhaghatListActivity.class);
                     break;
 

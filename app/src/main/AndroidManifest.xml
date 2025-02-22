@@ -106,6 +106,10 @@
             android:exported="false"/>
         <activity android:name="saadi.SaadiRubaiyatDetailActivity"
             android:exported="false"/>
+        <activity android:name="saadi.SaadiGhitaatDetailActivity"
+            android:exported="false"/>
+        <activity android:name="saadi.SaadiMalhaghatDetailActivity"
+            android:exported="false"/>
 
 
 
