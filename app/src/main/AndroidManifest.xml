@@ -108,8 +108,29 @@
             android:exported="false"/>
 
 
-        <activity android:name="saadi.GulistanDetailActivity"
+        <activity android:name="saadi.GolestanDetailActivity"
             android:exported="false"/>
+        <activity android:name="saadi.DibacheGolestanActivity"
+            android:exported="false"/>
+        <activity android:name="saadi.GolestanBab1Activity"
+            android:exported="false"/>
+        <activity android:name="saadi.GolestanBab2Activity"
+            android:exported="false"/>
+        <activity android:name="saadi.GolestanBab3Activity"
+            android:exported="false"/>
+        <activity android:name="saadi.GolestanBab4Activity"
+            android:exported="false"/>
+        <activity android:name="saadi.GolestanBab5Activity"
+            android:exported="false"/>
+        <activity android:name="saadi.GolestanBab6Activity"
+            android:exported="false"/>
+        <activity android:name="saadi.GolestanBab7Activity"
+            android:exported="false"/>
+        <activity android:name="saadi.GolestanBab8Activity"
+            android:exported="false"/>
+
+
+
         <activity android:name="saadi.RasaelDetailActivity"
             android:exported="false"/>
         <activity android:name="saadi.MajalesDetailActivity"

@@ -13,30 +13,25 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.jamlab.adab.Poem;
-import com.jamlab.adab.PoemLoader;
 import com.jamlab.adab.R;
 import favorits.FavoritesActivity;
 import search.SearchResultsActivity;
-import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-public class SaadiActivity extends AppCompatActivity {
+public class GolestanDetailActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
-    private SaadiAdapter saadiAdapter;
+    private GolestanAdapter golestanAdapter;
     private EditText searchField;
     private ImageButton searchButton;
     private ImageButton favoriteButton;
     private TextView toolbarTitle;
-    private List<Poem> allPoems;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_saadi);
+        setContentView(R.layout.activity_golestan_detail);
 
         // تنظیم Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -51,17 +46,17 @@ public class SaadiActivity extends AppCompatActivity {
         toolbarTitle = findViewById(R.id.toolbar_title);
         searchButton = findViewById(R.id.search_button);
         searchField = findViewById(R.id.search_field);
+        toolbarTitle.setText("گلستان سعدی");
 
         // مدیریت کلیک دکمه علاقه‌مندی‌ها
         favoriteButton.setOnClickListener(v -> {
-            Intent intent = new Intent(SaadiActivity.this, FavoritesActivity.class);
+            Intent intent = new Intent(GolestanDetailActivity.this, FavoritesActivity.class);
             startActivity(intent);
         });
 
         // مدیریت دکمه جست‌وجو و کشویی
         searchButton.setOnClickListener(v -> {
             if (searchField.getVisibility() == View.GONE) {
-                // باز کردن فیلد جست‌وجو
                 Animation slideIn = AnimationUtils.loadAnimation(this, R.anim.slide_in_right);
                 searchField.setVisibility(View.VISIBLE);
                 searchField.startAnimation(slideIn);
@@ -78,14 +73,11 @@ public class SaadiActivity extends AppCompatActivity {
                     @Override public void onAnimationRepeat(Animation animation) {}
                 });
             } else {
-                // بررسی محتوای فیلد جست‌وجو
                 String query = searchField.getText().toString().trim();
                 if (query.isEmpty()) {
-                    // بستن فیلد جست‌وجو بدون انجام جست‌وجو
                     closeSearchField();
                 } else {
-                    // انجام جست‌وجو
-                    performSearchAndNavigate();
+                    performSearchAndNavigate(query);
                 }
             }
         });
@@ -97,7 +89,7 @@ public class SaadiActivity extends AppCompatActivity {
                 int iconWidth = searchField.getCompoundDrawables()[0].getBounds().width();
                 float touchX = event.getX();
                 if (touchX <= (padding + iconWidth)) {
-                    performSearchAndNavigate();
+                    performSearchAndNavigate(searchField.getText().toString().trim());
                     return true;
                 }
             }
@@ -106,7 +98,7 @@ public class SaadiActivity extends AppCompatActivity {
 
         // مدیریت کلید Enter در کیبورد
         searchField.setOnEditorActionListener((v, actionId, event) -> {
-            performSearchAndNavigate();
+            performSearchAndNavigate(searchField.getText().toString().trim());
             return true;
         });
 
@@ -114,46 +106,56 @@ public class SaadiActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // ایجاد لیست بخش‌های مربوط به سعدی
-        List<SaadiItem> saadiItemList = new ArrayList<>();
-        saadiItemList.add(new SaadiItem("دیوان اشعار", R.drawable.ic_divan));
-        saadiItemList.add(new SaadiItem("بوستان", R.drawable.ic_bustan));
-        saadiItemList.add(new SaadiItem("گلستان", R.drawable.ic_gulistan));
-        saadiItemList.add(new SaadiItem("مواعظ", R.drawable.ic_mavaez));
-        saadiItemList.add(new SaadiItem("رسائل نثر", R.drawable.ic_rasael));
-        saadiItemList.add(new SaadiItem("مجالس پنجگانه", R.drawable.ic_majales));
+        // ایجاد لیست بخش‌های گلستان سعدی
+        List<GolestanItem> golestanItemList = new ArrayList<>();
+        golestanItemList.add(new GolestanItem("دیباچه گلستان", R.drawable.ic_dibache));
+        golestanItemList.add(new GolestanItem("باب اول گلستان", R.drawable.ic_bab1_golestan));
+        golestanItemList.add(new GolestanItem("باب دوم گلستان", R.drawable.ic_bab2_golestan));
+        golestanItemList.add(new GolestanItem("باب سوم گلستان", R.drawable.ic_bab3_golestan));
+        golestanItemList.add(new GolestanItem("باب چهارم گلستان", R.drawable.ic_bab4_golestan));
+        golestanItemList.add(new GolestanItem("باب پنجم گلستان", R.drawable.ic_bab5_golestan));
+        golestanItemList.add(new GolestanItem("باب ششم گلستان", R.drawable.ic_bab6_golestan));
+        golestanItemList.add(new GolestanItem("باب هفتم گلستان", R.drawable.ic_bab7_golestan));
+        golestanItemList.add(new GolestanItem("باب هشتم گلستان", R.drawable.ic_bab8_golestan));
 
         // ایجاد Adapter و تنظیم listener برای کلیک روی آیتم‌ها
-        saadiAdapter = new SaadiAdapter(saadiItemList, saadiItem -> {
+        golestanAdapter = new GolestanAdapter(golestanItemList, golestanItem -> {
             Intent intent;
-            switch (saadiItem.getTitle()) {
-                case "دیوان اشعار": intent = new Intent(SaadiActivity.this, DivanListActivity.class); break;
-                case "بوستان":
-                    intent = new Intent(SaadiActivity.this, BustanDetailActivity.class);
-                    intent.putExtra("title", "بوستان سعدی");
+            switch (golestanItem.getTitle()) {
+                case "دیباچه گلستان":
+                    intent = new Intent(GolestanDetailActivity.this, DibacheGolestanActivity.class);
                     break;
-                case "گلستان":
-                    intent = new Intent(SaadiActivity.this, GolestanDetailActivity.class);
-                    intent.putExtra("title", "گلستان سعدی");
+                case "باب اول گلستان":
+                    intent = new Intent(GolestanDetailActivity.this, GolestanBab1Activity.class);
                     break;
-                case "مواعظ": intent = new Intent(SaadiActivity.this, MavaezListActivity.class); break;
-                case "رسائل نثر":
-                    intent = new Intent(SaadiActivity.this, RasaelDetailActivity.class);
-                    intent.putExtra("title", "رسائل نثر سعدی");
+                case "باب دوم گلستان":
+                    intent = new Intent(GolestanDetailActivity.this, GolestanBab2Activity.class);
                     break;
-                case "مجالس پنجگانه":
-                    intent = new Intent(SaadiActivity.this, MajalesDetailActivity.class);
-                    intent.putExtra("title", "مجالس پنجگانه سعدی");
+                case "باب سوم گلستان":
+                    intent = new Intent(GolestanDetailActivity.this, GolestanBab3Activity.class);
                     break;
-                default: return;
+                case "باب چهارم گلستان":
+                    intent = new Intent(GolestanDetailActivity.this, GolestanBab4Activity.class);
+                    break;
+                case "باب پنجم گلستان":
+                    intent = new Intent(GolestanDetailActivity.this, GolestanBab5Activity.class);
+                    break;
+                case "باب ششم گلستان":
+                    intent = new Intent(GolestanDetailActivity.this, GolestanBab6Activity.class);
+                    break;
+                case "باب هفتم گلستان":
+                    intent = new Intent(GolestanDetailActivity.this, GolestanBab7Activity.class);
+                    break;
+                case "باب هشتم گلستان":
+                    intent = new Intent(GolestanDetailActivity.this, GolestanBab8Activity.class);
+                    break;
+                default:
+                    return;
             }
             startActivity(intent);
         });
 
-        recyclerView.setAdapter(saadiAdapter);
-
-        // بارگذاری همه اشعار از فایل‌های JSON
-        loadAllPoems();
+        recyclerView.setAdapter(golestanAdapter);
     }
 
     // متد برای بستن فیلد جست‌وجو
@@ -170,68 +172,14 @@ public class SaadiActivity extends AppCompatActivity {
         searchField.setText("");
     }
 
-    // بارگذاری همه اشعار از فایل‌های JSON
-    private void loadAllPoems() {
-        allPoems = new ArrayList<>();
-        int[] rawFiles = {
-                // R.raw.saadi_divan,
-                // R.raw.saadi_bustan,
-                // R.raw.saadi_gulistan,
-                // R.raw.saadi_mavaez,
-                // R.raw.saadi_rasael,
-                // R.raw.saadi_majales
-        };
-
-        for (int resId : rawFiles) {
-            try {
-                InputStream inputStream = getResources().openRawResource(resId);
-                List<Poem> poems = PoemLoader.loadPoemsFromJson(inputStream);
-                allPoems.addAll(poems);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
     // متد جست‌وجو و انتقال به SearchResultsActivity
-    private void performSearchAndNavigate() {
-        String query = searchField.getText().toString().trim();
+    private void performSearchAndNavigate(String query) {
         if (!query.isEmpty()) {
-            List<Poem> searchResults = performSearch(allPoems, query);
-            Intent intent = new Intent(SaadiActivity.this, SearchResultsActivity.class);
-            intent.putParcelableArrayListExtra("search_results", new ArrayList<>(searchResults));
+            Intent intent = new Intent(GolestanDetailActivity.this, SearchResultsActivity.class);
             intent.putExtra("search_query", query);
             startActivity(intent);
         }
-        // همیشه فیلد رو ببند، چه جست‌وجو انجام بشه چه نه
         closeSearchField();
-    }
-
-    // متد جست‌وجو در لیست اشعار
-    private List<Poem> performSearch(List<Poem> poems, String query) {
-        List<Poem> results = new ArrayList<>();
-        String normalizedQuery = normalizeText(query);
-        List<String> queryParts = Arrays.asList(normalizedQuery.split("\\s+"));
-
-        for (Poem poem : poems) {
-            String normalizedPoemText = normalizeText(poem.getText());
-            boolean matchesAll = true;
-            for (String part : queryParts) {
-                if (!normalizedPoemText.contains(part)) {
-                    matchesAll = false;
-                    break;
-                }
-            }
-            if (matchesAll) {
-                results.add(poem);
-            }
-        }
-        return results;
-    }
-
-    // تابع برای حذف اعراب از متن
-    private String normalizeText(String text) {
-        return text.replaceAll("[\\u064B-\\u065F]", "");
     }
 
     @Override
