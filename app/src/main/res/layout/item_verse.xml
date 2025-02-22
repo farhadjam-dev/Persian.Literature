@@ -13,26 +13,39 @@
         android:orientation="vertical"
         android:padding="5dp">
 
-        <!-- مصرع اول -->
+        <!-- شماره بیت -->
+        <TextView
+            android:id="@+id/verse_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="بیت ۱"
+            android:textSize="12sp"
+            android:textColor="@color/textColor"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="8dp" />
+
+        <!-- مصرع اول (راست‌چین) -->
         <TextView
             android:id="@+id/line1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="مصرع اول"
-            android:textAlignment="center"
-            android:textColor="@color/textColor"
-            android:textSize="16sp" />
+            android:textAlignment="viewEnd"
+        android:gravity="end"
+        android:textColor="@color/textColor"
+        android:textSize="16sp" />
 
-        <!-- مصرع دوم -->
+        <!-- مصرع دوم (چپ‌چین) -->
         <TextView
             android:id="@+id/line2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="مصرع دوم"
-            android:textAlignment="center"
-            android:textColor="@color/textColor"
-            android:textSize="16sp" />
+            android:textAlignment="viewStart"
+        android:gravity="start"
+        android:textColor="@color/textColor"
+        android:textSize="16sp" />
 
         <!-- نشانک برای گسترش/جمع کردن تفسیر -->
         <ImageView
@@ -40,8 +53,8 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/ic_expand_down"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="0dp" />
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="0dp" />
 
         <!-- تفسیر بیت -->
         <TextView

@@ -29,14 +29,17 @@ public class VerseAdapter extends RecyclerView.Adapter<VerseAdapter.VerseViewHol
     public void onBindViewHolder(@NonNull VerseViewHolder holder, int position) {
         Verse verse = verseList.get(position);
 
-        // تقسیم متن بیت به دو مصرع
+        // تنظیم شماره بیت به صورت فارسی (شروع از ۱)
+        holder.verseNumber.setText("بیت " + toPersianNumber(position + 1));
+
+        // تقسیم متن بیت به دو مصراع
         String[] lines = verse.getText().split("/");
         if (lines.length >= 2) {
             holder.line1.setText(lines[0].trim()); // مصرع اول
             holder.line2.setText(lines[1].trim()); // مصرع دوم
         } else {
-            holder.line1.setText(verse.getText()); // اگر تقسیم نشد، کل متن در مصرع اول نمایش داده شود
-            holder.line2.setText(""); // مصرع دوم خالی باشد
+            holder.line1.setText(verse.getText()); // اگر تقسیم نشد، کل متن در مصرع اول
+            holder.line2.setText(""); // مصرع دوم خالی
         }
 
         // تنظیم تفسیر بیت
@@ -61,7 +64,20 @@ public class VerseAdapter extends RecyclerView.Adapter<VerseAdapter.VerseViewHol
         return verseList.size();
     }
 
+    // تابع تبدیل اعداد لاتین به فارسی
+    private String toPersianNumber(int number) {
+        String[] persianNumbers = {"۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"};
+        StringBuilder result = new StringBuilder();
+        String numberStr = String.valueOf(number);
+        for (int i = 0; i < numberStr.length(); i++) {
+            char digit = numberStr.charAt(i);
+            result.append(persianNumbers[Character.getNumericValue(digit)]);
+        }
+        return result.toString();
+    }
+
     public static class VerseViewHolder extends RecyclerView.ViewHolder {
+        TextView verseNumber; // شماره بیت
         TextView line1; // مصرع اول
         TextView line2; // مصرع دوم
         TextView explanation; // تفسیر بیت
@@ -69,6 +85,7 @@ public class VerseAdapter extends RecyclerView.Adapter<VerseAdapter.VerseViewHol
 
         public VerseViewHolder(@NonNull View itemView) {
             super(itemView);
+            verseNumber = itemView.findViewById(R.id.verse_number);
             line1 = itemView.findViewById(R.id.line1);
             line2 = itemView.findViewById(R.id.line2);
             explanation = itemView.findViewById(R.id.explanation);
