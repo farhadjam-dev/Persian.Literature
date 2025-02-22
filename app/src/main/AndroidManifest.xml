@@ -110,6 +110,8 @@
             android:exported="false"/>
         <activity android:name="saadi.SaadiMalhaghatDetailActivity"
             android:exported="false"/>
+        <activity android:name="saadi.SaadiTarjibandDetailActivity"
+            android:exported="false"/>
 
 
 

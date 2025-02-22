@@ -1,8 +1,8 @@
 package saadi;
 
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import com.jamlab.adab.R;
 
 public class SaadiTarjibandListActivity extends AppCompatActivity {
@@ -12,17 +12,10 @@ public class SaadiTarjibandListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_saadi_tarjiband_list);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowTitleEnabled(false);
-        }
-    }
-
-    @Override
-    public boolean onSupportNavigateUp() {
-        finish();
-        return true;
+        // مستقیم به صفحه جزییات هدایت می‌شود
+        Intent intent = new Intent(SaadiTarjibandListActivity.this, SaadiTarjibandDetailActivity.class);
+        intent.putExtra("saadiTarjibandTitle", "ترجیع‌بند سعدی"); // عنوان ثابت
+        startActivity(intent);
+        finish(); // این اکتیویتی بسته می‌شود
     }
 }
