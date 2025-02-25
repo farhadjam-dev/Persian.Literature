@@ -154,23 +154,57 @@
 
         <activity android:name="saadi.GolestanDetailActivity"
             android:exported="false"/>
-        <activity android:name="saadi.DibacheGolestanActivity"
+        <activity android:name="saadi.GolestanDibacheActivity"
             android:exported="false"/>
-        <activity android:name="saadi.GolestanBab1Activity"
+        <activity android:name="saadi.GolestanBab1ListActivity"
             android:exported="false"/>
-        <activity android:name="saadi.GolestanBab2Activity"
+        <activity android:name="saadi.GolestanBab1DetailActivity"
             android:exported="false"/>
-        <activity android:name="saadi.GolestanBab3Activity"
+
+
+
+        <activity android:name="saadi.GolestanBab2ListActivity"
             android:exported="false"/>
-        <activity android:name="saadi.GolestanBab4Activity"
+        <activity android:name="saadi.GolestanBab2DetailActivity"
             android:exported="false"/>
-        <activity android:name="saadi.GolestanBab5Activity"
+
+
+
+        <activity android:name="saadi.GolestanBab3ListActivity"
             android:exported="false"/>
-        <activity android:name="saadi.GolestanBab6Activity"
+        <activity android:name="saadi.GolestanBab3DetailActivity"
             android:exported="false"/>
-        <activity android:name="saadi.GolestanBab7Activity"
+
+
+        <activity android:name="saadi.GolestanBab4ListActivity"
             android:exported="false"/>
-        <activity android:name="saadi.GolestanBab8Activity"
+        <activity android:name="saadi.GolestanBab4DetailActivity"
+            android:exported="false"/>
+
+
+        <activity android:name="saadi.GolestanBab5ListActivity"
+            android:exported="false"/>
+        <activity android:name="saadi.GolestanBab5DetailActivity"
+            android:exported="false"/>
+
+
+
+        <activity android:name="saadi.GolestanBab6ListActivity"
+            android:exported="false"/>
+        <activity android:name="saadi.GolestanBab6DetailActivity"
+            android:exported="false"/>
+
+
+        <activity android:name="saadi.GolestanBab7ListActivity"
+            android:exported="false"/>
+        <activity android:name="saadi.GolestanBab7DetailActivity"
+            android:exported="false"/>
+
+
+
+        <activity android:name="saadi.GolestanBab8ListActivity"
+            android:exported="false"/>
+        <activity android:name="saadi.GolestanBab8DetailActivity"
             android:exported="false"/>
 
 

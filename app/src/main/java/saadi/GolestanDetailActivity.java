@@ -123,31 +123,31 @@ public class GolestanDetailActivity extends AppCompatActivity {
             Intent intent;
             switch (golestanItem.getTitle()) {
                 case "دیباچه گلستان":
-                    intent = new Intent(GolestanDetailActivity.this, DibacheGolestanActivity.class);
+                    intent = new Intent(GolestanDetailActivity.this, GolestanDibacheActivity.class);
                     break;
                 case "باب اول گلستان":
-                    intent = new Intent(GolestanDetailActivity.this, GolestanBab1Activity.class);
+                    intent = new Intent(GolestanDetailActivity.this, GolestanBab1ListActivity.class);
                     break;
                 case "باب دوم گلستان":
-                    intent = new Intent(GolestanDetailActivity.this, GolestanBab2Activity.class);
+                    intent = new Intent(GolestanDetailActivity.this, GolestanBab2ListActivity.class);
                     break;
                 case "باب سوم گلستان":
-                    intent = new Intent(GolestanDetailActivity.this, GolestanBab3Activity.class);
+                    intent = new Intent(GolestanDetailActivity.this, GolestanBab3ListActivity.class);
                     break;
                 case "باب چهارم گلستان":
-                    intent = new Intent(GolestanDetailActivity.this, GolestanBab4Activity.class);
+                    intent = new Intent(GolestanDetailActivity.this, GolestanBab4ListActivity.class);
                     break;
                 case "باب پنجم گلستان":
-                    intent = new Intent(GolestanDetailActivity.this, GolestanBab5Activity.class);
+                    intent = new Intent(GolestanDetailActivity.this, GolestanBab5ListActivity.class);
                     break;
                 case "باب ششم گلستان":
-                    intent = new Intent(GolestanDetailActivity.this, GolestanBab6Activity.class);
+                    intent = new Intent(GolestanDetailActivity.this, GolestanBab6ListActivity.class);
                     break;
                 case "باب هفتم گلستان":
-                    intent = new Intent(GolestanDetailActivity.this, GolestanBab7Activity.class);
+                    intent = new Intent(GolestanDetailActivity.this, GolestanBab7ListActivity.class);
                     break;
                 case "باب هشتم گلستان":
-                    intent = new Intent(GolestanDetailActivity.this, GolestanBab8Activity.class);
+                    intent = new Intent(GolestanDetailActivity.this, GolestanBab8ListActivity.class);
                     break;
                 default:
                     return;
