@@ -123,7 +123,7 @@ public class MavaezDetailActivity extends AppCompatActivity {
             Intent intent;
             switch (mavaezItem.getTitle()) {
                 case "غزلیات":
-                    intent = new Intent(MavaezDetailActivity.this, MavaezGhazaliyatActivity.class);
+                    intent = new Intent(MavaezDetailActivity.this, MavaezGhazalListActivity.class);
                     break;
                 case "قصاید":
                     intent = new Intent(MavaezDetailActivity.this, MavaezQasaedActivity.class);

@@ -183,8 +183,13 @@
 
         <activity android:name="saadi.MavaezDetailActivity"
             android:exported="false"/>
-        <activity android:name="saadi.MavaezGhazaliyatActivity"
+        <activity android:name="saadi.MavaezGhazalListActivity"
             android:exported="false"/>
+        <activity android:name="saadi.MavaezGhazalDetailActivity"
+            android:exported="false"/>
+
+
+
         <activity android:name="saadi.MavaezQasaedActivity"
             android:exported="false"/>
         <activity android:name="saadi.MavaezQetaatActivity"
