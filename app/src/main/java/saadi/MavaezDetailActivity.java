@@ -126,25 +126,25 @@ public class MavaezDetailActivity extends AppCompatActivity {
                     intent = new Intent(MavaezDetailActivity.this, MavaezGhazalListActivity.class);
                     break;
                 case "قصاید":
-                    intent = new Intent(MavaezDetailActivity.this, MavaezQasaedActivity.class);
+                    intent = new Intent(MavaezDetailActivity.this, MavaezGhaseedahListActivity.class);
                     break;
                 case "مراثی":
-                    intent = new Intent(MavaezDetailActivity.this, MavaezMarasieActivity.class);
+                    intent = new Intent(MavaezDetailActivity.this, MavaezMarasiListActivity.class);
                     break;
                 case "قطعات":
-                    intent = new Intent(MavaezDetailActivity.this, MavaezQetaatActivity.class);
+                    intent = new Intent(MavaezDetailActivity.this, MavaezGhetaatListActivity.class);
                     break;
                 case "مثنویات":
-                    intent = new Intent(MavaezDetailActivity.this, MavaezMasnaviatActivity.class);
+                    intent = new Intent(MavaezDetailActivity.this, MavaezMasnaviListActivity.class);
                     break;
                 case "رباعیات":
-                    intent = new Intent(MavaezDetailActivity.this, MavaezRubaiyatActivity.class);
+                    intent = new Intent(MavaezDetailActivity.this, MavaezRobaiiatListActivity.class);
                     break;
                 case "قصاید و قطعات عربی":
-                    intent = new Intent(MavaezDetailActivity.this, MavaezArabicActivity.class);
+                    intent = new Intent(MavaezDetailActivity.this, MavaezArabicListActivity.class);
                     break;
                 case "مفردات":
-                    intent = new Intent(MavaezDetailActivity.this, MavaezMofradatActivity.class);
+                    intent = new Intent(MavaezDetailActivity.this, MavaezMofradatListActivity.class);
                     break;
                 case "مثلثات":
                     intent = new Intent(MavaezDetailActivity.this, MavaezMosalasatActivity.class);

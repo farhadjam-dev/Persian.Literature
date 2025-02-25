@@ -190,22 +190,54 @@
 
 
 
-        <activity android:name="saadi.MavaezQasaedActivity"
+        <activity android:name="saadi.MavaezGhaseedahListActivity"
             android:exported="false"/>
-        <activity android:name="saadi.MavaezQetaatActivity"
+        <activity android:name="saadi.MavaezGhaseedahDetailActivity"
             android:exported="false"/>
-        <activity android:name="saadi.MavaezMarasieActivity"
+
+
+
+        <activity android:name="saadi.MavaezGhetaatListActivity"
             android:exported="false"/>
-        <activity android:name="saadi.MavaezMasnaviatActivity"
+        <activity android:name="saadi.MavaezGhetaatDetailActivity"
             android:exported="false"/>
-        <activity android:name="saadi.MavaezRubaiyatActivity"
+
+
+
+        <activity android:name="saadi.MavaezMarasiListActivity"
             android:exported="false"/>
-        <activity android:name="saadi.MavaezArabicActivity"
+        <activity android:name="saadi.MavaezMarasiDetailActivity"
             android:exported="false"/>
+
+
+
+        <activity android:name="saadi.MavaezMasnaviListActivity"
+            android:exported="false"/>
+        <activity android:name="saadi.MavaezMasnaviDetailActivity"
+            android:exported="false"/>
+
+
+        <activity android:name="saadi.MavaezRobaiiatListActivity"
+            android:exported="false"/>
+        <activity android:name="saadi.MavaezRobaiiatDetailActivity"
+            android:exported="false"/>
+
+
+
+        <activity android:name="saadi.MavaezArabicListActivity"
+            android:exported="false"/>
+        <activity android:name="saadi.MavaezArabicDetailActivity"
+            android:exported="false"/>
+
+
+
         <activity android:name="saadi.MavaezMosalasatActivity"
             android:exported="false"/>
-        <activity android:name="saadi.MavaezMofradatActivity"
+        <activity android:name="saadi.MavaezMofradatListActivity"
             android:exported="false"/>
+        <activity android:name="saadi.MavaezMofradatDetailActivity"
+            android:exported="false"/>
+
 
 
 
