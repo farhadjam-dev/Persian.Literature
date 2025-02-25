@@ -231,8 +231,12 @@
 
 
 
-        <activity android:name="saadi.MavaezMosalasatActivity"
+        <activity android:name="saadi.MavaezMosallasatActivity"
             android:exported="false"/>
+        <activity android:name="saadi.MavaezMosallasatDetailActivity"
+            android:exported="false"/>
+
+
         <activity android:name="saadi.MavaezMofradatListActivity"
             android:exported="false"/>
         <activity android:name="saadi.MavaezMofradatDetailActivity"

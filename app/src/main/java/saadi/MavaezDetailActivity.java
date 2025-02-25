@@ -147,7 +147,7 @@ public class MavaezDetailActivity extends AppCompatActivity {
                     intent = new Intent(MavaezDetailActivity.this, MavaezMofradatListActivity.class);
                     break;
                 case "مثلثات":
-                    intent = new Intent(MavaezDetailActivity.this, MavaezMosalasatActivity.class);
+                    intent = new Intent(MavaezDetailActivity.this, MavaezMosallasatActivity.class);
                     break;
                 default:
                     return;
