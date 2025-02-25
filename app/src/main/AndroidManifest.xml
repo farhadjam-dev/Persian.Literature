@@ -209,9 +209,16 @@
 
 
 
-        <activity android:name="saadi.RasaelDetailActivity"
+        <activity android:name="saadi.ResaelListActivity"
             android:exported="false"/>
-        <activity android:name="saadi.MajalesDetailActivity"
+        <activity android:name="saadi.ResaelDetailActivity"
+            android:exported="false"/>
+
+
+
+        <activity android:name="saadi.MajalessListActivity"
+            android:exported="false"/>
+        <activity android:name="saadi.MajalessDetailActivity"
             android:exported="false"/>
 
 

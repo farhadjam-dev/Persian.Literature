@@ -138,11 +138,11 @@ public class SaadiActivity extends AppCompatActivity {
                     break;
                 case "مواعظ": intent = new Intent(SaadiActivity.this, MavaezDetailActivity.class); break;
                 case "رسائل نثر":
-                    intent = new Intent(SaadiActivity.this, RasaelDetailActivity.class);
+                    intent = new Intent(SaadiActivity.this, ResaelListActivity.class);
                     intent.putExtra("title", "رسائل نثر سعدی");
                     break;
                 case "مجالس پنجگانه":
-                    intent = new Intent(SaadiActivity.this, MajalesDetailActivity.class);
+                    intent = new Intent(SaadiActivity.this, MajalessListActivity.class);
                     intent.putExtra("title", "مجالس پنجگانه سعدی");
                     break;
                 default: return;
