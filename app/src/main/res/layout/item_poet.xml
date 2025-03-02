@@ -14,24 +14,22 @@
         android:padding="16dp">
 
         <!-- تصویر شاعر -->
-        <ImageView
-            android:id="@+id/poet_image"
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/hafez"
-            android:background="@color/colorAccent"
-             />
-
-        <!-- نام شاعر -->
-        <TextView
-            android:id="@+id/poet_name"
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="حافظ"
-            android:textSize="18sp"
-            android:textColor="@color/textColor"
-            android:gravity="center"
-            android:layout_marginTop="8dp" />
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp">
+
+            <ImageView
+                android:id="@+id/poet_image"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/hafez"
+                android:background="@color/colorAccent" />
+        </androidx.cardview.widget.CardView>
+
+        <!-- نام شاعر -->
+
     </LinearLayout>
 </androidx.cardview.widget.CardView>

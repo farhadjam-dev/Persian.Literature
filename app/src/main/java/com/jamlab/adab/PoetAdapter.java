@@ -47,7 +47,7 @@ public class PoetAdapter extends RecyclerView.Adapter<PoetAdapter.PoetViewHolder
         Poet poet = poetList.get(position);
 
         // تنظیم نام شاعر
-        holder.poetName.setText(poet.getName());
+       // holder.poetName.setText(poet.getName());
 
         // تنظیم تصویر شاعر
         holder.poetImage.setImageResource(poet.getImageResId());
@@ -71,14 +71,14 @@ public class PoetAdapter extends RecyclerView.Adapter<PoetAdapter.PoetViewHolder
     // کلاس ViewHolder برای نگهداری viewهای هر آیتم
     public static class PoetViewHolder extends RecyclerView.ViewHolder {
         ImageView poetImage; // تصویر شاعر
-        TextView poetName;   // نام شاعر
+       // TextView poetName;   // نام شاعر
 
         public PoetViewHolder(@NonNull View itemView) {
             super(itemView);
 
             // اتصال viewها به عناصر موجود در layout
             poetImage = itemView.findViewById(R.id.poet_image);
-            poetName = itemView.findViewById(R.id.poet_name);
+          //  poetName = itemView.findViewById(R.id.poet_name);
         }
     }
 }

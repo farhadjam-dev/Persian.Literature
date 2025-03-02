@@ -30,16 +30,17 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:scrollbarSize="0dp">
 
         <!-- TextView برای نمایش زندگی‌نامه -->
         <TextView
             android:id="@+id/bio_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:textColor="@color/textColor"
             android:lineSpacingExtra="8dp"
-            android:text="زندگی‌نامه حافظ" />
+            android:text="زندگی‌نامه حافظ"
+            android:textColor="@color/textColor"
+            android:textSize="16sp" />
     </ScrollView>
 </LinearLayout>
