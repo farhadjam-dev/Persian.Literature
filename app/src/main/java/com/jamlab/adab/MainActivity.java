@@ -75,8 +75,8 @@ public class MainActivity extends AppCompatActivity {
 
         List<Poet> poetList = new ArrayList<>();
         poetList.add(new Poet("حافظ", R.drawable.hafez));
-        poetList.add(new Poet("سعدی", R.drawable.saadi));
-        poetList.add(new Poet("مولوی", R.drawable.molavi));
+       // poetList.add(new Poet("سعدی", R.drawable.saadi));
+        //poetList.add(new Poet("مولوی", R.drawable.molavi));
 
         poetAdapter = new PoetAdapter(poetList, poet -> {
             if (poet.getName().equals("حافظ")) {
