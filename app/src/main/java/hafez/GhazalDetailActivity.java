@@ -52,8 +52,8 @@ public class GhazalDetailActivity extends AppCompatActivity {
 
     // نگاشت عنوان غزل به لینک صوتی Google Drive
     private static final Map<String, String> AUDIO_URLS = new HashMap<String, String>() {{
-        put("غزل شماره ۱", "https://drive.google.com/uc?export=download&id=1aGP2JQIOU0r0V_nupxacJBRC7W3IHBJl");
-        put("غزل شماره ۲", "https://drive.google.com/uc?export=download&id=1zjIUShd6E8TQeiR-6DjqA9d4KwvwnQSI");
+        put("غزل شماره ۱ حافظ", "https://drive.google.com/uc?export=download&id=1aGP2JQIOU0r0V_nupxacJBRC7W3IHBJl");
+        put("غزل شماره ۲ حافظ", "https://drive.google.com/uc?export=download&id=1zjIUShd6E8TQeiR-6DjqA9d4KwvwnQSI");
     }};
 
     // حداکثر حجم کش (1000 مگابایت)
