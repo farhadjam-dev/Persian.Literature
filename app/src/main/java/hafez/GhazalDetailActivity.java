@@ -9,8 +9,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
@@ -50,13 +51,11 @@ public class GhazalDetailActivity extends AppCompatActivity {
     private Handler handler = new Handler(Looper.getMainLooper());
     private boolean isPlaying = false;
 
-    // نگاشت عنوان غزل به لینک صوتی Google Drive
     private static final Map<String, String> AUDIO_URLS = new HashMap<String, String>() {{
         put("غزل شماره ۱ حافظ", "https://drive.google.com/uc?export=download&id=1aGP2JQIOU0r0V_nupxacJBRC7W3IHBJl");
         put("غزل شماره ۲ حافظ", "https://drive.google.com/uc?export=download&id=1zjIUShd6E8TQeiR-6DjqA9d4KwvwnQSI");
     }};
 
-    // حداکثر حجم کش (1000 مگابایت)
     private static final long MAX_CACHE_SIZE = 1000 * 1024 * 1024; // 1000 MB
 
     @Override
@@ -64,14 +63,12 @@ public class GhazalDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ghazal_detail);
 
-        // تنظیم Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
 
-        // پیدا کردن عناصر UI
         TextView toolbarTitle = findViewById(R.id.toolbar_title);
         favoriteButton = findViewById(R.id.favorite_button);
         playPauseButton = findViewById(R.id.play_pause_button);
@@ -79,31 +76,29 @@ public class GhazalDetailActivity extends AppCompatActivity {
         downloadProgress = findViewById(R.id.download_progress);
         remainingTime = findViewById(R.id.remaining_time);
 
-        // اتصال RecyclerView
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // دریافت عنوان غزل از Intent
         ghazalTitle = getIntent().getStringExtra("ghazalTitle");
         if (ghazalTitle != null) {
             toolbarTitle.setText(ghazalTitle);
         }
 
-        // بارگذاری ابیات غزل
         List<Verse> verseList = loadVersesFromJson(ghazalTitle);
         verseAdapter = new VerseAdapter(verseList);
         recyclerView.setAdapter(verseAdapter);
 
-        // مدیریت علاقه‌مندی‌ها
         SharedPreferences sharedPreferences = getSharedPreferences("Favorites", MODE_PRIVATE);
         Set<String> favorites = sharedPreferences.getStringSet("favorites", new HashSet<>());
-        Set<String> mutableFavorites = new HashSet<>(favorites); // کپی قابل تغییر
+        Set<String> mutableFavorites = new HashSet<>(favorites);
 
-        // بررسی وضعیت علاقه‌مندی برای غزل فعلی
         isFavorite = mutableFavorites.contains(ghazalTitle);
         favoriteButton.setImageResource(isFavorite ? R.drawable.ic_star_filled : R.drawable.ic_star_outline);
 
         favoriteButton.setOnClickListener(v -> {
+            Animation scaleUp = AnimationUtils.loadAnimation(this, R.anim.scale_up);
+            favoriteButton.startAnimation(scaleUp);
+
             SharedPreferences.Editor editor = sharedPreferences.edit();
             if (isFavorite) {
                 isFavorite = false;
@@ -117,11 +112,14 @@ public class GhazalDetailActivity extends AppCompatActivity {
                 Toast.makeText(this, "به علاقه‌مندی‌ها اضافه شد", Toast.LENGTH_SHORT).show();
             }
             editor.putStringSet("favorites", mutableFavorites);
-            editor.apply(); // ذخیره تغییرات
+            editor.apply();
         });
 
-        // تنظیم دکمه Play/Pause
         playPauseButton.setOnClickListener(v -> {
+            // بارگذاری و اعمال انیمیشن برای دکمه پخش/توقف
+            Animation playPauseAnim = AnimationUtils.loadAnimation(this, R.anim.play_pause_animation);
+            playPauseButton.startAnimation(playPauseAnim);
+
             if (!isPlaying) {
                 playAudio();
             } else {

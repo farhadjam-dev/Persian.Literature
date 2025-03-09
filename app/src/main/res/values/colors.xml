@@ -7,5 +7,5 @@
     <color name="colorAccent">#F28C38</color> <!-- نارنجی مرجانی به عنوان رنگ تاکیدی -->
     <color name="background">#F0F4F8</color> <!-- خاکستری روشن با ته‌رنگ آبی -->
     <color name="textColor">#1F2A44</color> <!-- رنگ تیره ملایم برای متن -->
-    <color name="cardBackground">#FDFDFD</color> <!-- سفید گرم برای کارت‌ها -->
+    <color name="cardBackground">#FDFDFD</color><!-- سفید گرم برای کارت‌ها -->
 </resources>

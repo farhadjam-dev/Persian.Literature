@@ -1,35 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/background">
 
-    <!-- Toolbar -->
+    <!-- Toolbar مدرن مشابه کد اول -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/toolbar_card"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_margin="0dp"
+        app:cardCornerRadius="0dp"
+        android:padding="8dp"
+    app:cardElevation="6dp"
+    app:cardBackgroundColor="@color/colorPrimary"> <!-- رنگ مشابه -->
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimary"
-        android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        android:popupTheme="@style/ThemeOverlay.AppCompat.Light">
-
-        <!-- عنوان "غزلیات حافظ" در وسط -->
-        <TextView
-            android:id="@+id/toolbar_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="غزلیات حافظ"
-            android:textSize="20sp"
-            android:textColor="@android:color/black"
-            android:layout_gravity="center"
-            android:padding="8dp" />
-    </androidx.appcompat.widget.Toolbar>
-
-    <!-- RecyclerView برای نمایش لیست غزلیات -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="8dp" />
-</LinearLayout>
+        android:background="@android:color/transparent"
+    app:contentInsetStart="0dp"
+        android:padding="8dp"
+    app:contentInsetEnd="0dp">
+
+    <!-- عنوان "غزلیات حافظ" در وسط -->
+    <TextView
+        android:id="@+id/toolbar_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="غزلیات حافظ"
+        android:textSize="18sp"
+    android:textColor="@android:color/black"
+    android:textStyle="bold"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:padding="8dp" />
+</androidx.appcompat.widget.Toolbar>
+    </androidx.cardview.widget.CardView>
+
+    <!-- RecyclerView برای نمایش لیست غزلیات (بدون تغییر) -->
+<androidx.recyclerview.widget.RecyclerView
+android:id="@+id/recyclerView"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:padding="0dp"
+    app:cardBackgroundColor="@color/colorPrimaryDark"/>
+    </LinearLayout>
