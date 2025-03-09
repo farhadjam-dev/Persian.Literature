@@ -24,41 +24,96 @@
             app:contentInsetStart="0dp"
             app:contentInsetEnd="0dp">
 
-            <!-- دکمه ستاره در سمت چپ -->
-            <ImageButton
-                android:id="@+id/favorite_button"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:src="@drawable/ic_star_outline"
-                android:tint="#FF0000"
-            android:background="@null"
-            android:layout_gravity="start|center_vertical"
-            android:padding="12dp"
-            android:scaleType="centerInside"
-            android:contentDescription="اضافه به علاقه‌مندی‌ها"
-            android:elevation="2dp" />
-
-            <!-- عنوان غزل در مرکز -->
-            <TextView
-                android:id="@+id/toolbar_title"
+            <!-- دکمه فلش قبلی در سمت راست -->
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="عنوان غزل"
-                android:textSize="18sp"
-                android:textColor="@android:color/black"
-                android:textStyle="bold"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
                 android:layout_gravity="end"
                 android:gravity="center"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:paddingHorizontal="16dp" />
+                android:padding="8dp">
+                <ImageButton
+                    android:id="@+id/prev_button"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_arrow_prev"
+                    android:background="@null"
+                    android:contentDescription="غزل قبلی" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="قبلی"
+                    android:textSize="12sp"
+                    android:textColor="@android:color/black" />
+            </LinearLayout>
+
+            <!-- عنوان غزل و دکمه علاقه‌مندی‌ها در مرکز -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:padding="8dp">
+
+                <!-- دکمه ستاره (علاقه‌مندی‌ها) -->
+                <ImageButton
+                    android:id="@+id/favorite_button"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:src="@drawable/ic_star_outline"
+                    android:tint="#FF0000"
+                    android:background="@null"
+                    android:scaleType="centerInside"
+                    android:contentDescription="اضافه به علاقه‌مندی‌ها"
+                    android:elevation="2dp"
+                    android:padding="2dp"
+                    android:layout_marginEnd="8dp" />
+
+                <!-- عنوان غزل -->
+                <TextView
+                    android:id="@+id/toolbar_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="عنوان غزل"
+                    android:textSize="18sp"
+                    android:textColor="@android:color/black"
+                    android:textStyle="bold"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:paddingHorizontal="8dp" />
+            </LinearLayout>
+
+            <!-- دکمه فلش بعدی در سمت چپ -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_gravity="start"
+                android:gravity="center"
+                android:padding="8dp">
+                <ImageButton
+                    android:id="@+id/next_button"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_arrow_next"
+                    android:background="@null"
+                    android:contentDescription="غزل بعدی" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="بعدی"
+                    android:textSize="12sp"
+                    android:textColor="@android:color/black" />
+            </LinearLayout>
+
         </androidx.appcompat.widget.Toolbar>
     </androidx.cardview.widget.CardView>
 
-    <!-- RecyclerView برای نمایش ابیات و تفسیر -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+    <!-- ViewPager2 برای نمایش غزل‌ها -->
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -74,7 +129,7 @@
         android:layout_margin="12dp"
         app:cardCornerRadius="12dp"
         app:cardElevation="8dp"
-        app:cardBackgroundColor="@color/colorPrimaryDark"> <!-- بازگشت به رنگ ثابت -->
+        app:cardBackgroundColor="@color/colorPrimaryDark">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -92,7 +147,7 @@
                 <ImageButton
                     android:id="@+id/play_pause_button"
                     android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                    android:layout_height="match_parent"
                     android:src="@drawable/ic_play"
                     android:background="@drawable/circular_button_background"
                     android:scaleType="centerInside"

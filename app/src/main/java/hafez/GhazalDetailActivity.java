@@ -7,8 +7,7 @@ import android.os.Handler;
 import android.os.Looper;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -29,6 +28,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -38,18 +38,22 @@ import java.util.Set;
 
 public class GhazalDetailActivity extends AppCompatActivity {
 
-    private RecyclerView recyclerView;
-    private VerseAdapter verseAdapter;
+    private ViewPager2 viewPager;
+    private GhazalPagerAdapter ghazalAdapter;
     private ImageButton favoriteButton;
     private ImageButton playPauseButton;
+    private ImageButton nextButton;
+    private ImageButton prevButton;
     private SeekBar audioSeekBar;
     private ProgressBar downloadProgress;
     private TextView remainingTime;
+    private TextView toolbarTitle;
     private boolean isFavorite = false;
     private String ghazalTitle;
     private MediaPlayer mediaPlayer;
     private Handler handler = new Handler(Looper.getMainLooper());
     private boolean isPlaying = false;
+    private List<String> ghazalTitles;
 
     private static final Map<String, String> AUDIO_URLS = new HashMap<String, String>() {{
         put("غزل شماره ۱ حافظ", "https://drive.google.com/uc?export=download&id=1aGP2JQIOU0r0V_nupxacJBRC7W3IHBJl");
@@ -69,57 +73,75 @@ public class GhazalDetailActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
 
-        TextView toolbarTitle = findViewById(R.id.toolbar_title);
+        toolbarTitle = findViewById(R.id.toolbar_title);
         favoriteButton = findViewById(R.id.favorite_button);
         playPauseButton = findViewById(R.id.play_pause_button);
+        nextButton = findViewById(R.id.next_button);
+        prevButton = findViewById(R.id.prev_button);
         audioSeekBar = findViewById(R.id.audio_seekbar);
         downloadProgress = findViewById(R.id.download_progress);
         remainingTime = findViewById(R.id.remaining_time);
+        viewPager = findViewById(R.id.viewPager);
 
-        recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
+        // بارگذاری لیست غزل‌ها و معکوس کردن آن
+        ghazalTitles = loadGhazalTitlesFromJson();
+        Collections.reverse(ghazalTitles); // معکوس کردن ترتیب غزل‌ها
         ghazalTitle = getIntent().getStringExtra("ghazalTitle");
-        if (ghazalTitle != null) {
-            toolbarTitle.setText(ghazalTitle);
+        if (ghazalTitle == null || ghazalTitle.isEmpty()) {
+            ghazalTitle = ghazalTitles.isEmpty() ? "بدون عنوان" : ghazalTitles.get(0); // مقدار پیش‌فرض
+        }
+        int initialPosition = ghazalTitles.indexOf(ghazalTitle);
+        if (initialPosition == -1) {
+            initialPosition = 0; // اگر غزل پیدا نشد، از اولین غزل شروع کن
         }
 
-        List<Verse> verseList = loadVersesFromJson(ghazalTitle);
-        verseAdapter = new VerseAdapter(verseList);
-        recyclerView.setAdapter(verseAdapter);
+        // تنظیم ViewPager2
+        ghazalAdapter = new GhazalPagerAdapter(this, ghazalTitles);
+        viewPager.setAdapter(ghazalAdapter);
+        viewPager.setCurrentItem(initialPosition, false);
+        viewPager.setUserInputEnabled(true); // فعال کردن کشیدن
 
-        SharedPreferences sharedPreferences = getSharedPreferences("Favorites", MODE_PRIVATE);
-        Set<String> favorites = sharedPreferences.getStringSet("favorites", new HashSet<>());
-        Set<String> mutableFavorites = new HashSet<>(favorites);
+        // تنظیم عنوان اولیه
+        toolbarTitle.setText(ghazalTitle);
 
-        isFavorite = mutableFavorites.contains(ghazalTitle);
-        favoriteButton.setImageResource(isFavorite ? R.drawable.ic_star_filled : R.drawable.ic_star_outline);
-
-        favoriteButton.setOnClickListener(v -> {
-            Animation scaleUp = AnimationUtils.loadAnimation(this, R.anim.scale_up);
-            favoriteButton.startAnimation(scaleUp);
-
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            if (isFavorite) {
-                isFavorite = false;
-                mutableFavorites.remove(ghazalTitle);
-                favoriteButton.setImageResource(R.drawable.ic_star_outline);
-                Toast.makeText(this, "از علاقه‌مندی‌ها حذف شد", Toast.LENGTH_SHORT).show();
-            } else {
-                isFavorite = true;
-                mutableFavorites.add(ghazalTitle);
-                favoriteButton.setImageResource(R.drawable.ic_star_filled);
-                Toast.makeText(this, "به علاقه‌مندی‌ها اضافه شد", Toast.LENGTH_SHORT).show();
+        // به‌روزرسانی عنوان و صوت هنگام تغییر صفحه
+        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                ghazalTitle = ghazalTitles.get(position);
+                toolbarTitle.setText(ghazalTitle); // به‌روزرسانی عنوان
+                updateFavoriteButton();
+                resetAndLoadAudio();
             }
-            editor.putStringSet("favorites", mutableFavorites);
-            editor.apply();
         });
 
+        // مدیریت کلیک روی دکمه‌های قبلی و بعدی
+        nextButton.setOnClickListener(v -> { // دکمه بعدی (سمت چپ) → غزل قبلی
+            int prevPosition = viewPager.getCurrentItem() - 1;
+            if (prevPosition >= 0) {
+                viewPager.setCurrentItem(prevPosition);
+            } else {
+                Toast.makeText(this, "این آخرین غزل است", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        prevButton.setOnClickListener(v -> { // دکمه قبلی (سمت راست) → غزل بعدی
+            int nextPosition = viewPager.getCurrentItem() + 1;
+            if (nextPosition < ghazalTitles.size()) {
+                viewPager.setCurrentItem(nextPosition);
+            } else {
+                Toast.makeText(this, "این اولین غزل است", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // تنظیم دکمه علاقه‌مندی‌ها
+        updateFavoriteButton();
+        favoriteButton.setOnClickListener(v -> toggleFavorite());
+
+        // تنظیم دکمه پخش/توقف
         playPauseButton.setOnClickListener(v -> {
-            // بارگذاری و اعمال انیمیشن برای دکمه پخش/توقف
             Animation playPauseAnim = AnimationUtils.loadAnimation(this, R.anim.play_pause_animation);
             playPauseButton.startAnimation(playPauseAnim);
-
             if (!isPlaying) {
                 playAudio();
             } else {
@@ -128,6 +150,36 @@ public class GhazalDetailActivity extends AppCompatActivity {
         });
 
         setupSeekBar();
+    }
+
+    private void updateFavoriteButton() {
+        SharedPreferences sharedPreferences = getSharedPreferences("Favorites", MODE_PRIVATE);
+        Set<String> favorites = sharedPreferences.getStringSet("favorites", new HashSet<>());
+        isFavorite = favorites.contains(ghazalTitle);
+        favoriteButton.setImageResource(isFavorite ? R.drawable.ic_star_filled : R.drawable.ic_star_outline);
+    }
+
+    private void toggleFavorite() {
+        Animation scaleUp = AnimationUtils.loadAnimation(this, R.anim.scale_up);
+        favoriteButton.startAnimation(scaleUp);
+
+        SharedPreferences sharedPreferences = getSharedPreferences("Favorites", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Set<String> favorites = new HashSet<>(sharedPreferences.getStringSet("favorites", new HashSet<>()));
+
+        if (isFavorite) {
+            isFavorite = false;
+            favorites.remove(ghazalTitle);
+            favoriteButton.setImageResource(R.drawable.ic_star_outline);
+            Toast.makeText(this, "از علاقه‌مندی‌ها حذف شد", Toast.LENGTH_SHORT).show();
+        } else {
+            isFavorite = true;
+            favorites.add(ghazalTitle);
+            favoriteButton.setImageResource(R.drawable.ic_star_filled);
+            Toast.makeText(this, "به علاقه‌مندی‌ها اضافه شد", Toast.LENGTH_SHORT).show();
+        }
+        editor.putStringSet("favorites", favorites);
+        editor.apply();
     }
 
     private void playAudio() {
@@ -168,7 +220,7 @@ public class GhazalDetailActivity extends AppCompatActivity {
                 playPauseButton.setImageResource(R.drawable.ic_pause);
                 updateSeekBar();
             });
-            mediaPlayer.setOnCompletionListener(mp -> resetAudio());
+            mediaPlayer.setOnCompletionListener(mp -> resetAndLoadAudio());
             mediaPlayer.prepareAsync();
         } catch (IOException e) {
             e.printStackTrace();
@@ -187,24 +239,15 @@ public class GhazalDetailActivity extends AppCompatActivity {
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.connect();
 
-                try {
-                    if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
-                        runOnUiThread(() -> {
-                            downloadProgress.setVisibility(View.GONE);
-                            playPauseButton.setEnabled(true);
-                            try {
-                                Toast.makeText(this, "خطا در دانلود: " + connection.getResponseCode(), Toast.LENGTH_SHORT).show();
-                            } catch (IOException e) {
-                                throw new RuntimeException(e);
-                            }
-                        });
-                        return;
-                    }
-                } catch (IOException e) {
+                if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
                     runOnUiThread(() -> {
                         downloadProgress.setVisibility(View.GONE);
                         playPauseButton.setEnabled(true);
-                        Toast.makeText(this, "خطا در دریافت پاسخ سرور", Toast.LENGTH_SHORT).show();
+                        try {
+                            Toast.makeText(this, "خطا در دانلود: " + connection.getResponseCode(), Toast.LENGTH_SHORT).show();
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
                     });
                     return;
                 }
@@ -267,17 +310,38 @@ public class GhazalDetailActivity extends AppCompatActivity {
         }
     }
 
-    private void resetAudio() {
+    private void resetAndLoadAudio() {
         if (mediaPlayer != null) {
             if (mediaPlayer.isPlaying()) {
-                mediaPlayer.pause();
+                mediaPlayer.stop();
             }
-            mediaPlayer.seekTo(0);
-            isPlaying = false;
-            playPauseButton.setImageResource(R.drawable.ic_play);
-            audioSeekBar.setProgress(0);
-            remainingTime.setText("-" + formatTime(mediaPlayer.getDuration()));
-            handler.removeCallbacksAndMessages(null);
+            mediaPlayer.reset();
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
+        isPlaying = false;
+        playPauseButton.setImageResource(R.drawable.ic_play);
+        audioSeekBar.setProgress(0);
+        remainingTime.setText("-00:00");
+        handler.removeCallbacksAndMessages(null);
+
+        String audioUrl = AUDIO_URLS.get(ghazalTitle);
+        if (audioUrl != null) {
+            File cacheFile = new File(getCacheDir(), ghazalTitle.replace(" ", "_") + ".mp3");
+            if (cacheFile.exists()) {
+                try {
+                    mediaPlayer = new MediaPlayer();
+                    mediaPlayer.setDataSource(cacheFile.getAbsolutePath());
+                    mediaPlayer.setOnPreparedListener(mp -> {
+                        audioSeekBar.setMax(mp.getDuration());
+                        remainingTime.setText("-" + formatTime(mp.getDuration()));
+                    });
+                    mediaPlayer.prepareAsync();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Toast.makeText(this, "خطا در بارگذاری صوت", Toast.LENGTH_SHORT).show();
+                }
+            }
         }
     }
 
@@ -326,7 +390,28 @@ public class GhazalDetailActivity extends AppCompatActivity {
         handler.removeCallbacksAndMessages(null);
     }
 
-    private List<Verse> loadVersesFromJson(String ghazalTitle) {
+    private List<String> loadGhazalTitlesFromJson() {
+        List<String> titles = new ArrayList<>();
+        try {
+            InputStream inputStream = getResources().openRawResource(R.raw.hafez_ghazals);
+            int size = inputStream.available();
+            byte[] buffer = new byte[size];
+            inputStream.read(buffer);
+            inputStream.close();
+            String json = new String(buffer, "UTF-8");
+            JSONArray jsonArray = new JSONArray(json);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                titles.add(jsonObject.getString("title"));
+            }
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "خطا در بارگذاری غزل‌ها", Toast.LENGTH_SHORT).show();
+        }
+        return titles;
+    }
+
+    public List<Verse> loadVersesFromJson(String ghazalTitle) {
         List<Verse> verseList = new ArrayList<>();
         try {
             InputStream inputStream = getResources().openRawResource(R.raw.hafez_ghazals);
