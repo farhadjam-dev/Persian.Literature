@@ -34,17 +34,13 @@
                 android:padding="8dp">
                 <ImageButton
                     android:id="@+id/prev_button"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:src="@drawable/ic_arrow_prev"
                     android:background="@null"
                     android:contentDescription="غزل قبلی" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="قبلی"
-                    android:textSize="12sp"
-                    android:textColor="@android:color/black" />
+
+
             </LinearLayout>
 
             <!-- عنوان غزل و دکمه علاقه‌مندی‌ها در مرکز -->
@@ -95,17 +91,12 @@
                 android:padding="8dp">
                 <ImageButton
                     android:id="@+id/next_button"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:src="@drawable/ic_arrow_next"
                     android:background="@null"
                     android:contentDescription="غزل بعدی" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="بعدی"
-                    android:textSize="12sp"
-                    android:textColor="@android:color/black" />
+
             </LinearLayout>
 
         </androidx.appcompat.widget.Toolbar>
