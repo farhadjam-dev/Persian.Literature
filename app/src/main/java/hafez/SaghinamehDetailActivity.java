@@ -10,6 +10,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
@@ -44,14 +46,13 @@ public class SaghinamehDetailActivity extends AppCompatActivity {
     private ProgressBar downloadProgress;
     private TextView remainingTime;
     private boolean isFavorite = false;
-    private String saghinamehTitle;
+    private String saghinamehTitle = "ساقی‌نامه حافظ"; // عنوان ثابت چون فقط یک ساقی‌نامه داریم
     private MediaPlayer mediaPlayer;
     private Handler handler = new Handler(Looper.getMainLooper());
     private boolean isPlaying = false;
 
-    // نگاشت عنوان ساقی‌نامه به لینک صوتی Google Drive (فعلاً خالی)
     private static final Map<String, String> AUDIO_URLS = new HashMap<String, String>() {{
-        //put("ساقی‌نامه حافظ", "لینک صوتی"); // بعداً لینک رو اضافه کنید
+        //put("ساقی‌نامه حافظ", "https://drive.google.com/uc?export=download&id=لینک_صوتی");
     }};
 
     private static final long MAX_CACHE_SIZE = 1000 * 1024 * 1024; // 1000 MB
@@ -81,17 +82,11 @@ public class SaghinamehDetailActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // دریافت عنوان ساقی‌نامه از Intent
-        saghinamehTitle = getIntent().getStringExtra("saghinamehTitle");
-        if (saghinamehTitle != null) {
-            toolbarTitle.setText(saghinamehTitle);
-        } else {
-            saghinamehTitle = "ساقی‌نامه حافظ"; // مقدار پیش‌فرض
-            toolbarTitle.setText(saghinamehTitle);
-        }
+        // تنظیم عنوان ثابت
+        toolbarTitle.setText(saghinamehTitle);
 
         // بارگذاری ابیات ساقی‌نامه
-        List<Verse> verseList = loadVersesFromJson(saghinamehTitle);
+        List<Verse> verseList = loadVersesFromJson();
         verseAdapter = new VerseAdapter(verseList);
         recyclerView.setAdapter(verseAdapter);
 
@@ -100,11 +95,12 @@ public class SaghinamehDetailActivity extends AppCompatActivity {
         Set<String> favorites = sharedPreferences.getStringSet("favorites", new HashSet<>());
         Set<String> mutableFavorites = new HashSet<>(favorites);
 
-        // بررسی وضعیت علاقه‌مندی برای ساقی‌نامه
         isFavorite = mutableFavorites.contains(saghinamehTitle);
         favoriteButton.setImageResource(isFavorite ? R.drawable.ic_star_filled : R.drawable.ic_star_outline);
 
         favoriteButton.setOnClickListener(v -> {
+            Animation scaleUp = AnimationUtils.loadAnimation(this, R.anim.scale_up);
+            favoriteButton.startAnimation(scaleUp);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             if (isFavorite) {
                 isFavorite = false;
@@ -123,6 +119,8 @@ public class SaghinamehDetailActivity extends AppCompatActivity {
 
         // تنظیم دکمه Play/Pause
         playPauseButton.setOnClickListener(v -> {
+            Animation playPauseAnim = AnimationUtils.loadAnimation(this, R.anim.play_pause_animation);
+            playPauseButton.startAnimation(playPauseAnim);
             if (!isPlaying) {
                 playAudio();
             } else {
@@ -136,7 +134,7 @@ public class SaghinamehDetailActivity extends AppCompatActivity {
     private void playAudio() {
         String audioUrl = AUDIO_URLS.get(saghinamehTitle);
         if (audioUrl == null) {
-            Toast.makeText(this, "فایل صوتی برای این ساقی‌نامه یافت نشد", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "فایل صوتی برای ساقی‌نامه یافت نشد", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -326,7 +324,7 @@ public class SaghinamehDetailActivity extends AppCompatActivity {
         return true;
     }
 
-    private List<Verse> loadVersesFromJson(String saghinamehTitle) {
+    private List<Verse> loadVersesFromJson() {
         List<Verse> verseList = new ArrayList<>();
         try {
             InputStream inputStream = getResources().openRawResource(R.raw.hafez_saghinameh);
@@ -336,7 +334,7 @@ public class SaghinamehDetailActivity extends AppCompatActivity {
             inputStream.close();
             String json = new String(buffer, "UTF-8");
             JSONArray jsonArray = new JSONArray(json);
-            // چون فقط یه ساقی‌نامه داریم، اولین شیء رو می‌گیره
+            // چون فقط یک ساقی‌نامه داریم، اولین شیء را می‌گیریم
             if (jsonArray.length() > 0) {
                 JSONObject jsonObject = jsonArray.getJSONObject(0);
                 JSONArray versesArray = jsonObject.getJSONArray("verses");

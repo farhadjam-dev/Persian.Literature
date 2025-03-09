@@ -2,11 +2,11 @@ package hafez;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx
+
+        .recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.jamlab.adab.R;
 import org.json.JSONArray;
@@ -27,24 +27,16 @@ public class RubaiyatListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rubaiyat_list);
 
-        // تنظیم Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
 
-        // اتصال RecyclerView
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // بارگذاری رباعیات از JSON
         List<Rubaiyat> rubaiyatList = loadRubaiyatsFromJson();
-        if (rubaiyatList.isEmpty()) {
-            Toast.makeText(this, "هیچ رباعی‌ای یافت نشد", Toast.LENGTH_SHORT).show();
-        }
-
-        // تنظیم آداپتر
         rubaiyatAdapter = new RubaiyatAdapter(rubaiyatList, rubaiyat -> {
             Intent intent = new Intent(RubaiyatListActivity.this, RubaiyatDetailActivity.class);
             intent.putExtra("rubaiyatTitle", rubaiyat.getTitle());
@@ -56,64 +48,35 @@ public class RubaiyatListActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        rubaiyatAdapter.notifyDataSetChanged(); // به‌روزرسانی برای تغییرات علاقه‌مندی‌ها
+        rubaiyatAdapter.notifyDataSetChanged();
     }
 
-    // بارگذاری رباعیات از فایل JSON
     private List<Rubaiyat> loadRubaiyatsFromJson() {
         List<Rubaiyat> rubaiyatList = new ArrayList<>();
         try {
-            // باز کردن فایل JSON از res/raw
             InputStream inputStream = getResources().openRawResource(R.raw.hafez_rubaiyat);
             int size = inputStream.available();
             byte[] buffer = new byte[size];
-            int bytesRead = inputStream.read(buffer);
+            inputStream.read(buffer);
             inputStream.close();
-
-            if (bytesRead <= 0) {
-                Log.e("RubaiyatDebug", "فایل JSON خالی است");
-                return rubaiyatList;
-            }
-
             String json = new String(buffer, "UTF-8");
             JSONArray jsonArray = new JSONArray(json);
-
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                String title = jsonObject.optString("title", "بدون عنوان");
-
-                // بررسی وجود و نوع "verses"
-                if (!jsonObject.has("verses") || jsonObject.isNull("verses")) {
-                    Log.w("RubaiyatDebug", "کلید 'verses' برای " + title + " وجود ندارد");
-                    continue;
-                }
-
-                Object versesObj = jsonObject.get("verses");
-                if (!(versesObj instanceof JSONArray)) {
-                    Log.w("RubaiyatDebug", "'verses' برای " + title + " آرایه نیست: " + versesObj.toString());
-                    continue;
-                }
-
-                JSONArray versesArray = (JSONArray) versesObj;
+                String title = jsonObject.getString("title");
+                JSONArray versesArray = jsonObject.getJSONArray("verses");
                 List<Verse> verses = new ArrayList<>();
-
                 for (int j = 0; j < versesArray.length(); j++) {
                     JSONObject verseObject = versesArray.getJSONObject(j);
-                    String text = verseObject.optString("text", "");
-                    String explanation = verseObject.optString("explanation", "");
+                    String text = verseObject.getString("text");
+                    String explanation = verseObject.getString("explanation");
                     verses.add(new Verse(text, explanation));
                 }
-
                 rubaiyatList.add(new Rubaiyat(title, verses));
             }
-        } catch (IOException e) {
-            Log.e("RubaiyatDebug", "خطا در خواندن فایل JSON: " + e.getMessage());
-            Toast.makeText(this, "خطا در بارگذاری رباعیات", Toast.LENGTH_SHORT).show();
-        } catch (JSONException e) {
-            Log.e("RubaiyatDebug", "خطا در پردازش JSON: " + e.getMessage());
-            Toast.makeText(this, "فرمت JSON رباعیات نامعتبر است", Toast.LENGTH_SHORT).show();
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
         }
-        Log.d("RubaiyatDebug", "تعداد رباعیات بارگذاری‌شده: " + rubaiyatList.size());
         return rubaiyatList;
     }
 }

@@ -2,8 +2,6 @@ package hafez;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -27,24 +25,16 @@ public class GhasaidListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ghasaid_list);
 
-        // تنظیم Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
 
-        // اتصال RecyclerView
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // بارگذاری قصاید از JSON
         List<Ghasaid> ghasaidList = loadGhasaidFromJson();
-        if (ghasaidList.isEmpty()) {
-            Toast.makeText(this, "هیچ قصیده‌ای یافت نشد", Toast.LENGTH_SHORT).show();
-        }
-
-        // تنظیم آداپتر
         ghasaidAdapter = new GhasaidAdapter(ghasaidList, ghasaid -> {
             Intent intent = new Intent(GhasaidListActivity.this, GhasaidDetailActivity.class);
             intent.putExtra("ghasaidTitle", ghasaid.getTitle());
@@ -56,64 +46,35 @@ public class GhasaidListActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        ghasaidAdapter.notifyDataSetChanged(); // به‌روزرسانی برای تغییرات علاقه‌مندی‌ها
+        ghasaidAdapter.notifyDataSetChanged();
     }
 
-    // بارگذاری قصاید از فایل JSON
     private List<Ghasaid> loadGhasaidFromJson() {
         List<Ghasaid> ghasaidList = new ArrayList<>();
         try {
-            // باز کردن فایل JSON از res/raw
             InputStream inputStream = getResources().openRawResource(R.raw.hafez_ghasaid);
             int size = inputStream.available();
             byte[] buffer = new byte[size];
-            int bytesRead = inputStream.read(buffer);
+            inputStream.read(buffer);
             inputStream.close();
-
-            if (bytesRead <= 0) {
-                Log.e("GhasaidDebug", "فایل JSON خالی است");
-                return ghasaidList;
-            }
-
             String json = new String(buffer, "UTF-8");
             JSONArray jsonArray = new JSONArray(json);
-
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                String title = jsonObject.optString("title", "بدون عنوان");
-
-                // بررسی وجود و نوع "verses"
-                if (!jsonObject.has("verses") || jsonObject.isNull("verses")) {
-                    Log.w("GhasaidDebug", "کلید 'verses' برای " + title + " وجود ندارد");
-                    continue;
-                }
-
-                Object versesObj = jsonObject.get("verses");
-                if (!(versesObj instanceof JSONArray)) {
-                    Log.w("GhasaidDebug", "'verses' برای " + title + " آرایه نیست: " + versesObj.toString());
-                    continue;
-                }
-
-                JSONArray versesArray = (JSONArray) versesObj;
+                String title = jsonObject.getString("title");
+                JSONArray versesArray = jsonObject.getJSONArray("verses");
                 List<Verse> verses = new ArrayList<>();
-
                 for (int j = 0; j < versesArray.length(); j++) {
                     JSONObject verseObject = versesArray.getJSONObject(j);
-                    String text = verseObject.optString("text", "");
-                    String explanation = verseObject.optString("explanation", "");
+                    String text = verseObject.getString("text");
+                    String explanation = verseObject.getString("explanation");
                     verses.add(new Verse(text, explanation));
                 }
-
                 ghasaidList.add(new Ghasaid(title, verses));
             }
-        } catch (IOException e) {
-            Log.e("GhasaidDebug", "خطا در خواندن فایل JSON: " + e.getMessage());
-            Toast.makeText(this, "خطا در بارگذاری قصاید", Toast.LENGTH_SHORT).show();
-        } catch (JSONException e) {
-            Log.e("GhasaidDebug", "خطا در پردازش JSON: " + e.getMessage());
-            Toast.makeText(this, "فرمت JSON قصاید نامعتبر است", Toast.LENGTH_SHORT).show();
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
         }
-        Log.d("GhasaidDebug", "تعداد قصاید بارگذاری‌شده: " + ghasaidList.size());
         return ghasaidList;
     }
 }
