@@ -38,10 +38,11 @@ public class MainActivity extends AppCompatActivity {
     private NavigationView navigationView;
     private EditText searchField;
     private ImageView searchIcon, favoriteIcon, menuIcon;
-    private List<Poem> allPoems; // لیست کل اشعار از همه فایل‌ها
+    private List<Poem> allPoems;
     private boolean doubleBackToExitPressedOnce = false;
     private static final int DOUBLE_BACK_DELAY = 2000;
     private boolean isSearchInProgress = false;
+    private static final int MAX_SEARCH_RESULTS = 100; // محدودیت تعداد نتایج
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,20 +64,13 @@ public class MainActivity extends AppCompatActivity {
 
         menuIcon.setOnClickListener(v -> drawerLayout.openDrawer(GravityCompat.START));
 
-        drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
-            @Override public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {}
-            @Override public void onDrawerOpened(@NonNull View drawerView) {}
-            @Override public void onDrawerClosed(@NonNull View drawerView) {}
-            @Override public void onDrawerStateChanged(int newState) {}
-        });
-
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         List<Poet> poetList = new ArrayList<>();
         poetList.add(new Poet("حافظ", R.drawable.hafez));
-       // poetList.add(new Poet("سعدی", R.drawable.saadi));
-        //poetList.add(new Poet("مولوی", R.drawable.molavi));
+        // poetList.add(new Poet("سعدی", R.drawable.saadi));
+        // poetList.add(new Poet("مولوی", R.drawable.molavi));
 
         poetAdapter = new PoetAdapter(poetList, poet -> {
             if (poet.getName().equals("حافظ")) {
@@ -91,7 +85,6 @@ public class MainActivity extends AppCompatActivity {
         favoriteIcon.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, FavoritesActivity.class)));
         recyclerView.setAdapter(poetAdapter);
 
-        // بارگذاری همه اشعار از فایل‌های JSON
         loadAllPoems();
 
         navigationView.setNavigationItemSelectedListener(item -> {
@@ -185,7 +178,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // بارگذاری همه اشعار از فایل‌های JSON
     private void loadAllPoems() {
         allPoems = new ArrayList<>();
         int[] rawFiles = {
@@ -196,8 +188,6 @@ public class MainActivity extends AppCompatActivity {
                 R.raw.hafez_masnavi,
                 R.raw.hafez_saghinameh,
                 R.raw.hafez_montasab
-                // اگه فایل‌های سعدی یا مولوی دارید، اینجا اضافه کنید
-                // مثلاً: R.raw.saadi_ghazals, R.raw.molavi_masnavi
         };
 
         for (int resId : rawFiles) {
@@ -217,51 +207,58 @@ public class MainActivity extends AppCompatActivity {
         String query = searchField.getText().toString().trim();
         if (!query.isEmpty()) {
             isSearchInProgress = true;
-            List<Poem> searchResults = performSearch(allPoems, query);
-            Intent intent = new Intent(MainActivity.this, SearchResultsActivity.class);
-            intent.putParcelableArrayListExtra("search_results", new ArrayList<>(searchResults));
-            intent.putExtra("search_query", query);
-            startActivity(intent);
-            // ریست کردن قفل بعد از تأخیر کوتاه
-            new Handler(Looper.getMainLooper()).postDelayed(() -> isSearchInProgress = false, 500);
+            new Thread(() -> {
+                List<Poem> searchResults = performSearch(allPoems, query);
+                runOnUiThread(() -> {
+                    Intent intent = new Intent(MainActivity.this, SearchResultsActivity.class);
+                    intent.putParcelableArrayListExtra("search_results", new ArrayList<>(searchResults));
+                    intent.putExtra("search_query", query);
+                    startActivity(intent);
 
-            // مخفی کردن نوار جست‌وجو پس از جست‌وجو
-            LinearLayout searchLayout = findViewById(R.id.search_layout);
-            Animation slideOut = AnimationUtils.loadAnimation(this, R.anim.slide_out);
-            searchLayout.startAnimation(slideOut);
-            searchLayout.setVisibility(View.GONE);
-            Animation fadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in);
-            favoriteIcon.setVisibility(View.VISIBLE);
-            menuIcon.setVisibility(View.VISIBLE);
-            favoriteIcon.startAnimation(fadeIn);
-            menuIcon.startAnimation(fadeIn);
-            searchField.setText("");
+                    LinearLayout searchLayout = findViewById(R.id.search_layout);
+                    Animation slideOut = AnimationUtils.loadAnimation(this, R.anim.slide_out);
+                    searchLayout.startAnimation(slideOut);
+                    searchLayout.setVisibility(View.GONE);
+                    Animation fadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in);
+                    favoriteIcon.setVisibility(View.VISIBLE);
+                    menuIcon.setVisibility(View.VISIBLE);
+                    favoriteIcon.startAnimation(fadeIn);
+                    menuIcon.startAnimation(fadeIn);
+                    searchField.setText("");
+
+                    isSearchInProgress = false;
+                });
+            }).start();
         }
     }
 
     private List<Poem> performSearch(List<Poem> poems, String query) {
         List<Poem> results = new ArrayList<>();
         String normalizedQuery = normalizeText(query);
-        List<String> queryParts = Arrays.asList(normalizedQuery.split("\\s+")); // تقسیم با فاصله
+        List<String> queryWords = Arrays.asList(normalizedQuery.split("\\s+"));
 
         for (Poem poem : poems) {
             String normalizedPoemText = normalizeText(poem.getText());
             boolean matchesAll = true;
-            for (String part : queryParts) {
-                if (!normalizedPoemText.contains(part)) {
+            for (String word : queryWords) {
+                if (!normalizedPoemText.contains(" " + word + " ") &&
+                        !normalizedPoemText.startsWith(word + " ") &&
+                        !normalizedPoemText.endsWith(" " + word) &&
+                        !normalizedPoemText.equals(word)) {
                     matchesAll = false;
                     break;
                 }
             }
             if (matchesAll) {
                 results.add(poem);
+                if (results.size() >= MAX_SEARCH_RESULTS) break; // محدودیت تعداد نتایج
             }
         }
         return results;
     }
 
     private String normalizeText(String text) {
-        return text.replaceAll("[\\u064B-\\u065F]", ""); // حذف تمام اعراب یونی‌کد
+        return text.replaceAll("[\\u064B-\\u065F]", ""); // حذف اعراب
     }
 
     @Override

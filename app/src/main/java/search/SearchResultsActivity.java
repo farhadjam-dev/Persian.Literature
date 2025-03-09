@@ -28,25 +28,21 @@ public class SearchResultsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_results);
 
-        // تنظیم Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true); // فعال کردن دکمه بازگشت
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
 
         recyclerView = findViewById(R.id.search_results_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // دریافت نتایج جست‌وجو و عبارت جست‌وجو از Intent
         List<Poem> searchResults = getIntent().getParcelableArrayListExtra("search_results");
         String searchQuery = getIntent().getStringExtra("search_query");
 
-        // تنظیم آداپتر
         searchResultAdapter = new SearchResultAdapter(searchResults, searchQuery, poem -> {
             Intent intent;
-            // تعیین نوع شعر بر اساس منبع یا عنوان
             String title = poem.getTitle().toLowerCase();
             if (title.contains("غزل")) {
                 intent = new Intent(SearchResultsActivity.this, GhazalDetailActivity.class);
@@ -70,7 +66,6 @@ public class SearchResultsActivity extends AppCompatActivity {
                 intent = new Intent(SearchResultsActivity.this, MontasabDetailActivity.class);
                 intent.putExtra("montasabTitle", poem.getTitle());
             } else {
-                // پیش‌فرض: غزل
                 intent = new Intent(SearchResultsActivity.this, GhazalDetailActivity.class);
                 intent.putExtra("ghazalTitle", poem.getTitle());
             }
