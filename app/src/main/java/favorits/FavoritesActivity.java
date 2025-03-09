@@ -8,21 +8,21 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.jamlab.adab.Poem;
+import com.jamlab.adab.PoemLoader;
 import com.jamlab.adab.R;
 
 public class FavoritesActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private FavoriteAdapter favoriteAdapter;
-    private List<Ghazal> favoriteGhazals; // لیست غزلیات علاقه‌مندی
+    private List<Poem> favoritePoems; // لیست اشعار علاقه‌مندی
     private TextView emptyTextView;
 
     @Override
@@ -34,8 +34,8 @@ public class FavoritesActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(false); // حذف دکمه Back
-            getSupportActionBar().setDisplayShowTitleEnabled(false); // حذف عنوان پیش‌فرض
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
 
         // اتصال RecyclerView
@@ -45,11 +45,11 @@ public class FavoritesActivity extends AppCompatActivity {
         // اتصال TextView برای پیام خالی بودن
         emptyTextView = findViewById(R.id.empty_text_view);
 
-        // بارگذاری غزلیات علاقه‌مندی
-        favoriteGhazals = loadFavoriteGhazals();
+        // بارگذاری اشعار علاقه‌مندی
+        favoritePoems = loadFavoritePoems();
 
         // تنظیم آداپتر
-        favoriteAdapter = new FavoriteAdapter(this, favoriteGhazals);
+        favoriteAdapter = new FavoriteAdapter(this, favoritePoems);
         recyclerView.setAdapter(favoriteAdapter);
 
         // بررسی وضعیت لیست
@@ -60,14 +60,14 @@ public class FavoritesActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         // به‌روزرسانی لیست علاقه‌مندی‌ها هنگام بازگشت به این اکتیویتی
-        favoriteGhazals = loadFavoriteGhazals();
-        favoriteAdapter.updateFavorites(favoriteGhazals);
+        favoritePoems = loadFavoritePoems();
+        favoriteAdapter.updateFavorites(favoritePoems);
         updateFavoritesVisibility();
     }
 
     // به‌روزرسانی نمایش بر اساس وضعیت لیست
     private void updateFavoritesVisibility() {
-        if (favoriteGhazals.isEmpty()) {
+        if (favoritePoems.isEmpty()) {
             recyclerView.setVisibility(View.GONE);
             emptyTextView.setVisibility(View.VISIBLE);
         } else {
@@ -76,54 +76,49 @@ public class FavoritesActivity extends AppCompatActivity {
         }
     }
 
-    // بارگذاری غزلیات علاقه‌مندی
-    private List<Ghazal> loadFavoriteGhazals() {
+    // بارگذاری اشعار علاقه‌مندی
+    private List<Poem> loadFavoritePoems() {
         // بارگذاری عناوین علاقه‌مندی‌ها از SharedPreferences
         SharedPreferences sharedPreferences = getSharedPreferences("Favorites", MODE_PRIVATE);
         Set<String> favoritesSet = sharedPreferences.getStringSet("favorites", new HashSet<>());
 
-        // بارگذاری همه غزلیات از JSON
-        List<Ghazal> allGhazals = loadGhazalsFromJson();
-        List<Ghazal> favoriteGhazals = new ArrayList<>();
+        // بارگذاری همه اشعار از فایل‌های JSON
+        List<Poem> allPoems = loadAllPoemsFromJson();
+        List<Poem> favoritePoems = new ArrayList<>();
 
-        // فیلتر کردن غزلیات علاقه‌مندی
-        for (Ghazal ghazal : allGhazals) {
-            if (favoritesSet.contains(ghazal.getTitle())) {
-                favoriteGhazals.add(ghazal);
+        // فیلتر کردن اشعار علاقه‌مندی
+        for (Poem poem : allPoems) {
+            if (favoritesSet.contains(poem.getTitle())) {
+                favoritePoems.add(poem);
             }
         }
-        return favoriteGhazals;
+        return favoritePoems;
     }
 
-    // بارگذاری غزلیات از فایل JSON
-    private List<Ghazal> loadGhazalsFromJson() {
-        List<Ghazal> ghazalList = new ArrayList<>();
-        try {
-            InputStream inputStream = getResources().openRawResource(R.raw.hafez_ghazals);
-            int size = inputStream.available();
-            byte[] buffer = new byte[size];
-            inputStream.read(buffer);
-            inputStream.close();
-            String json = new String(buffer, "UTF-8");
-            JSONArray jsonArray = new JSONArray(json);
+    // بارگذاری همه اشعار از فایل‌های JSON
+    private List<Poem> loadAllPoemsFromJson() {
+        List<Poem> allPoems = new ArrayList<>();
+        int[] rawFiles = {
+                R.raw.hafez_ghazals,
+                R.raw.hafez_rubaiyat,
+                R.raw.hafez_ghitaat,
+                R.raw.hafez_ghasaid,
+                R.raw.hafez_masnavi,
+                R.raw.hafez_saghinameh,
+                R.raw.hafez_montasab
+                // اگر فایل‌های دیگری (مثل سعدی یا مولوی) دارید، اینجا اضافه کنید
+        };
 
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                String title = jsonObject.getString("title");
-                JSONArray versesArray = jsonObject.getJSONArray("verses");
-                List<Verse> verses = new ArrayList<>();
-                for (int j = 0; j < versesArray.length(); j++) {
-                    JSONObject verseObject = versesArray.getJSONObject(j);
-                    String text = verseObject.getString("text");
-                    String explanation = verseObject.getString("explanation");
-                    verses.add(new Verse(text, explanation));
-                }
-                ghazalList.add(new Ghazal(title, verses));
+        for (int resId : rawFiles) {
+            try {
+                InputStream inputStream = getResources().openRawResource(resId);
+                List<Poem> poems = PoemLoader.loadPoemsFromJson(inputStream);
+                allPoems.addAll(poems);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-        return ghazalList;
+        return allPoems;
     }
 
     @Override
