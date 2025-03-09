@@ -8,14 +8,21 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.jamlab.adab.R;
+import java.util.ArrayList;
 import java.util.List;
 
 public class VerseAdapter extends RecyclerView.Adapter<VerseAdapter.VerseViewHolder> {
 
     private List<Verse> verseList;
+    private List<Boolean> expandedStates; // لیست برای ذخیره وضعیت باز/بسته بودن هر آیتم
 
     public VerseAdapter(List<Verse> verseList) {
         this.verseList = verseList;
+        // مقداردهی اولیه وضعیت بسته برای همه آیتم‌ها
+        this.expandedStates = new ArrayList<>();
+        for (int i = 0; i < verseList.size(); i++) {
+            expandedStates.add(false);
+        }
     }
 
     @NonNull
@@ -45,17 +52,17 @@ public class VerseAdapter extends RecyclerView.Adapter<VerseAdapter.VerseViewHol
         // تنظیم تفسیر بیت
         holder.explanation.setText(verse.getExplanation());
 
+        // تنظیم وضعیت اولیه تفسیر و نشانک بر اساس expandedStates
+        boolean isExpanded = expandedStates.get(position);
+        holder.explanation.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
+        holder.expandIcon.setImageResource(isExpanded ? R.drawable.ic_expand_up : R.drawable.ic_expand_down);
+
         // مدیریت کلیک روی نشانک
         holder.expandIcon.setOnClickListener(v -> {
-            if (holder.explanation.getVisibility() == View.GONE) {
-                // نمایش تفسیر و تغییر جهت نشانک به بالا
-                holder.explanation.setVisibility(View.VISIBLE);
-                holder.expandIcon.setImageResource(R.drawable.ic_expand_up);
-            } else {
-                // مخفی کردن تفسیر و تغییر جهت نشانک به پایین
-                holder.explanation.setVisibility(View.GONE);
-                holder.expandIcon.setImageResource(R.drawable.ic_expand_down);
-            }
+            // تغییر وضعیت فقط برای این آیتم
+            expandedStates.set(position, !isExpanded);
+            // به‌روزرسانی فقط این آیتم
+            notifyItemChanged(position);
         });
     }
 
