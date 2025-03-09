@@ -6,14 +6,14 @@
     android:orientation="vertical"
     android:background="@color/background">
 
-    <!-- Toolbar مدرن -->
+    <!-- Toolbar مدرن و سفارشی -->
     <androidx.cardview.widget.CardView
         android:id="@+id/toolbar_card"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:layout_margin="0dp"
         app:cardCornerRadius="0dp"
-        app:cardElevation="6dp"
+        app:cardElevation="4dp"
         app:cardBackgroundColor="@color/colorPrimary">
 
         <androidx.appcompat.widget.Toolbar
@@ -24,81 +24,76 @@
             app:contentInsetStart="0dp"
             app:contentInsetEnd="0dp">
 
-            <!-- دکمه فلش قبلی در سمت راست -->
+            <!-- دکمه فلش قبلی -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:layout_gravity="end"
                 android:gravity="center"
-                android:padding="8dp">
+                android:padding="10dp">
                 <ImageButton
                     android:id="@+id/prev_button"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
                     android:src="@drawable/ic_arrow_prev"
-                    android:background="@null"
-                    android:contentDescription="غزل قبلی" />
-
-
+                    android:background="@drawable/circle_button_background"
+                    android:tint="@color/textColor"
+                    android:contentDescription="غزل قبلی"
+                    android:elevation="2dp" />
             </LinearLayout>
 
-            <!-- عنوان غزل و دکمه علاقه‌مندی‌ها در مرکز -->
+            <!-- عنوان غزل و دکمه علاقه‌مندی‌ها در وسط -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
                 android:orientation="horizontal"
                 android:gravity="center"
                 android:layout_gravity="center"
                 android:padding="8dp">
 
-                <!-- دکمه ستاره (علاقه‌مندی‌ها) -->
                 <ImageButton
                     android:id="@+id/favorite_button"
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:src="@drawable/ic_star_outline"
-                    android:tint="#FF0000"
-                    android:background="@null"
-                    android:scaleType="centerInside"
-                    android:contentDescription="اضافه به علاقه‌مندی‌ها"
-                    android:elevation="2dp"
-                    android:padding="2dp"
-                    android:layout_marginEnd="8dp" />
+                    android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_star_outline"
+                android:background="@null"
 
-                <!-- عنوان غزل -->
+                android:contentDescription="اضافه به علاقه‌مندی‌ها"
+                android:padding="3dp"
+                android:layout_marginEnd="5dp" ></ImageButton>
+
                 <TextView
                     android:id="@+id/toolbar_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="عنوان غزل"
                     android:textSize="18sp"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/textColor"
                     android:textStyle="bold"
                     android:ellipsize="end"
                     android:maxLines="1"
                     android:paddingHorizontal="8dp" />
             </LinearLayout>
 
-            <!-- دکمه فلش بعدی در سمت چپ -->
+            <!-- دکمه فلش بعدی -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:layout_gravity="start"
                 android:gravity="center"
-                android:padding="8dp">
+                android:padding="10dp">
                 <ImageButton
                     android:id="@+id/next_button"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
                     android:src="@drawable/ic_arrow_next"
-                    android:background="@null"
-                    android:contentDescription="غزل بعدی" />
-
+                    android:background="@drawable/circle_button_background"
+                    android:tint="@color/textColor"
+                    android:contentDescription="غزل بعدی"
+                    android:elevation="2dp" />
             </LinearLayout>
-
         </androidx.appcompat.widget.Toolbar>
     </androidx.cardview.widget.CardView>
 
@@ -112,44 +107,45 @@
         android:clipToPadding="false"
         android:background="@color/background" />
 
-    <!-- میدیا پلیر مدرن -->
+    <!-- میدیا پلیر مدرن و سفارشی -->
     <androidx.cardview.widget.CardView
         android:id="@+id/media_player_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        app:cardCornerRadius="12dp"
-        app:cardElevation="8dp"
+        android:layout_margin="10dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="6dp"
         app:cardBackgroundColor="@color/colorPrimaryDark">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="8dp"
-            android:layout_margin="5dp"
             android:gravity="center_horizontal">
 
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="8dp">
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="0dp">
 
                 <ImageButton
                     android:id="@+id/play_pause_button"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                        android:layout_height="match_parent"
                     android:src="@drawable/ic_play"
-                    android:background="@drawable/circular_button_background"
+                    android:background="@null"
+
                     android:scaleType="centerInside"
                     android:contentDescription="پخش/توقف"
                     android:layout_gravity="center"
-                    android:elevation="4dp" />
+                    android:elevation="2dp"
+                    android:padding="8dp" />
 
                 <ProgressBar
                     android:id="@+id/download_progress"
-                    android:layout_width="64dp"
-                    android:layout_height="64dp"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
                     android:layout_gravity="center"
                     android:indeterminateTint="@color/colorAccent"
                     android:visibility="gone" />
@@ -168,15 +164,16 @@
                     android:layout_height="wrap_content"
                     android:thumbTint="@color/colorAccent"
                     android:progressTint="@color/colorAccent"
-                    android:secondaryProgressTint="@android:color/white"
-                    android:backgroundTint="@android:color/white" />
+                    android:secondaryProgressTint="@color/cardBackground"
+                    android:backgroundTint="@color/background"
+                    android:paddingVertical="4dp" />
 
                 <TextView
                     android:id="@+id/remaining_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="-00:00"
-                    android:textColor="@android:color/white"
+                    android:textColor="@color/cardBackground"
                     android:textSize="14sp"
                     android:layout_marginStart="12dp" />
             </LinearLayout>

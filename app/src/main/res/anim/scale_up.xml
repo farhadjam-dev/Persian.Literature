@@ -1,21 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <set xmlns:android="http://schemas.android.com/apk/res/android"
-    android:fillAfter="true">
-    <scale
-        android:fromXScale="1.0"
-        android:toXScale="1.2"
-        android:fromYScale="1.0"
-        android:toYScale="1.2"
-        android:duration="100"
+    android:fillAfter="false">
+
+    <!-- کاهش شفافیت و چرخش -->
+    <alpha
+        android:fromAlpha="1.0"
+        android:toAlpha="0.5"
+        android:duration="120" />
+    <rotate
+        android:fromDegrees="0"
+        android:toDegrees="10"
+        android:duration="120"
         android:pivotX="50%"
         android:pivotY="50%" />
-    <scale
-        android:fromXScale="1.2"
-        android:toXScale="1.0"
-        android:fromYScale="1.2"
-        android:toYScale="1.0"
-        android:startOffset="100"
-        android:duration="100"
+
+    <!-- بازگشت شفافیت و چرخش معکوس -->
+    <alpha
+        android:fromAlpha="0.5"
+        android:toAlpha="1.0"
+        android:startOffset="120"
+        android:duration="120" />
+    <rotate
+        android:fromDegrees="10"
+        android:toDegrees="-10"
+        android:startOffset="120"
+        android:duration="120"
+        android:pivotX="50%"
+        android:pivotY="50%" />
+
+    <!-- بازگشت به حالت اولیه -->
+    <rotate
+        android:fromDegrees="-10"
+        android:toDegrees="0"
+        android:startOffset="240"
+        android:duration="80"
         android:pivotX="50%"
         android:pivotY="50%" />
 </set>

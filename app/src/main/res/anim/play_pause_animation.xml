@@ -1,37 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <set xmlns:android="http://schemas.android.com/apk/res/android"
-    android:fillAfter="false"> <!-- تغییر به false برای جلوگیری از حفظ حالت نهایی -->
+    android:fillAfter="false">
 
-    <!-- بزرگ شدن و چرخش -->
+    <!-- بزرگ شدن و کاهش شفافیت -->
     <scale
         android:fromXScale="1.0"
-        android:toXScale="1.15"
+        android:toXScale="1.25"
         android:fromYScale="1.0"
-        android:toYScale="1.15"
-        android:duration="100"
+        android:toYScale="1.25"
+        android:duration="150"
         android:pivotX="50%"
         android:pivotY="50%" />
-    <rotate
-        android:fromDegrees="0"
-        android:toDegrees="15"
-        android:duration="100"
-        android:pivotX="50%"
-        android:pivotY="50%" />
+    <alpha
+        android:fromAlpha="1.0"
+        android:toAlpha="0.7"
+        android:duration="150" />
 
-    <!-- بازگشت به حالت اولیه -->
+    <!-- کوچک شدن و بازگشت شفافیت -->
     <scale
-        android:fromXScale="1.15"
-        android:toXScale="1.0"
-        android:fromYScale="1.15"
-        android:toYScale="1.0"
-        android:startOffset="100"
+        android:fromXScale="1.25"
+        android:toXScale="0.9"
+        android:fromYScale="1.25"
+        android:toYScale="0.9"
+        android:startOffset="150"
         android:duration="100"
         android:pivotX="50%"
         android:pivotY="50%" />
-    <rotate
-        android:fromDegrees="15"
-        android:toDegrees="0"
-        android:startOffset="100"
+    <alpha
+        android:fromAlpha="0.7"
+        android:toAlpha="1.0"
+        android:startOffset="150"
+        android:duration="100" />
+
+    <!-- بازگشت به حالت اصلی -->
+    <scale
+        android:fromXScale="0.9"
+        android:toXScale="1.0"
+        android:fromYScale="0.9"
+        android:toYScale="1.0"
+        android:startOffset="250"
         android:duration="100"
         android:pivotX="50%"
         android:pivotY="50%" />

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
-    <color name="colorPrimary">#FDFDFD</color> <!-- آبی تیره مدرن -->
-    <color name="colorPrimaryDark">#386381</color> <!-- آبی تیره‌تر برای نوار وضعیت -->
-    <color name="colorAccent">#F28C38</color> <!-- نارنجی مرجانی به عنوان رنگ تاکیدی -->
-    <color name="background">#F0F4F8</color> <!-- خاکستری روشن با ته‌رنگ آبی -->
-    <color name="textColor">#1F2A44</color> <!-- رنگ تیره ملایم برای متن -->
-    <color name="cardBackground">#FDFDFD</color><!-- سفید گرم برای کارت‌ها -->
+    <color name="black">#80000000</color> <!-- 50% transparency -->
+    <color name="white">#FFFFFF</color> <!-- White remains the same -->
+    <color name="colorPrimary">#F0E4D2</color> <!-- Lighter version of #E8D9C5 -->
+    <color name="colorPrimaryDark">#D8C7B0</color> <!-- Lighter version of #CBB8A3 -->
+    <color name="colorAccent">#F9F1E0</color> <!-- Lighter version of #F7EBD6 -->
+    <color name="background">#FFFCF9</color> <!-- Lighter version of #FEFBF6 -->
+    <color name="textColor">#9A8B7A</color> <!-- Lighter version of #7A6B5A -->
+    <color name="cardBackground">#FFFEFA</color> <!-- Remains the same -->
 </resources>
