@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean doubleBackToExitPressedOnce = false;
     private static final int DOUBLE_BACK_DELAY = 2000;
     private boolean isSearchInProgress = false;
-    private static final int MAX_SEARCH_RESULTS = 100; // محدودیت تعداد نتایج
+    private static final int MAX_SEARCH_RESULTS = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +94,9 @@ public class MainActivity extends AppCompatActivity {
                 drawerLayout.closeDrawer(GravityCompat.START);
             } else if (id == R.id.nav_settings) {
                 startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+                drawerLayout.closeDrawer(GravityCompat.START);
+            } else if (id == R.id.nav_about_us) { // گزینه جدید "درباره ما"
+                startActivity(new Intent(MainActivity.this, AboutUsActivity.class));
                 drawerLayout.closeDrawer(GravityCompat.START);
             }
             return true;
@@ -251,14 +254,14 @@ public class MainActivity extends AppCompatActivity {
             }
             if (matchesAll) {
                 results.add(poem);
-                if (results.size() >= MAX_SEARCH_RESULTS) break; // محدودیت تعداد نتایج
+                if (results.size() >= MAX_SEARCH_RESULTS) break;
             }
         }
         return results;
     }
 
     private String normalizeText(String text) {
-        return text.replaceAll("[\\u064B-\\u065F]", ""); // حذف اعراب
+        return text.replaceAll("[\\u064B-\\u065F]", "");
     }
 
     @Override
