@@ -1,19 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#80000000</color> <!-- 50% transparency -->
-    <color name="white">#FFFFFF</color> <!-- White remains the same -->
-    <color name="colorPrimary">#F0E4D2</color> <!-- Lighter version of #E8D9C5 -->
-    <color name="colorPrimaryDark">#D8C7B0</color> <!-- Lighter version of #CBB8A3 -->
-    <color name="colorAccent">#F9F1E0</color> <!-- Lighter version of #F7EBD6 -->
-    <color name="background">#FFFCF9</color> <!-- Lighter version of #FEFBF6 -->
-    <color name="textColor">#9A8B7A</color> <!-- Lighter version of #7A6B5A -->
-    <color name="cardBackground">#FFFEFA</color> <!-- Remains the same -->
+    <!-- مشکی با شفافیت 50% و ته‌رنگ قهوه‌ای گرم -->
+    <color name="black">#804F2D2D</color> <!-- 50% transparency with a warm brown tint -->
 
-    <!-- Dark Theme Colors -->
-    <color name="dark_colorPrimary">#6B5E4A</color>
-    <color name="dark_colorPrimaryDark">#4A4033</color>
-    <color name="dark_colorAccent">#A89B85</color>
-    <color name="dark_background">#2A2520</color>
-    <color name="dark_textColor">#D8C7B0</color>
-    <color name="dark_cardBackground">#3C352F</color>
+    <!-- سفید با ته‌رنگ گرم -->
+    <color name="white">#FFF8F2</color> <!-- Warm off-white -->
+
+    <!-- رنگ اصلی: قرمز مرجانی گرم -->
+    <color name="colorPrimary">#F2EADD</color> <!-- Warm coral red -->
+
+    <!-- رنگ اصلی تیره: نارنجی سوخته غنی -->
+    <color name="colorPrimaryDark">#F47362</color> <!-- Rich burnt orange -->
+
+    <!-- رنگ تاکیدی: نارنجی ملایم و گرم -->
+    <color name="colorAccent">#FFC107</color> <!-- Soft warm amber -->
+
+    <!-- پس‌زمینه: کرم گرم -->
+    <color name="background">#FFF7EA</color> <!-- Warm cream with a subtle glow -->
+
+    <!-- رنگ متن: قهوه‌ای گرم و تیره -->
+    <color name="textColor">#6D4C41</color> <!-- Deep warm brown for readability -->
+
+    <!-- پس‌زمینه کارت: کرم روشن‌تر با ته‌رنگ نارنجی -->
+    <color name="cardBackground">#FDFAF1</color> <!-- Light warm cream -->
 </resources>
