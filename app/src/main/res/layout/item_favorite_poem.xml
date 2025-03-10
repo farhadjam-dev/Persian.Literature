@@ -20,7 +20,9 @@
             android:text="عنوان غزل"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:textColor="@android:color/black"
+            android:fontFamily="@font/zainblack"
+
+            android:textColor="#857562"
             android:layout_gravity="end"
         android:gravity="right"
         android:textAlignment="gravity" />
@@ -32,6 +34,7 @@
             android:layout_height="wrap_content"
             android:text="بخشی از شعر..."
             android:textSize="14sp"
+            android:fontFamily="@font/vazirmatnregular"
             android:textColor="@android:color/darker_gray"
             android:paddingTop="8dp"
             android:layout_gravity="end"

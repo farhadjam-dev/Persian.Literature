@@ -18,10 +18,11 @@ android:id="@+id/header_title"
 android:layout_width="wrap_content"
 android:layout_height="wrap_content"
 android:text="شعر و ادب پارسی"
-android:textColor="@android:color/white"
-android:textSize="20sp"
+android:textColor="@color/black"
+android:textSize="23sp"
 android:textStyle="bold"
+
 android:layout_marginTop="8dp"
-android:fontFamily="sans-serif-medium" /> <!-- فونت مدرن -->
+android:fontFamily="@font/almaraibold" /> <!-- فونت مدرن -->
 
     </LinearLayout>

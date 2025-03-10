@@ -20,7 +20,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="نتایج جست‌ و جو"
-            android:textSize="20sp"
+            android:textSize="18sp"
+            android:fontFamily="@font/almaraibold"
             android:textColor="@android:color/black"
             android:layout_gravity="center" />
     </androidx.appcompat.widget.Toolbar>

@@ -19,8 +19,9 @@
             android:id="@+id/toolbar_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="علاقه‌مندی‌ها"
-            android:textSize="20sp"
+            android:text="علاقه‌مندی ‌ها"
+            android:fontFamily="@font/almaraibold"
+            android:textSize="18sp"
             android:textColor="@android:color/black"
             android:layout_gravity="center" />
     </androidx.appcompat.widget.Toolbar>

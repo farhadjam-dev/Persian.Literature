@@ -21,8 +21,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="درباره ما"
+            android:fontFamily="@font/almaraibold"
             android:textColor="@android:color/black"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:textStyle="bold" />
     </androidx.appcompat.widget.Toolbar>
 
@@ -53,22 +54,10 @@
                 android:id="@+id/about_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="نرم‌افزار شعر و ادب پارسی با هدف ترویج فرهنگ و ادبیات غنی پارسی طراحی شده است. ما در این برنامه تلاش کرده‌ایم تا مجموعه‌ای از آثار ارزشمند شاعران بزرگ پارسی‌گو را در دسترس شما قرار دهیم."
+                android:text="نرم‌افزار شعر و ادب پارسی با هدف ترویج فرهنگ و ادبیات غنی پارسی طراحی شده است. ما در این برنامه تلاش کرده‌ایم تا مجموعه‌ای از آثار ارزشمند شاعران بزرگ پارسی‌گو را همراه با تفاسیر اشعار و حکایات در دسترس شما عزیزان قرار دهیم."
                 android:textColor="@color/textColor"
-                android:textSize="16sp"
-                android:lineSpacingExtra="4dp"
-                android:textAlignment="center"
-                android:layout_marginTop="24dp"
-                android:paddingHorizontal="16dp" />
-
-            <TextView
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="طراح : فرهاد جمشیدپور"
-                android:textColor="@color/textColor"
-                android:textSize="16sp"
-                android:textStyle="bold"
+                android:textSize="18sp"
+                android:fontFamily="@font/vazirmatnregular"
                 android:lineSpacingExtra="4dp"
                 android:textAlignment="center"
                 android:layout_marginTop="24dp"
@@ -76,13 +65,28 @@
 
             <!-- آدرس ایمیل -->
             <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:lineSpacingExtra="4dp"
+                android:paddingHorizontal="16dp"
+                android:text="طراح : فرهاد جمشیدپور"
+                android:fontFamily="@font/almaraibold"
+                android:textAlignment="center"
+                android:textColor="@color/textColor"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
                 android:id="@+id/email_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="تماس با ما :   jamshidpour.farhad@gmail.com"
-                android:textColor="@color/colorAccent"
-                android:textSize="18sp"
+                android:textColor="@color/textColor"
+                android:textSize="16sp"
                 android:textStyle="bold"
+                android:fontFamily="@font/almaraibold"
                 android:layout_marginTop="32dp"
                 android:layout_marginBottom="16dp"
                 android:clickable="true"
