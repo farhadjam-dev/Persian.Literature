@@ -30,6 +30,7 @@
                 android:layout_height="wrap_content"
                 android:text="قصاید حافظ"
                 android:textSize="18sp"
+                android:fontFamily="@font/almaraibold"
                 android:textColor="@android:color/black"
                 android:textStyle="bold"
                 android:layout_gravity="center"

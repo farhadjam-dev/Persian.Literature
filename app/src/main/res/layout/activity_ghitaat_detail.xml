@@ -68,6 +68,7 @@
                     android:layout_height="wrap_content"
                     android:text="عنوان قطعه"
                     android:textSize="18sp"
+                    android:fontFamily="@font/almaraibold"
                     android:textColor="@color/textColor"
                     android:textStyle="bold"
                     android:ellipsize="end"

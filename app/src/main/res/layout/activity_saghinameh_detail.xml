@@ -60,6 +60,7 @@
                     android:layout_height="wrap_content"
                     android:text="ساقی‌نامه حافظ"
                     android:textSize="18sp"
+                    android:fontFamily="@font/almaraibold"
                     android:textColor="@color/textColor"
                     android:textStyle="bold"
                     android:ellipsize="end"
