@@ -58,6 +58,24 @@ public class GhazalDetailActivity extends AppCompatActivity {
     private static final Map<String, String> AUDIO_URLS = new HashMap<String, String>() {{
         put("غزل شماره ۱ حافظ", "https://drive.google.com/uc?export=download&id=1aGP2JQIOU0r0V_nupxacJBRC7W3IHBJl");
         put("غزل شماره ۲ حافظ", "https://drive.google.com/uc?export=download&id=1zjIUShd6E8TQeiR-6DjqA9d4KwvwnQSI");
+        put("غزل شماره ۳ حافظ", "https://drive.google.com/uc?export=download&id=1c2qJJ4A-fEwScQ4HsBgswhfYXMoJgQyq");
+        put("غزل شماره ۴ حافظ", "https://drive.google.com/uc?export=download&id=1mm3M3QUL1F6J5BTIHG-J3vvd1GAzkNND");
+        put("غزل شماره ۵ حافظ", "https://drive.google.com/uc?export=download&id=1971bMFmX6LFZTjalRDDmDHiccOdLTskz");
+        put("غزل شماره ۶ حافظ", "https://drive.google.com/uc?export=download&id=1zhShLFbK9QaqrJdPU0U1xVefdQZgoQej");
+        put("غزل شماره ۷ حافظ", "https://drive.google.com/uc?export=download&id=1pRGYIZxnUIefexJxjuqA92-agl_Uw4Ng");
+        put("غزل شماره ۸ حافظ", "https://drive.google.com/uc?export=download&id=1zj3MHiu1riih2sCv_erZrTuzWTiTkNjt");
+        put("غزل شماره ۹ حافظ", "https://drive.google.com/uc?export=download&id=131qYDy8_reIjMOkKGgCAegAxERPshIxC");
+        put("غزل شماره ۱۰ حافظ", "https://drive.google.com/uc?export=download&id=1ZEbhLWnTLwVugWhveJY5lgZyx4oZBooo");
+        put("غزل شماره ۱۱ حافظ", "https://drive.google.com/uc?export=download&id=16IuFoQ4wfkrFVbC5ItlpXX1-_aBnPEJE");
+        put("غزل شماره ۱۲ حافظ", "https://drive.google.com/uc?export=download&id=13-xZfepPbGTzCZAJA3-7oOTKfq1yqMpC");
+        put("غزل شماره ۱۳ حافظ", "https://drive.google.com/uc?export=download&id=1xpvZANTl9OjhkVM6Ped0GRPLjhPuSpA2");
+        put("غزل شماره ۱۴ حافظ", "https://drive.google.com/uc?export=download&id=1DK0xfv42gsnMK8tR4D8q3BZpdaPylNph");
+        put("غزل شماره ۱۵ حافظ", "https://drive.google.com/uc?export=download&id=1yMJ_QQrpBjGzxKEQFNzeo9gm5nSkECgn");
+        put("غزل شماره ۱۶ حافظ", "https://drive.google.com/uc?export=download&id=1lVbZiVsSXnQTczvP5bLkf5xfX-udXhFB");
+        put("غزل شماره ۱۷ حافظ", "https://drive.google.com/uc?export=download&id=1DDVloA0qKyKhM4Fx0LMgzxueQzL4TQO9");
+        put("غزل شماره ۱۸ حافظ", "https://drive.google.com/uc?export=download&id=1k8ruPHsJT56Qv2AzEsvMq5USzsNZVZbe");
+        put("غزل شماره ۱۹ حافظ", "https://drive.google.com/uc?export=download&id=1rDjY0UpDM_KDgOCxKtAgKZs-rPU5-yY0");
+        put("غزل شماره ۲۰ حافظ", "https://drive.google.com/uc?export=download&id=1be-gY2eBdEb5kzz94OHeJlx88yaM2F7u");
     }};
 
     private static final long MAX_CACHE_SIZE = 1000 * 1024 * 1024; // 1000 MB

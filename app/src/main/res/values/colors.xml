@@ -8,4 +8,12 @@
     <color name="background">#FFFCF9</color> <!-- Lighter version of #FEFBF6 -->
     <color name="textColor">#9A8B7A</color> <!-- Lighter version of #7A6B5A -->
     <color name="cardBackground">#FFFEFA</color> <!-- Remains the same -->
+
+    <!-- Dark Theme Colors -->
+    <color name="dark_colorPrimary">#6B5E4A</color>
+    <color name="dark_colorPrimaryDark">#4A4033</color>
+    <color name="dark_colorAccent">#A89B85</color>
+    <color name="dark_background">#2A2520</color>
+    <color name="dark_textColor">#D8C7B0</color>
+    <color name="dark_cardBackground">#3C352F</color>
 </resources>

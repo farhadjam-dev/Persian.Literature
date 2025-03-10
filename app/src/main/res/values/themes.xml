@@ -1,8 +1,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.Adab" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="android:statusBarColor">#F0E4D2</item> <!-- رنگ نوار وضعیت -->
+        <item name="android:windowLightStatusBar">true</item> <!-- برای تنظیم متن نوار وضعیت به رنگ تیره -->
     </style>
 
     <style name="Theme.Adab" parent="Base.Theme.Adab" />
