@@ -127,7 +127,8 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="0dp">
+                android:layout_marginBottom="0dp"
+                android:layoutDirection="ltr">
 
                 <ImageButton
                     android:id="@+id/play_pause_button"
