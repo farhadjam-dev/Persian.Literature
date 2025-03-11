@@ -60,7 +60,7 @@
         android:text="تفسیر بیت"
         android:textSize="14sp"
         android:textColor="@color/textColor"
-        android:textDirection="locale"
+        android:textDirection="anyRtl"
         android:layout_marginTop="8dp"
         android:visibility="gone" />
 </LinearLayout>
