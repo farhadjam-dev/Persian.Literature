@@ -14,51 +14,50 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="16dp"
-        android:gravity="right">
+        android:layoutDirection="ltr" >
 
-        <!-- ستاره علاقه‌مندی -->
-        <ImageView
-            android:id="@+id/favorite_icon"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/ic_star_filled"
-            android:visibility="gone"
+    <!-- ستاره علاقه‌مندی (همیشه در چپ) -->
+    <ImageView
+        android:id="@+id/favorite_icon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/ic_star_filled"
+        android:visibility="gone"
         android:layout_marginEnd="8dp" />
 
-        <!-- LinearLayout عمودی برای عنوان و مصرع -->
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="right">
+    <!-- LinearLayout عمودی برای عنوان و مصرع -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="right" >
 
-            <!-- عنوان غزل -->
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="عنوان غزل"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:fontFamily="@font/zainblack"
+    <!-- عنوان غزل -->
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="عنوان غزل"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/zainblack"
+        android:textColor="#857562"
+        android:gravity="right"
+        android:layout_gravity="right" />
 
-                android:textColor="#857562"
-                android:gravity="right"
-                android:layout_gravity="right" />
-
-            <!-- مصرع اول غزل -->
-            <TextView
-                android:id="@+id/first_verse"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="مصرع اول..."
-                android:textSize="14sp"
-                android:textColor="@android:color/darker_gray"
-                android:paddingTop="8dp"
-                android:fontFamily="@font/vazirmatnregular"
-                android:gravity="right"
-                android:layout_gravity="right" />
-        </LinearLayout>
+    <!-- مصرع اول غزل -->
+    <TextView
+        android:id="@+id/first_verse"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="مصرع اول..."
+        android:textSize="14sp"
+        android:textColor="@android:color/darker_gray"
+        android:paddingTop="8dp"
+        android:fontFamily="@font/vazirmatnregular"
+        android:gravity="right"
+        android:layout_gravity="right" />
+</LinearLayout>
     </LinearLayout>
-</androidx.cardview.widget.CardView>
+    </androidx.cardview.widget.CardView>
