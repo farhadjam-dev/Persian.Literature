@@ -11,62 +11,57 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="5dp">
+        android:layoutDirection="ltr"
+    android:padding="5dp">
 
-        <!-- شماره بیت -->
-        <TextView
-            android:id="@+id/verse_number"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="بیت ۱"
-            android:textSize="12sp"
-            android:textColor="@color/textColor"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="8dp" />
-
-        <!-- مصرع اول (راست‌چین) -->
-        <TextView
-            android:id="@+id/line1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="مصرع اول"
-            android:textAlignment="viewEnd"
-        android:gravity="end"
+    <TextView
+        android:id="@+id/verse_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="بیت ۱"
+        android:textSize="12sp"
         android:textColor="@color/textColor"
-        android:textSize="16sp"
-            android:fontFamily="@font/vazirmatnregular"/>
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="8dp" />
 
-        <!-- مصرع دوم (چپ‌چین) -->
-        <TextView
-            android:id="@+id/line2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="مصرع دوم"
-            android:textAlignment="viewStart"
-        android:gravity="start"
+    <TextView
+        android:id="@+id/line1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="مصرع اول"
+        android:textSize="16sp"
         android:textColor="@color/textColor"
+        android:gravity="right"
+    android:fontFamily="@font/vazirmatnregular" />
+
+    <TextView
+        android:id="@+id/line2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="مصرع دوم"
         android:textSize="16sp"
-            android:fontFamily="@font/vazirmatnregular"/>
+        android:textColor="@color/textColor"
+        android:gravity="left"
+    android:layout_marginTop="8dp"
+    android:fontFamily="@font/vazirmatnregular" />
 
-        <!-- نشانک برای گسترش/جمع کردن تفسیر -->
-        <ImageView
-            android:id="@+id/expand_icon"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/ic_expand_down"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="0dp" />
+    <ImageView
+        android:id="@+id/expand_icon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/ic_expand_down"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="0dp" />
 
-        <!-- تفسیر بیت -->
-        <TextView
-            android:id="@+id/explanation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="تفسیر بیت"
-            android:textSize="14sp"
-            android:textColor="@color/textColor"
-            android:layout_marginTop="8dp"
-            android:visibility="gone" />
-    </LinearLayout>
-</androidx.cardview.widget.CardView>
+    <TextView
+        android:id="@+id/explanation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="تفسیر بیت"
+        android:textSize="14sp"
+        android:textColor="@color/textColor"
+        android:textDirection="locale"
+        android:layout_marginTop="8dp"
+        android:visibility="gone" />
+</LinearLayout>
+    </androidx.cardview.widget.CardView>

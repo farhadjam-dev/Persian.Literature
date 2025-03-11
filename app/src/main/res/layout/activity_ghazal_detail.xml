@@ -4,9 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:layoutDirection="locale"
+    android:textDirection="locale"
     android:background="@color/background">
 
-    <!-- Toolbar مدرن و سفارشی -->
     <androidx.cardview.widget.CardView
         android:id="@+id/toolbar_card"
         android:layout_width="match_parent"
@@ -21,11 +22,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@android:color/transparent"
+            android:layoutDirection="locale"
             app:contentInsetStart="0dp"
-            app:contentInsetEnd="0dp"
-            >
+            app:contentInsetEnd="0dp">
 
-            <!-- دکمه فلش قبلی -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -44,25 +44,24 @@
                     android:elevation="2dp" />
             </LinearLayout>
 
-            <!-- عنوان غزل و دکمه علاقه‌مندی‌ها در وسط -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
+                android:layoutDirection="locale"
                 android:gravity="center"
                 android:layout_gravity="center"
                 android:padding="8dp">
 
                 <ImageButton
                     android:id="@+id/favorite_button"
-                    android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_star_outline"
-                android:background="@null"
-
-                android:contentDescription="اضافه به علاقه‌مندی‌ها"
-                android:padding="3dp"
-                android:layout_marginEnd="5dp" ></ImageButton>
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_star_outline"
+                    android:background="@null"
+                    android:contentDescription="اضافه به علاقه‌مندی‌ها"
+                    android:padding="3dp"
+                    android:layout_marginEnd="5dp" />
 
                 <TextView
                     android:id="@+id/toolbar_title"
@@ -75,10 +74,10 @@
                     android:textStyle="bold"
                     android:ellipsize="end"
                     android:maxLines="1"
+                    android:textDirection="locale"
                     android:paddingHorizontal="8dp" />
             </LinearLayout>
 
-            <!-- دکمه فلش بعدی -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -99,7 +98,6 @@
         </androidx.appcompat.widget.Toolbar>
     </androidx.cardview.widget.CardView>
 
-    <!-- ViewPager2 برای نمایش غزل‌ها -->
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
@@ -109,7 +107,6 @@
         android:clipToPadding="false"
         android:background="@color/background" />
 
-    <!-- میدیا پلیر مدرن و سفارشی -->
     <androidx.cardview.widget.CardView
         android:id="@+id/media_player_layout"
         android:layout_width="match_parent"
@@ -124,6 +121,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="2dp"
+            android:layoutDirection="locale"
             android:gravity="center_horizontal">
 
             <FrameLayout
@@ -134,12 +132,10 @@
                 <ImageButton
                     android:id="@+id/play_pause_button"
                     android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                    android:layout_height="match_parent"
                     android:src="@drawable/ic_play"
                     android:tint="@color/cardBackground"
-
                     android:background="@null"
-
                     android:scaleType="centerInside"
                     android:contentDescription="پخش/توقف"
                     android:layout_gravity="center"
@@ -159,6 +155,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:layoutDirection="ltr"
                 android:gravity="center_vertical">
 
                 <SeekBar
@@ -179,8 +176,9 @@
                     android:text="-00:00"
                     android:textColor="@color/cardBackground"
                     android:textSize="14sp"
+                    android:textDirection="locale"
                     android:layout_marginStart="12dp"
-                    android:layout_marginEnd="12dp"/>
+                    android:layout_marginEnd="12dp" />
             </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
