@@ -91,6 +91,33 @@
                 android:layout_marginBottom="16dp"
                 android:clickable="true"
                 android:focusable="true" />
+
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="منایع : برای متن اشعار و خوانش های صوتی و همچنین زندگی نامه ها از سایت گنجور استفاده شده است."
+                android:textColor="@color/textColor"
+                android:textSize="13sp"
+
+                android:fontFamily="@font/vazirmatnregular"
+                android:layout_marginTop="32dp"
+                android:layout_marginBottom="0dp"
+                />
+
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="www.ganjoor.net"
+                android:textColor="@color/textColor"
+                android:textSize="14dp"
+                android:textStyle="bold"
+                android:fontFamily="@font/vazirmatnregular"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:clickable="true"
+                android:focusable="true" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
