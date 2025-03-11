@@ -1,44 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:cardCornerRadius="8dp"
     android:layout_margin="4dp"
+    app:cardCornerRadius="8dp"
     android:elevation="4dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:layoutDirection="ltr"
+    android:gravity="right" >
 
-        <!-- عنوان غزل -->
-        <TextView
-            android:id="@+id/poem_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="عنوان غزل"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:fontFamily="@font/zainblack"
+    <!-- عنوان غزل -->
+    <TextView
+        android:id="@+id/poem_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="عنوان غزل"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/zainblack"
+        android:textColor="#857562"
+        android:gravity="right"  />
 
-            android:textColor="#857562"
-            android:layout_gravity="end"
-        android:gravity="right"
-        android:textAlignment="gravity" />
-
-        <!-- بخشی از شعر -->
-        <TextView
-            android:id="@+id/poem_excerpt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="بخشی از شعر..."
-            android:textSize="14sp"
-            android:fontFamily="@font/vazirmatnregular"
-            android:textColor="@android:color/darker_gray"
-            android:paddingTop="8dp"
-            android:layout_gravity="end"
-        android:gravity="right"
-        android:textAlignment="gravity" />
-    </LinearLayout>
-</androidx.cardview.widget.CardView>
+    <!-- بخشی از شعر -->
+    <TextView
+        android:id="@+id/poem_excerpt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="بخشی از شعر..."
+        android:textSize="14sp"
+        android:fontFamily="@font/vazirmatnregular"
+        android:textColor="@android:color/darker_gray"
+        android:paddingTop="8dp"
+        android:gravity="right"  />
+</LinearLayout>
+    </androidx.cardview.widget.CardView>
