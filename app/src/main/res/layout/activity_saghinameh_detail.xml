@@ -42,7 +42,8 @@
                 android:orientation="horizontal"
                 android:gravity="center"
                 android:layout_gravity="center"
-                android:padding="8dp">
+                android:padding="8dp"
+                android:layoutDirection="ltr">
 
                 <ImageButton
                     android:id="@+id/favorite_button"
