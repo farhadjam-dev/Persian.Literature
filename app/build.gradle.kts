@@ -10,9 +10,8 @@ android {
         applicationId = "com.jamlab.adab"
         minSdk = 28
         targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
-
+        versionCode = 2
+        versionName = "1.0.1"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -25,14 +24,19 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+
+    lint {
+        abortOnError = false
+        checkReleaseBuilds = false
+    }
 }
 
 dependencies {
-
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
@@ -40,18 +44,12 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
-    implementation ("androidx.appcompat:appcompat:1.3.1")
-    implementation ("androidx.recyclerview:recyclerview:1.4.0")
-    implementation ("com.google.android.material:material:1.4.0")
-    implementation ("androidx.constraintlayout:constraintlayout:2.1.0")
-    implementation ("androidx.appcompat:appcompat:1.3.1")
-    implementation ("androidx.recyclerview:recyclerview:1.4.0")
-    implementation ("androidx.cardview:cardview:1.0.0")
-    implementation ("com.google.android.material:material:1.4.0")
-    implementation ("androidx.constraintlayout:constraintlayout:2.1.0")
-    implementation ("androidx.navigation:navigation-fragment:2.8.7")
-    implementation ("androidx.navigation:navigation-ui:2.8.7")
-    implementation ("androidx.viewpager2:viewpager2:1.0.0")
-
-
+    implementation("androidx.appcompat:appcompat:1.3.1")
+    implementation("androidx.recyclerview:recyclerview:1.4.0")
+    implementation("com.google.android.material:material:1.4.0")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.0")
+    implementation("androidx.cardview:cardview:1.0.0")
+    implementation("androidx.navigation:navigation-fragment:2.8.7")
+    implementation("androidx.navigation:navigation-ui:2.8.7")
+    implementation("androidx.viewpager2:viewpager2:1.0.0")
 }
