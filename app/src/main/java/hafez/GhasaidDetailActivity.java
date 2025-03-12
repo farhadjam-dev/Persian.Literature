@@ -1,5 +1,9 @@
 package hafez;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -12,10 +16,12 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.jamlab.adab.R;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -48,18 +54,25 @@ public class GhasaidDetailActivity extends AppCompatActivity {
     private ProgressBar downloadProgress;
     private TextView remainingTime;
     private TextView toolbarTitle;
+    private FloatingActionButton fabSettings;
+    private LinearLayout expandedMenu;
+    private ImageButton copyButton;
+    private ImageButton shareButton;
+    private ImageButton favoriteMenuButton;
     private boolean isFavorite = false;
     private String ghasaidTitle;
     private MediaPlayer mediaPlayer;
     private Handler handler = new Handler(Looper.getMainLooper());
     private boolean isPlaying = false;
     private List<String> ghasaidTitles;
+    private boolean isMenuExpanded = false;
 
     private static final Map<String, String> AUDIO_URLS = new HashMap<String, String>() {{
         //put("قصیده شماره ۱", "https://drive.google.com/uc?export=download&id=لینک_صوتی");
     }};
 
     private static final long MAX_CACHE_SIZE = 1000 * 1024 * 1024; // 1000 MB
+    private static final long MENU_HIDE_DELAY = 3000; // 3 ثانیه
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +94,11 @@ public class GhasaidDetailActivity extends AppCompatActivity {
         downloadProgress = findViewById(R.id.download_progress);
         remainingTime = findViewById(R.id.remaining_time);
         viewPager = findViewById(R.id.viewPager);
+        fabSettings = findViewById(R.id.fab_settings);
+        expandedMenu = findViewById(R.id.expanded_menu);
+        copyButton = findViewById(R.id.copy_button);
+        shareButton = findViewById(R.id.share_button);
+        favoriteMenuButton = findViewById(R.id.favorite_menu_button);
 
         // بارگذاری لیست قصاید و معکوس کردن آن
         ghasaidTitles = loadGhasaidTitlesFromJson();
@@ -146,6 +164,57 @@ public class GhasaidDetailActivity extends AppCompatActivity {
         });
 
         setupSeekBar();
+
+        // تنظیمات آیکون شناور و منوی گسترش‌پذیر
+        fabSettings.setOnClickListener(v -> toggleMenu());
+
+        copyButton.setOnClickListener(v -> copyText());
+        shareButton.setOnClickListener(v -> shareText());
+        favoriteMenuButton.setOnClickListener(v -> toggleFavorite());
+    }
+
+    private void toggleMenu() {
+        if (isMenuExpanded) {
+            expandedMenu.setVisibility(View.GONE);
+            fabSettings.setImageResource(R.drawable.ic_settings);
+            fabSettings.setAlpha(0.5f); // بازگشت به حالت محو
+            handler.removeCallbacksAndMessages(null); // حذف تایمر قبلی
+        } else {
+            expandedMenu.setVisibility(View.VISIBLE);
+            fabSettings.setImageResource(R.drawable.ic_close);
+            fabSettings.setAlpha(1.0f); // تغییر به حالت کاملاً رنگی
+            // تنظیم تایمر برای محو شدن خودکار منو پس از 3 ثانیه
+            handler.postDelayed(() -> {
+                if (isMenuExpanded) {
+                    toggleMenu(); // بستن منو پس از 3 ثانیه
+                }
+            }, MENU_HIDE_DELAY);
+        }
+        isMenuExpanded = !isMenuExpanded;
+    }
+
+    private void copyText() {
+        List<Verse> verses = loadVersesFromJson(ghasaidTitle);
+        StringBuilder textToCopy = new StringBuilder(ghasaidTitle + "\n\n");
+        for (Verse verse : verses) {
+            textToCopy.append(verse.getText()).append("\n");
+        }
+        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("قصیده", textToCopy.toString());
+        clipboard.setPrimaryClip(clip);
+        Toast.makeText(this, "متن قصیده کپی شد", Toast.LENGTH_SHORT).show();
+    }
+
+    private void shareText() {
+        List<Verse> verses = loadVersesFromJson(ghasaidTitle);
+        StringBuilder textToShare = new StringBuilder(ghasaidTitle + "\n\n");
+        for (Verse verse : verses) {
+            textToShare.append(verse.getText()).append("\n");
+        }
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, textToShare.toString());
+        startActivity(Intent.createChooser(shareIntent, "اشتراک قصیده"));
     }
 
     private void updateFavoriteButton() {
@@ -153,6 +222,11 @@ public class GhasaidDetailActivity extends AppCompatActivity {
         Set<String> favorites = sharedPreferences.getStringSet("favorites", new HashSet<>());
         isFavorite = favorites.contains(ghasaidTitle);
         favoriteButton.setImageResource(isFavorite ? R.drawable.ic_star_filled : R.drawable.ic_star_outline);
+        updateFavoriteMenuButton();
+    }
+
+    private void updateFavoriteMenuButton() {
+        favoriteMenuButton.setImageResource(isFavorite ? R.drawable.ic_star_filled : R.drawable.ic_star_outline);
     }
 
     private void toggleFavorite() {
@@ -167,11 +241,13 @@ public class GhasaidDetailActivity extends AppCompatActivity {
             isFavorite = false;
             favorites.remove(ghasaidTitle);
             favoriteButton.setImageResource(R.drawable.ic_star_outline);
+            favoriteMenuButton.setImageResource(R.drawable.ic_star_outline);
             Toast.makeText(this, "از علاقه‌مندی‌ها حذف شد", Toast.LENGTH_SHORT).show();
         } else {
             isFavorite = true;
             favorites.add(ghasaidTitle);
             favoriteButton.setImageResource(R.drawable.ic_star_filled);
+            favoriteMenuButton.setImageResource(R.drawable.ic_star_filled);
             Toast.makeText(this, "به علاقه‌مندی‌ها اضافه شد", Toast.LENGTH_SHORT).show();
         }
         editor.putStringSet("favorites", favorites);
