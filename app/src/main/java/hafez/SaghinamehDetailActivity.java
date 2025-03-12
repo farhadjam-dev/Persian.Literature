@@ -1,5 +1,9 @@
 package hafez;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -13,10 +17,12 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.jamlab.adab.R;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -45,17 +51,24 @@ public class SaghinamehDetailActivity extends AppCompatActivity {
     private SeekBar audioSeekBar;
     private ProgressBar downloadProgress;
     private TextView remainingTime;
+    private FloatingActionButton fabSettings;
+    private LinearLayout expandedMenu;
+    private ImageButton copyButton;
+    private ImageButton shareButton;
+    private ImageButton favoriteMenuButton;
     private boolean isFavorite = false;
     private String saghinamehTitle = "ساقی‌نامه حافظ"; // عنوان ثابت چون فقط یک ساقی‌نامه داریم
     private MediaPlayer mediaPlayer;
     private Handler handler = new Handler(Looper.getMainLooper());
     private boolean isPlaying = false;
+    private boolean isMenuExpanded = false;
 
     private static final Map<String, String> AUDIO_URLS = new HashMap<String, String>() {{
         //put("ساقی‌نامه حافظ", "https://drive.google.com/uc?export=download&id=لینک_صوتی");
     }};
 
     private static final long MAX_CACHE_SIZE = 1000 * 1024 * 1024; // 1000 MB
+    private static final long MENU_HIDE_DELAY = 3000; // 3 ثانیه
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +90,11 @@ public class SaghinamehDetailActivity extends AppCompatActivity {
         audioSeekBar = findViewById(R.id.audio_seekbar);
         downloadProgress = findViewById(R.id.download_progress);
         remainingTime = findViewById(R.id.remaining_time);
+        fabSettings = findViewById(R.id.fab_settings);
+        expandedMenu = findViewById(R.id.expanded_menu);
+        copyButton = findViewById(R.id.copy_button);
+        shareButton = findViewById(R.id.share_button);
+        favoriteMenuButton = findViewById(R.id.favorite_menu_button);
 
         // اتصال RecyclerView
         recyclerView = findViewById(R.id.recyclerView);
@@ -97,25 +115,10 @@ public class SaghinamehDetailActivity extends AppCompatActivity {
 
         isFavorite = mutableFavorites.contains(saghinamehTitle);
         favoriteButton.setImageResource(isFavorite ? R.drawable.ic_star_filled : R.drawable.ic_star_outline);
+        favoriteMenuButton.setImageResource(isFavorite ? R.drawable.ic_star_filled : R.drawable.ic_star_outline);
 
-        favoriteButton.setOnClickListener(v -> {
-            Animation scaleUp = AnimationUtils.loadAnimation(this, R.anim.scale_up);
-            favoriteButton.startAnimation(scaleUp);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            if (isFavorite) {
-                isFavorite = false;
-                mutableFavorites.remove(saghinamehTitle);
-                favoriteButton.setImageResource(R.drawable.ic_star_outline);
-                Toast.makeText(this, "از علاقه‌مندی‌ها حذف شد", Toast.LENGTH_SHORT).show();
-            } else {
-                isFavorite = true;
-                mutableFavorites.add(saghinamehTitle);
-                favoriteButton.setImageResource(R.drawable.ic_star_filled);
-                Toast.makeText(this, "به علاقه‌مندی‌ها اضافه شد", Toast.LENGTH_SHORT).show();
-            }
-            editor.putStringSet("favorites", mutableFavorites);
-            editor.apply();
-        });
+        favoriteButton.setOnClickListener(v -> toggleFavorite());
+        favoriteMenuButton.setOnClickListener(v -> toggleFavorite());
 
         // تنظیم دکمه Play/Pause
         playPauseButton.setOnClickListener(v -> {
@@ -128,7 +131,85 @@ public class SaghinamehDetailActivity extends AppCompatActivity {
             }
         });
 
+        // تنظیمات آیکون شناور و منوی گسترش‌پذیر
+        fabSettings.setOnClickListener(v -> toggleMenu());
+        copyButton.setOnClickListener(v -> copyText());
+        shareButton.setOnClickListener(v -> shareText());
+
         setupSeekBar();
+    }
+
+    private void toggleMenu() {
+        Animation slideIn = AnimationUtils.loadAnimation(this, R.anim.slide_in_left);
+        Animation slideOut = AnimationUtils.loadAnimation(this, R.anim.slide_out_left);
+
+        if (isMenuExpanded) {
+            expandedMenu.startAnimation(slideOut);
+            expandedMenu.setVisibility(View.GONE);
+            fabSettings.setImageResource(R.drawable.ic_settings);
+            fabSettings.setAlpha(0.5f);
+            handler.removeCallbacksAndMessages(null);
+        } else {
+            expandedMenu.setVisibility(View.VISIBLE);
+            expandedMenu.startAnimation(slideIn);
+            fabSettings.setImageResource(R.drawable.ic_arrow_back);
+            fabSettings.setAlpha(1.0f);
+            handler.postDelayed(() -> {
+                if (isMenuExpanded) {
+                    toggleMenu();
+                }
+            }, MENU_HIDE_DELAY);
+        }
+        isMenuExpanded = !isMenuExpanded;
+    }
+
+    private void copyText() {
+        List<Verse> verses = loadVersesFromJson();
+        StringBuilder textToCopy = new StringBuilder(saghinamehTitle + "\n\n");
+        for (Verse verse : verses) {
+            textToCopy.append(verse.getText()).append("\n");
+        }
+        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("ساقی‌نامه", textToCopy.toString());
+        clipboard.setPrimaryClip(clip);
+        Toast.makeText(this, "متن ساقی‌نامه کپی شد", Toast.LENGTH_SHORT).show();
+    }
+
+    private void shareText() {
+        List<Verse> verses = loadVersesFromJson();
+        StringBuilder textToShare = new StringBuilder(saghinamehTitle + "\n\n");
+        for (Verse verse : verses) {
+            textToShare.append(verse.getText()).append("\n");
+        }
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, textToShare.toString());
+        startActivity(Intent.createChooser(shareIntent, "اشتراک ساقی‌نامه"));
+    }
+
+    private void toggleFavorite() {
+        Animation scaleUp = AnimationUtils.loadAnimation(this, R.anim.scale_up);
+        favoriteButton.startAnimation(scaleUp);
+
+        SharedPreferences sharedPreferences = getSharedPreferences("Favorites", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Set<String> favorites = new HashSet<>(sharedPreferences.getStringSet("favorites", new HashSet<>()));
+
+        if (isFavorite) {
+            isFavorite = false;
+            favorites.remove(saghinamehTitle);
+            favoriteButton.setImageResource(R.drawable.ic_star_outline);
+            favoriteMenuButton.setImageResource(R.drawable.ic_star_outline);
+            Toast.makeText(this, "از علاقه‌مندی‌ها حذف شد", Toast.LENGTH_SHORT).show();
+        } else {
+            isFavorite = true;
+            favorites.add(saghinamehTitle);
+            favoriteButton.setImageResource(R.drawable.ic_star_filled);
+            favoriteMenuButton.setImageResource(R.drawable.ic_star_filled);
+            Toast.makeText(this, "به علاقه‌مندی‌ها اضافه شد", Toast.LENGTH_SHORT).show();
+        }
+        editor.putStringSet("favorites", favorites);
+        editor.apply();
     }
 
     private void playAudio() {
