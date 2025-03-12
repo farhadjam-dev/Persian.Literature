@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="#F9FCFB" /> <!-- پس‌زمینه دایره با رنگ background -->
+    <solid android:color="#FBCC3E" /> <!-- پس‌زمینه دایره با رنگ background -->
     <corners android:radius="50dp" /> <!-- دایره کامل -->
     <size android:width="20dp" android:height="20dp" /> <!-- سایز ثابت -->
 </shape>

@@ -174,19 +174,23 @@ public class GhasaidDetailActivity extends AppCompatActivity {
     }
 
     private void toggleMenu() {
+        Animation slideIn = AnimationUtils.loadAnimation(this, R.anim.slide_in_left);
+        Animation slideOut = AnimationUtils.loadAnimation(this, R.anim.slide_out_left);
+
         if (isMenuExpanded) {
+            expandedMenu.startAnimation(slideOut);
             expandedMenu.setVisibility(View.GONE);
             fabSettings.setImageResource(R.drawable.ic_settings);
-            fabSettings.setAlpha(0.5f); // بازگشت به حالت محو
-            handler.removeCallbacksAndMessages(null); // حذف تایمر قبلی
+            fabSettings.setAlpha(0.5f);
+            handler.removeCallbacksAndMessages(null);
         } else {
             expandedMenu.setVisibility(View.VISIBLE);
-            fabSettings.setImageResource(R.drawable.ic_close);
-            fabSettings.setAlpha(1.0f); // تغییر به حالت کاملاً رنگی
-            // تنظیم تایمر برای محو شدن خودکار منو پس از 3 ثانیه
+            expandedMenu.startAnimation(slideIn);
+            fabSettings.setImageResource(R.drawable.ic_arrow_back); // فلش برعکس
+            fabSettings.setAlpha(1.0f);
             handler.postDelayed(() -> {
                 if (isMenuExpanded) {
-                    toggleMenu(); // بستن منو پس از 3 ثانیه
+                    toggleMenu();
                 }
             }, MENU_HIDE_DELAY);
         }
