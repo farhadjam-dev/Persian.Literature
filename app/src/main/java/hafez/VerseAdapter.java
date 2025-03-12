@@ -1,11 +1,18 @@
 package hafez;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.jamlab.adab.R;
 import java.util.ArrayList;
@@ -41,13 +48,10 @@ public class VerseAdapter extends RecyclerView.Adapter<VerseAdapter.VerseViewHol
 
         // تقسیم متن بیت به دو مصراع
         String[] lines = verse.getText().split("/");
-        if (lines.length >= 2) {
-            holder.line1.setText(lines[0].trim()); // مصرع اول
-            holder.line2.setText(lines[1].trim()); // مصرع دوم
-        } else {
-            holder.line1.setText(verse.getText()); // اگر تقسیم نشد، کل متن در مصرع اول
-            holder.line2.setText(""); // مصرع دوم خالی
-        }
+        String line1Text = lines.length > 0 ? lines[0].trim() : "";
+        String line2Text = lines.length > 1 ? lines[1].trim() : "";
+        holder.line1.setText(line1Text); // مصرع اول
+        holder.line2.setText(line2Text); // مصرع دوم
 
         // تنظیم تفسیر بیت
         holder.explanation.setText(verse.getExplanation());
@@ -59,10 +63,27 @@ public class VerseAdapter extends RecyclerView.Adapter<VerseAdapter.VerseViewHol
 
         // مدیریت کلیک روی نشانک
         holder.expandIcon.setOnClickListener(v -> {
-            // تغییر وضعیت فقط برای این آیتم
             expandedStates.set(position, !isExpanded);
-            // به‌روزرسانی فقط این آیتم
             notifyItemChanged(position);
+        });
+
+        // اضافه کردن قابلیت دبل‌کلیک روی کارت ویو
+        GestureDetector gestureDetector = new GestureDetector(holder.itemView.getContext(), new GestureDetector.SimpleOnGestureListener() {
+            @Override
+            public boolean onDoubleTap(MotionEvent e) {
+                // کپی کردن متن بیت (مصرع اول و دوم)
+                String verseText = line1Text + "\n" + line2Text;
+                ClipboardManager clipboard = (ClipboardManager) holder.itemView.getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("بیت", verseText);
+                clipboard.setPrimaryClip(clip);
+                Toast.makeText(holder.itemView.getContext(), "بیت کپی شد", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
+
+        holder.cardView.setOnTouchListener((v, event) -> {
+            gestureDetector.onTouchEvent(event);
+            return true; // بازگشت true برای مصرف رویداد
         });
     }
 
@@ -89,6 +110,7 @@ public class VerseAdapter extends RecyclerView.Adapter<VerseAdapter.VerseViewHol
         TextView line2; // مصرع دوم
         TextView explanation; // تفسیر بیت
         ImageView expandIcon; // نشانک
+        CardView cardView; // کارت ویو
 
         public VerseViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -97,6 +119,7 @@ public class VerseAdapter extends RecyclerView.Adapter<VerseAdapter.VerseViewHol
             line2 = itemView.findViewById(R.id.line2);
             explanation = itemView.findViewById(R.id.explanation);
             expandIcon = itemView.findViewById(R.id.expand_icon);
+            cardView = (CardView) itemView; // اشاره به CardView ریشه
         }
     }
 }
