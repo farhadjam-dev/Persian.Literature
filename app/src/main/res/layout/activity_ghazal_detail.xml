@@ -246,7 +246,16 @@
             android:layout_height="40dp"
             android:src="@drawable/ic_star_outline"
             android:background="@drawable/circle_button_background"
-            android:contentDescription="علاقه‌مندی‌ها" />
+            android:contentDescription="علاقه‌مندی‌ها"
+            android:layout_marginEnd="8dp" />
+
+        <ImageButton
+            android:id="@+id/poem_info_button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_info"
+            android:background="@drawable/circle_button_background"
+            android:contentDescription="اطلاعات شعر" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

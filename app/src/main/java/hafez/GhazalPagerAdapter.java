@@ -33,7 +33,8 @@ public class GhazalPagerAdapter extends RecyclerView.Adapter<GhazalPagerAdapter.
     @Override
     public void onBindViewHolder(@NonNull GhazalViewHolder holder, int position) {
         String ghazalTitle = ghazalTitles.get(position);
-        List<Verse> verses = ((GhazalDetailActivity) context).loadVersesFromJson(ghazalTitle);
+        PoemDetails poemDetails = ((GhazalDetailActivity) context).loadPoemDetails(ghazalTitle);
+        List<Verse> verses = poemDetails.getVerses();
         VerseAdapter verseAdapter = new VerseAdapter(verses);
         holder.recyclerView.setLayoutManager(new LinearLayoutManager(context));
         holder.recyclerView.setAdapter(verseAdapter);
