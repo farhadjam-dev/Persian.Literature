@@ -65,6 +65,7 @@ public class SaghinamehDetailActivity extends AppCompatActivity {
 
     private static final Map<String, String> AUDIO_URLS = new HashMap<String, String>() {{
         //put("ساقی‌نامه حافظ", "https://drive.google.com/uc?export=download&id=لینک_صوتی");
+        put("ساقی‌نامه حافظ", "https://drive.google.com/uc?export=download&id=1JOx0B2UEtKazH7Mj3J0LJXse3n4bBV2e");
     }};
 
     private static final long MAX_CACHE_SIZE = 1000 * 1024 * 1024; // 1000 MB

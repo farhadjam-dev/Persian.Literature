@@ -65,6 +65,7 @@ public class MasnaviDetailActivity extends AppCompatActivity {
 
     private static final Map<String, String> AUDIO_URLS = new HashMap<String, String>() {{
         //put("مثنوی حافظ", "https://drive.google.com/uc?export=download&id=لینک_صوتی");
+        put("مثنوی حافظ", "https://drive.google.com/uc?export=download&id=1pFhGIhJFD3MMj9uU-cccEyvgGA5k7Elj");
     }};
 
     private static final long MAX_CACHE_SIZE = 1000 * 1024 * 1024; // 1000 MB

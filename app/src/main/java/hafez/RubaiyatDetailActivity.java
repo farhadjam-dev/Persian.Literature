@@ -69,6 +69,48 @@ public class RubaiyatDetailActivity extends AppCompatActivity {
 
     private static final Map<String, String> AUDIO_URLS = new HashMap<String, String>() {{
         //put("رباعی شماره ۱", "https://drive.google.com/uc?export=download&id=لینک_صوتی");
+        put("رباعی شماره ۱ حافظ", "https://drive.google.com/uc?export=download&id=1I0-uTMaLue_soo10cXKFMptPI1UCab4b");
+        put("رباعی شماره ۲ حافظ", "https://drive.google.com/uc?export=download&id=1zi0kAzVPs2aKHiwTWGp3JgXn8INwt3ni");
+        put("رباعی شماره ۳ حافظ", "https://drive.google.com/uc?export=download&id=1cuMY_-2TT5UOSEJ-gimU5z3eJuvJcCGn");
+        put("رباعی شماره ۴ حافظ", "https://drive.google.com/uc?export=download&id=1F56ZN-E4SfI3di8zUDS9xWM47LLgKsw-");
+        put("رباعی شماره ۵ حافظ", "https://drive.google.com/uc?export=download&id=1YEZYk6ou9fScHQt5drS8IVaFI_aojx75");
+        put("رباعی شماره ۶ حافظ", "https://drive.google.com/uc?export=download&id=1u1e8Xt59vRG35O3ghgx_xr_qOE-IMfeV");
+        put("رباعی شماره ۷ حافظ", "https://drive.google.com/uc?export=download&id=1-V7Qf4BOyHJzxmUZgzSV5066G0yxQ5bo");
+        put("رباعی شماره ۸ حافظ", "https://drive.google.com/uc?export=download&id=18KufMA4fvVeWcvhOyEA3ioUTGAdwecu4");
+        put("رباعی شماره ۹ حافظ", "https://drive.google.com/uc?export=download&id=1lUCMgPWFeYkzyPR5TmzWAXouosjMgVtx");
+        put("رباعی شماره ۱۰ حافظ", "https://drive.google.com/uc?export=download&id=1bUtlbBkWHXuLa7Bwy_JGDDsfBjSXD5jL");
+        put("رباعی شماره ۱۱ حافظ", "https://drive.google.com/uc?export=download&id=1CXpiVvnKNtFX0jZpk8aoFP9ZV9pBkhED");
+        put("رباعی شماره ۱۲ حافظ", "https://drive.google.com/uc?export=download&id=1nH2R6QYRJiiXhe5LSGXOS2fWQ01yx9_W");
+        put("رباعی شماره ۱۳ حافظ", "https://drive.google.com/uc?export=download&id=1RvzcFcbp2r3O7E5LsEHDgfsV9FEPrbKn");
+        put("رباعی شماره ۱۴ حافظ", "https://drive.google.com/uc?export=download&id=1aYBmKbB4EbcfnfZkgyPzOiYjZAQcdspC");
+        put("رباعی شماره ۱۵ حافظ", "https://drive.google.com/uc?export=download&id=1wGdmogfJIjE1H2WnoI3ZDkzbMt87d0IC");
+        put("رباعی شماره ۱۶ حافظ", "https://drive.google.com/uc?export=download&id=1rBb5qWQiXaeWfsKlfVAQpmOtfwHDaYeW");
+        put("رباعی شماره ۱۷ حافظ", "https://drive.google.com/uc?export=download&id=1lSqaEX5NJEbY0Y1iwje53iDllRty-P95");
+        put("رباعی شماره ۱۸ حافظ", "https://drive.google.com/uc?export=download&id=148ConGyqGystSLT9eq0-rtafiIkx4T_J");
+        put("رباعی شماره ۱۹ حافظ", "https://drive.google.com/uc?export=download&id=19HVVT27XZNWu_ZQP29soOTpu8-LCC2g8");
+        put("رباعی شماره ۲۰ حافظ", "https://drive.google.com/uc?export=download&id=1GxhSY-Od3MmR9fPt948VC6qFB-zh4aqv");
+        put("رباعی شماره ۲۱ حافظ", "https://drive.google.com/uc?export=download&id=1a2vFTOik0ti3qOpJW4NWS51cIpeogeNU");
+        put("رباعی شماره ۲۲ حافظ", "https://drive.google.com/uc?export=download&id=1aTRx1_DO7BbkSp6T64RdsBkmGKVK9jEv");
+        put("رباعی شماره ۲۳ حافظ", "https://drive.google.com/uc?export=download&id=1Z2vQ6N_vsL4wyQE9ldA7QbX2OvQvaE8G");
+        put("رباعی شماره ۲۴ حافظ", "https://drive.google.com/uc?export=download&id=1y0hiCVo6St_sE5nDcO3EdjS7ij9PIxVg");
+        put("رباعی شماره ۲۵ حافظ", "https://drive.google.com/uc?export=download&id=1fApmU0j39CyEqu78IrbKI6ZMnIGR3wPm");
+        put("رباعی شماره ۲۶ حافظ", "https://drive.google.com/uc?export=download&id=1_MYGYinUS35UxSihrXbnJ4ME-EZgQINe");
+        put("رباعی شماره ۲۷ حافظ", "https://drive.google.com/uc?export=download&id=1yehSUXGD_W4aM_M9Ih1EBfkAvPU8z35e");
+        put("رباعی شماره ۲۸ حافظ", "https://drive.google.com/uc?export=download&id=1De1UwNB2iPWGydiL2iwLBGpXgmw9PLoU");
+        put("رباعی شماره ۲۹ حافظ", "https://drive.google.com/uc?export=download&id=1wDMaw33mwUNhhHfJkig504752GuIS-Uk");
+        put("رباعی شماره ۳۰ حافظ", "https://drive.google.com/uc?export=download&id=1LEEEYgtcdb9uhsnweJYJ2TpgM46YaVP5");
+        put("رباعی شماره ۳۱ حافظ", "https://drive.google.com/uc?export=download&id=12SVCWxmYeuk0nT7_reLbFa7QGns7fPQN");
+        put("رباعی شماره ۳۲ حافظ", "https://drive.google.com/uc?export=download&id=19meDCV7brjH-QW0YGsm5HkMbRa6mvId5");
+        put("رباعی شماره ۳۳ حافظ", "https://drive.google.com/uc?export=download&id=1U8P5j7JKQfoZ3MRP7mfP4lPRSt8IKKbK");
+        put("رباعی شماره ۳۴ حافظ", "https://drive.google.com/uc?export=download&id=1RNrGzlENSoYWuJpW1fuW4LIuqohLHWqr");
+        put("رباعی شماره ۳۵ حافظ", "https://drive.google.com/uc?export=download&id=1-VZOqEa3x7owLZep7DVQCDLz0Fp6mDeY");
+        put("رباعی شماره ۳۶ حافظ", "https://drive.google.com/uc?export=download&id=1drifU5NWt0wlTtb7mxUujU7_oqyvCESf");
+        put("رباعی شماره ۳۷ حافظ", "https://drive.google.com/uc?export=download&id=1htgX5NkKrymvXY_0fT_ZQb6hvegeePR7");
+        put("رباعی شماره ۳۸ حافظ", "https://drive.google.com/uc?export=download&id=1NwGi4gpFta9AG1qloVr-YOBxPF-6ZnOK");
+        put("رباعی شماره ۳۹ حافظ", "https://drive.google.com/uc?export=download&id=1syqkbsTly14AkJCh0F7av8oe1enZRqb5");
+        put("رباعی شماره ۴۰ حافظ", "https://drive.google.com/uc?export=download&id=1mJv_Uu8njDf7n54dxrDiMRkOhVVkMlVr");
+        put("رباعی شماره ۴۱ حافظ", "https://drive.google.com/uc?export=download&id=1XDuJiCsa2d15mo77_Rw9SADsgxq5YGEg");
+        put("رباعی شماره ۴۲ حافظ", "https://drive.google.com/uc?export=download&id=1dpxlJWURSFnHUwdENrdKdrAIvTyvTy6n");
     }};
 
     private static final long MAX_CACHE_SIZE = 1000 * 1024 * 1024; // 1000 MB

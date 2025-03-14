@@ -69,6 +69,40 @@ public class GhitaatDetailActivity extends AppCompatActivity {
 
     private static final Map<String, String> AUDIO_URLS = new HashMap<String, String>() {{
         //put("قطعه شماره ۱", "https://drive.google.com/uc?export=download&id=لینک_صوتی");
+        put("قطعه شماره ۱ حافظ", "https://drive.google.com/uc?export=download&id=18q0t6Ws5p8EdCQlKxnwDYFMps62P-_bO");
+        put("قطعه شماره ۲ حافظ", "https://drive.google.com/uc?export=download&id=1jZThH3c3i-ZAifiZiwIykXMs2V5X4kBn");
+        put("قطعه شماره ۳ حافظ", "https://drive.google.com/uc?export=download&id=1ETyiDn3Uv0O9mL67e42tfGpraWm3_k1u");
+        put("قطعه شماره ۴ حافظ", "https://drive.google.com/uc?export=download&id=1EFrqx5RKIJDnNR83cBs1y-41qez6jIXL");
+        put("قطعه شماره ۵ حافظ", "https://drive.google.com/uc?export=download&id=1XEUoBhLoz_A6GUINbe0Z8faJMAvCp-t2");
+        put("قطعه شماره ۶ حافظ", "https://drive.google.com/uc?export=download&id=15B2ilpgsQB6pdSuG3dfse1d8td2eTYlK");
+        put("قطعه شماره ۷ حافظ", "https://drive.google.com/uc?export=download&id=1tBPV5BbajCgL0mhM_qQg41odhRv0gl-d");
+        put("قطعه شماره ۸ حافظ", "https://drive.google.com/uc?export=download&id=1EEJmx_5RJL0p77FdgOQQSGe037yl6WJc");
+        put("قطعه شماره ۹ حافظ", "https://drive.google.com/uc?export=download&id=1FptwS349LKerNac-a-jtuyBcRWx_vg4a");
+        put("قطعه شماره ۱۰ حافظ", "https://drive.google.com/uc?export=download&id=1zZhv1YhyyOXer3fyg6GJ-a8WiNDZ2LBm");
+        put("قطعه شماره ۱۱ حافظ", "https://drive.google.com/uc?export=download&id=1tQr2nk0tCFRTY7j84GfxN0XmGWn-GRby");
+        put("قطعه شماره ۱۲ حافظ", "https://drive.google.com/uc?export=download&id=15_9-set_LqTKRusUpC-8zhs4BrlVD-5c");
+        put("قطعه شماره ۱۳ حافظ", "https://drive.google.com/uc?export=download&id=149s5AvSA1UCJXNvFRrjAFyQ5p9DDrpGG");
+        put("قطعه شماره ۱۴ حافظ", "https://drive.google.com/uc?export=download&id=1bedXdgsvlXfa5sTGMvJx5yd3m9SarKoN");
+        put("قطعه شماره ۱۵ حافظ", "https://drive.google.com/uc?export=download&id=1NC7wAFFQVzqjp0UtF5kY1oXH2gJQZlvN");
+        put("قطعه شماره ۱۶ حافظ", "https://drive.google.com/uc?export=download&id=13y0uegk8X-LZ2a4azT5Hqz1_k5r0qSMD");
+        put("قطعه شماره ۱۷ حافظ", "https://drive.google.com/uc?export=download&id=1T8prqTqzA24xyhdr19lNJyMn0Capo0xG");
+        put("قطعه شماره ۱۸ حافظ", "https://drive.google.com/uc?export=download&id=1C6jRjSfa6cgAX0L79h7ED2ZZBkj6mw8x");
+        put("قطعه شماره ۱۹ حافظ", "https://drive.google.com/uc?export=download&id=1kuX5_wMKwPPxdLjnE7cp0AvdhlmVF8vS");
+        put("قطعه شماره ۲۰ حافظ", "https://drive.google.com/uc?export=download&id=1JDCNM5mqMxWpv3muT-4NZcsVzF8RW4ze");
+        put("قطعه شماره ۲۱ حافظ", "https://drive.google.com/uc?export=download&id=1W74r9cAfUpC5yoKvUosLbn7v0mpNVLV5");
+        put("قطعه شماره ۲۲ حافظ", "https://drive.google.com/uc?export=download&id=1rz3LISt0r9__gKDDTB-o-vdTtODJdxHz");
+        put("قطعه شماره ۲۳ حافظ", "https://drive.google.com/uc?export=download&id=1exUYd0OWY-EABgt5fnHHA-eYCT7h7bGx");
+        put("قطعه شماره ۲۴ حافظ", "https://drive.google.com/uc?export=download&id=1f3Dv-YgOaOpXFw3m6Py_M0kxfhOgetc8");
+        put("قطعه شماره ۲۵ حافظ", "https://drive.google.com/uc?export=download&id=1shHXcyk0NdGefxFAx3-EjSEK4LwDviUa");
+        put("قطعه شماره ۲۶ حافظ", "https://drive.google.com/uc?export=download&id=1-IcTff1U720z4fDZrfCsAgGz3IcRhj9_");
+        put("قطعه شماره ۲۷ حافظ", "https://drive.google.com/uc?export=download&id=1H0EJMMj0IOz4jm97nw6rRxtnbHAjNaeR");
+        put("قطعه شماره ۲۸ حافظ", "https://drive.google.com/uc?export=download&id=1C7jZxX94LP1e6l0fIauPgVZEk8gJ9Fgp");
+        put("قطعه شماره ۲۹ حافظ", "https://drive.google.com/uc?export=download&id=1KBiBEtmrZAloKNgC1FxEbd6vp5V2sX2O");
+        put("قطعه شماره ۳۰ حافظ", "https://drive.google.com/uc?export=download&id=1UXX0i6Sk66JzVDGUCAFDKA4UrvZGhUGC");
+        put("قطعه شماره ۳۱ حافظ", "https://drive.google.com/uc?export=download&id=1bkatVqMep77Kyn9ssUdqB1c6phYY2Xgu");
+        put("قطعه شماره ۳۲ حافظ", "https://drive.google.com/uc?export=download&id=1yh7lh1bOov1P9A4mYBe8A6TGdcOK79RQ");
+        put("قطعه شماره ۳۳ حافظ", "https://drive.google.com/uc?export=download&id=18DpwVrweC-I5OZVcZipquL2ECs1FsW49");
+        put("قطعه شماره ۳۴ حافظ", "https://drive.google.com/uc?export=download&id=1wRyDGTZgH3vibCdFky9FmShNz50il8Oa");
     }};
 
     private static final long MAX_CACHE_SIZE = 1000 * 1024 * 1024; // 1000 MB

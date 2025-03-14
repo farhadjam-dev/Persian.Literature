@@ -69,6 +69,9 @@ public class GhasaidDetailActivity extends AppCompatActivity {
 
     private static final Map<String, String> AUDIO_URLS = new HashMap<String, String>() {{
         //put("قصیده شماره ۱", "https://drive.google.com/uc?export=download&id=لینک_صوتی");
+        put("قصیده شماره ۱ حافظ", "https://drive.google.com/uc?export=download&id=1mHBwA0PyA5EFFkCEHvyDn3v1elKo0ilI");
+        put("قصیده شماره ۲ حافظ", "https://drive.google.com/uc?export=download&id=1Bjpe9yj4__LKbd0GZeuhblhXm7OBN5ht");
+        put("قصیده شماره ۳ حافظ", "https://drive.google.com/uc?export=download&id=1QY0z-GGffRO_q8ynTxEEQpR_OlAnOios");
     }};
 
     private static final long MAX_CACHE_SIZE = 1000 * 1024 * 1024; // 1000 MB
