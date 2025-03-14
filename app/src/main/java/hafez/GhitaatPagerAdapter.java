@@ -30,7 +30,8 @@ public class GhitaatPagerAdapter extends RecyclerView.Adapter<GhitaatPagerAdapte
     @Override
     public void onBindViewHolder(@NonNull GhitaatViewHolder holder, int position) {
         String ghitaatTitle = ghitaatTitles.get(position);
-        List<Verse> verses = ((GhitaatDetailActivity) context).loadVersesFromJson(ghitaatTitle);
+        PoemDetails poemDetails = ((GhitaatDetailActivity) context).loadPoemDetails(ghitaatTitle);
+        List<Verse> verses = poemDetails.getVerses();
         VerseAdapter verseAdapter = new VerseAdapter(verses);
         holder.recyclerView.setLayoutManager(new LinearLayoutManager(context));
         holder.recyclerView.setAdapter(verseAdapter);

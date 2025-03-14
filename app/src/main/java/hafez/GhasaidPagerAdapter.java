@@ -30,7 +30,8 @@ public class GhasaidPagerAdapter extends RecyclerView.Adapter<GhasaidPagerAdapte
     @Override
     public void onBindViewHolder(@NonNull GhasaidViewHolder holder, int position) {
         String ghasaidTitle = ghasaidTitles.get(position);
-        List<Verse> verses = ((GhasaidDetailActivity) context).loadVersesFromJson(ghasaidTitle);
+        PoemDetails poemDetails = ((GhasaidDetailActivity) context).loadPoemDetails(ghasaidTitle);
+        List<Verse> verses = poemDetails.getVerses();
         VerseAdapter verseAdapter = new VerseAdapter(verses);
         holder.recyclerView.setLayoutManager(new LinearLayoutManager(context));
         holder.recyclerView.setAdapter(verseAdapter);

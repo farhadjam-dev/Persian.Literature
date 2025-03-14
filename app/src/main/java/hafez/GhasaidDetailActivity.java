@@ -9,12 +9,16 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.text.TextUtilsCompat;
 import androidx.viewpager2.widget.ViewPager2;
+import android.view.Gravity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -39,6 +43,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -59,6 +64,7 @@ public class GhasaidDetailActivity extends AppCompatActivity {
     private ImageButton copyButton;
     private ImageButton shareButton;
     private ImageButton favoriteMenuButton;
+    private ImageButton poemInfoButton; // دکمه جدید برای اطلاعات شعر
     private boolean isFavorite = false;
     private String ghasaidTitle;
     private MediaPlayer mediaPlayer;
@@ -68,7 +74,6 @@ public class GhasaidDetailActivity extends AppCompatActivity {
     private boolean isMenuExpanded = false;
 
     private static final Map<String, String> AUDIO_URLS = new HashMap<String, String>() {{
-        //put("قصیده شماره ۱", "https://drive.google.com/uc?export=download&id=لینک_صوتی");
         put("قصیده شماره ۱ حافظ", "https://drive.google.com/uc?export=download&id=1mHBwA0PyA5EFFkCEHvyDn3v1elKo0ilI");
         put("قصیده شماره ۲ حافظ", "https://drive.google.com/uc?export=download&id=1Bjpe9yj4__LKbd0GZeuhblhXm7OBN5ht");
         put("قصیده شماره ۳ حافظ", "https://drive.google.com/uc?export=download&id=1QY0z-GGffRO_q8ynTxEEQpR_OlAnOios");
@@ -102,6 +107,7 @@ public class GhasaidDetailActivity extends AppCompatActivity {
         copyButton = findViewById(R.id.copy_button);
         shareButton = findViewById(R.id.share_button);
         favoriteMenuButton = findViewById(R.id.favorite_menu_button);
+        poemInfoButton = findViewById(R.id.poem_info_button); // مقداردهی دکمه جدید
 
         // بارگذاری لیست قصاید و معکوس کردن آن
         ghasaidTitles = loadGhasaidTitlesFromJson();
@@ -154,6 +160,7 @@ public class GhasaidDetailActivity extends AppCompatActivity {
         // تنظیم دکمه علاقه‌مندی‌ها
         updateFavoriteButton();
         favoriteButton.setOnClickListener(v -> toggleFavorite());
+        favoriteMenuButton.setOnClickListener(v -> toggleFavorite());
 
         // تنظیم دکمه پخش/توقف
         playPauseButton.setOnClickListener(v -> {
@@ -166,14 +173,14 @@ public class GhasaidDetailActivity extends AppCompatActivity {
             }
         });
 
-        setupSeekBar();
-
         // تنظیمات آیکون شناور و منوی گسترش‌پذیر
         fabSettings.setOnClickListener(v -> toggleMenu());
 
         copyButton.setOnClickListener(v -> copyText());
         shareButton.setOnClickListener(v -> shareText());
-        favoriteMenuButton.setOnClickListener(v -> toggleFavorite());
+        poemInfoButton.setOnClickListener(v -> showPoemInfoDialog()); // رویداد کلیک دکمه اطلاعات شعر
+
+        setupSeekBar();
     }
 
     private void toggleMenu() {
@@ -189,7 +196,7 @@ public class GhasaidDetailActivity extends AppCompatActivity {
         } else {
             expandedMenu.setVisibility(View.VISIBLE);
             expandedMenu.startAnimation(slideIn);
-            fabSettings.setImageResource(R.drawable.ic_arrow_back); // فلش برعکس
+            fabSettings.setImageResource(R.drawable.ic_arrow_back);
             fabSettings.setAlpha(1.0f);
             handler.postDelayed(() -> {
                 if (isMenuExpanded) {
@@ -201,7 +208,8 @@ public class GhasaidDetailActivity extends AppCompatActivity {
     }
 
     private void copyText() {
-        List<Verse> verses = loadVersesFromJson(ghasaidTitle);
+        PoemDetails poemDetails = loadPoemDetails(ghasaidTitle);
+        List<Verse> verses = poemDetails.getVerses();
         StringBuilder textToCopy = new StringBuilder(ghasaidTitle + "\n\n");
         for (Verse verse : verses) {
             textToCopy.append(verse.getText()).append("\n");
@@ -213,7 +221,8 @@ public class GhasaidDetailActivity extends AppCompatActivity {
     }
 
     private void shareText() {
-        List<Verse> verses = loadVersesFromJson(ghasaidTitle);
+        PoemDetails poemDetails = loadPoemDetails(ghasaidTitle);
+        List<Verse> verses = poemDetails.getVerses();
         StringBuilder textToShare = new StringBuilder(ghasaidTitle + "\n\n");
         for (Verse verse : verses) {
             textToShare.append(verse.getText()).append("\n");
@@ -224,15 +233,75 @@ public class GhasaidDetailActivity extends AppCompatActivity {
         startActivity(Intent.createChooser(shareIntent, "اشتراک قصیده"));
     }
 
+    private void showPoemInfoDialog() {
+        PoemDetails poemDetails = loadPoemDetails(ghasaidTitle);
+        PoemInfo poemInfo = poemDetails.getPoemInfo();
+        List<Verse> verses = poemDetails.getVerses();
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomDialogTheme);
+
+        // ساخت ویوی سفارشی برای عنوان
+        TextView customTitle = new TextView(this);
+        customTitle.setText("اطلاعات شعر");
+        customTitle.setGravity(Gravity.CENTER);
+        customTitle.setTextColor(getResources().getColor(R.color.textColor));
+        customTitle.setTextSize(20);
+        customTitle.setPadding(0, 20, 0, 20);
+        LinearLayout.LayoutParams titleParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+        titleParams.gravity = Gravity.CENTER;
+        customTitle.setLayoutParams(titleParams);
+
+        // تنظیم جهت متن بر اساس زبان
+        boolean isRtl = TextUtilsCompat.getLayoutDirectionFromLocale(Locale.getDefault()) == View.LAYOUT_DIRECTION_RTL;
+        customTitle.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+        customTitle.setTextDirection(isRtl ? View.TEXT_DIRECTION_RTL : View.TEXT_DIRECTION_LTR);
+
+        builder.setCustomTitle(customTitle);
+
+        StringBuilder message = new StringBuilder();
+        if (poemInfo != null) {
+            message.append("وزن: ").append(poemInfo.getMeter()).append("\n");
+            message.append("قالب: ").append(poemInfo.getForm()).append("\n");
+            int verseCount = verses.size();
+            message.append("تعداد ابیات: ").append(toPersianNumber(verseCount));
+        } else {
+            message.append("اطلاعات شعر در دسترس نیست.");
+        }
+
+        builder.setMessage(message.toString());
+        builder.setPositiveButton("بستن", (dialog, which) -> dialog.dismiss());
+        AlertDialog dialog = builder.create();
+
+        dialog.setOnShowListener(dialogInterface -> {
+            Button positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+            if (positiveButton != null) {
+                positiveButton.setTextColor(getResources().getColor(android.R.color.black));
+                positiveButton.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
+            }
+        });
+
+        dialog.show();
+    }
+
+    private String toPersianNumber(int number) {
+        String[] persianNumbers = {"۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"};
+        StringBuilder result = new StringBuilder();
+        String numberStr = String.valueOf(number);
+        for (int i = 0; i < numberStr.length(); i++) {
+            char digit = numberStr.charAt(i);
+            result.append(persianNumbers[Character.getNumericValue(digit)]);
+        }
+        return result.toString();
+    }
+
     private void updateFavoriteButton() {
         SharedPreferences sharedPreferences = getSharedPreferences("Favorites", MODE_PRIVATE);
         Set<String> favorites = sharedPreferences.getStringSet("favorites", new HashSet<>());
         isFavorite = favorites.contains(ghasaidTitle);
         favoriteButton.setImageResource(isFavorite ? R.drawable.ic_star_filled : R.drawable.ic_star_outline);
-        updateFavoriteMenuButton();
-    }
-
-    private void updateFavoriteMenuButton() {
         favoriteMenuButton.setImageResource(isFavorite ? R.drawable.ic_star_filled : R.drawable.ic_star_outline);
     }
 
@@ -490,8 +559,9 @@ public class GhasaidDetailActivity extends AppCompatActivity {
         return titles;
     }
 
-    public List<Verse> loadVersesFromJson(String ghasaidTitle) {
+    PoemDetails loadPoemDetails(String ghasaidTitle) {
         List<Verse> verseList = new ArrayList<>();
+        PoemInfo poemInfo = null;
         try {
             InputStream inputStream = getResources().openRawResource(R.raw.hafez_ghasaid);
             int size = inputStream.available();
@@ -511,12 +581,19 @@ public class GhasaidDetailActivity extends AppCompatActivity {
                         String explanation = verseObject.getString("explanation");
                         verseList.add(new Verse(text, explanation));
                     }
+                    if (jsonObject.has("poem_info")) {
+                        JSONObject poemInfoObject = jsonObject.getJSONObject("poem_info");
+                        String meter = poemInfoObject.getString("meter");
+                        String form = poemInfoObject.getString("form");
+                        int verseCount = poemInfoObject.getInt("verse_count");
+                        poemInfo = new PoemInfo(meter, form, verseCount);
+                    }
                     break;
                 }
             }
         } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
-        return verseList;
+        return new PoemDetails(verseList, poemInfo);
     }
 }
