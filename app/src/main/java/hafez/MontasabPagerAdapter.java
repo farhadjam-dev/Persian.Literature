@@ -30,7 +30,8 @@ public class MontasabPagerAdapter extends RecyclerView.Adapter<MontasabPagerAdap
     @Override
     public void onBindViewHolder(@NonNull MontasabViewHolder holder, int position) {
         String montasabTitle = montasabTitles.get(position);
-        List<Verse> verses = ((MontasabDetailActivity) context).loadVersesFromJson(montasabTitle);
+        PoemDetails poemDetails = ((MontasabDetailActivity) context).loadPoemDetails(montasabTitle);
+        List<Verse> verses = poemDetails.getVerses();
         VerseAdapter verseAdapter = new VerseAdapter(verses);
         holder.recyclerView.setLayoutManager(new LinearLayoutManager(context));
         holder.recyclerView.setAdapter(verseAdapter);

@@ -9,12 +9,16 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.text.TextUtilsCompat;
 import androidx.viewpager2.widget.ViewPager2;
+import android.view.Gravity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -39,6 +43,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -59,6 +64,7 @@ public class MontasabDetailActivity extends AppCompatActivity {
     private ImageButton copyButton;
     private ImageButton shareButton;
     private ImageButton favoriteMenuButton;
+    private ImageButton poemInfoButton;
     private boolean isFavorite = false;
     private String montasabTitle;
     private MediaPlayer mediaPlayer;
@@ -69,6 +75,7 @@ public class MontasabDetailActivity extends AppCompatActivity {
 
     private static final Map<String, String> AUDIO_URLS = new HashMap<String, String>() {{
         //put("شعر منتسب شماره ۱", "https://drive.google.com/uc?export=download&id=لینک_صوتی");
+        // لینک‌های صوتی برای اشعار منتسب را اینجا اضافه کنید
     }};
 
     private static final long MAX_CACHE_SIZE = 1000 * 1024 * 1024; // 1000 MB
@@ -99,8 +106,8 @@ public class MontasabDetailActivity extends AppCompatActivity {
         copyButton = findViewById(R.id.copy_button);
         shareButton = findViewById(R.id.share_button);
         favoriteMenuButton = findViewById(R.id.favorite_menu_button);
+        poemInfoButton = findViewById(R.id.poem_info_button);
 
-        // بارگذاری لیست اشعار منتسب و معکوس کردن آن
         montasabTitles = loadMontasabTitlesFromJson();
         Collections.reverse(montasabTitles);
         montasabTitle = getIntent().getStringExtra("montasabTitle");
@@ -110,7 +117,6 @@ public class MontasabDetailActivity extends AppCompatActivity {
         int initialPosition = montasabTitles.indexOf(montasabTitle);
         if (initialPosition == -1) initialPosition = 0;
 
-        // تنظیم ViewPager2
         montasabAdapter = new MontasabPagerAdapter(this, montasabTitles);
         viewPager.setAdapter(montasabAdapter);
         viewPager.setCurrentItem(initialPosition, false);
@@ -118,7 +124,6 @@ public class MontasabDetailActivity extends AppCompatActivity {
 
         toolbarTitle.setText(montasabTitle);
 
-        // به‌روزرسانی عنوان و صوت هنگام تغییر صفحه
         viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
@@ -129,7 +134,6 @@ public class MontasabDetailActivity extends AppCompatActivity {
             }
         });
 
-        // مدیریت دکمه‌های قبلی و بعدی
         nextButton.setOnClickListener(v -> {
             int prevPosition = viewPager.getCurrentItem() - 1;
             if (prevPosition >= 0) {
@@ -148,12 +152,10 @@ public class MontasabDetailActivity extends AppCompatActivity {
             }
         });
 
-        // تنظیم دکمه علاقه‌مندی‌ها
         updateFavoriteButton();
         favoriteButton.setOnClickListener(v -> toggleFavorite());
         favoriteMenuButton.setOnClickListener(v -> toggleFavorite());
 
-        // تنظیم دکمه پخش/توقف
         playPauseButton.setOnClickListener(v -> {
             Animation playPauseAnim = AnimationUtils.loadAnimation(this, R.anim.play_pause_animation);
             playPauseButton.startAnimation(playPauseAnim);
@@ -164,10 +166,10 @@ public class MontasabDetailActivity extends AppCompatActivity {
             }
         });
 
-        // تنظیمات آیکون شناور و منوی گسترش‌پذیر
         fabSettings.setOnClickListener(v -> toggleMenu());
         copyButton.setOnClickListener(v -> copyText());
         shareButton.setOnClickListener(v -> shareText());
+        poemInfoButton.setOnClickListener(v -> showPoemInfoDialog());
 
         setupSeekBar();
     }
@@ -197,7 +199,8 @@ public class MontasabDetailActivity extends AppCompatActivity {
     }
 
     private void copyText() {
-        List<Verse> verses = loadVersesFromJson(montasabTitle);
+        PoemDetails poemDetails = loadPoemDetails(montasabTitle);
+        List<Verse> verses = poemDetails.getVerses();
         StringBuilder textToCopy = new StringBuilder(montasabTitle + "\n\n");
         for (Verse verse : verses) {
             textToCopy.append(verse.getText()).append("\n");
@@ -209,7 +212,8 @@ public class MontasabDetailActivity extends AppCompatActivity {
     }
 
     private void shareText() {
-        List<Verse> verses = loadVersesFromJson(montasabTitle);
+        PoemDetails poemDetails = loadPoemDetails(montasabTitle);
+        List<Verse> verses = poemDetails.getVerses();
         StringBuilder textToShare = new StringBuilder(montasabTitle + "\n\n");
         for (Verse verse : verses) {
             textToShare.append(verse.getText()).append("\n");
@@ -218,6 +222,68 @@ public class MontasabDetailActivity extends AppCompatActivity {
         shareIntent.setType("text/plain");
         shareIntent.putExtra(Intent.EXTRA_TEXT, textToShare.toString());
         startActivity(Intent.createChooser(shareIntent, "اشتراک شعر منتسب"));
+    }
+
+    private void showPoemInfoDialog() {
+        PoemDetails poemDetails = loadPoemDetails(montasabTitle);
+        PoemInfo poemInfo = poemDetails.getPoemInfo();
+        List<Verse> verses = poemDetails.getVerses();
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomDialogTheme);
+
+        TextView customTitle = new TextView(this);
+        customTitle.setText("اطلاعات شعر");
+        customTitle.setGravity(Gravity.CENTER);
+        customTitle.setTextColor(getResources().getColor(R.color.textColor));
+        customTitle.setTextSize(20);
+        customTitle.setPadding(0, 20, 0, 20);
+        LinearLayout.LayoutParams titleParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+        titleParams.gravity = Gravity.CENTER;
+        customTitle.setLayoutParams(titleParams);
+
+        boolean isRtl = TextUtilsCompat.getLayoutDirectionFromLocale(Locale.getDefault()) == View.LAYOUT_DIRECTION_RTL;
+        customTitle.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+        customTitle.setTextDirection(isRtl ? View.TEXT_DIRECTION_RTL : View.TEXT_DIRECTION_LTR);
+
+        builder.setCustomTitle(customTitle);
+
+        StringBuilder message = new StringBuilder();
+        if (poemInfo != null) {
+            message.append("وزن: ").append(poemInfo.getMeter()).append("\n");
+            message.append("قالب: ").append(poemInfo.getForm()).append("\n");
+            int verseCount = verses.size();
+            message.append("تعداد ابیات: ").append(toPersianNumber(verseCount));
+        } else {
+            message.append("اطلاعات شعر در دسترس نیست.");
+        }
+
+        builder.setMessage(message.toString());
+        builder.setPositiveButton("بستن", (dialog, which) -> dialog.dismiss());
+        AlertDialog dialog = builder.create();
+
+        dialog.setOnShowListener(dialogInterface -> {
+            Button positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+            if (positiveButton != null) {
+                positiveButton.setTextColor(getResources().getColor(android.R.color.black));
+                positiveButton.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
+            }
+        });
+
+        dialog.show();
+    }
+
+    private String toPersianNumber(int number) {
+        String[] persianNumbers = {"۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"};
+        StringBuilder result = new StringBuilder();
+        String numberStr = String.valueOf(number);
+        for (int i = 0; i < numberStr.length(); i++) {
+            char digit = numberStr.charAt(i);
+            result.append(persianNumbers[Character.getNumericValue(digit)]);
+        }
+        return result.toString();
     }
 
     private void updateFavoriteButton() {
@@ -482,8 +548,9 @@ public class MontasabDetailActivity extends AppCompatActivity {
         return titles;
     }
 
-    public List<Verse> loadVersesFromJson(String montasabTitle) {
+    PoemDetails loadPoemDetails(String montasabTitle) {
         List<Verse> verseList = new ArrayList<>();
+        PoemInfo poemInfo = null;
         try {
             InputStream inputStream = getResources().openRawResource(R.raw.hafez_montasab);
             int size = inputStream.available();
@@ -503,12 +570,19 @@ public class MontasabDetailActivity extends AppCompatActivity {
                         String explanation = verseObject.getString("explanation");
                         verseList.add(new Verse(text, explanation));
                     }
+                    if (jsonObject.has("poem_info")) {
+                        JSONObject poemInfoObject = jsonObject.getJSONObject("poem_info");
+                        String meter = poemInfoObject.getString("meter");
+                        String form = poemInfoObject.getString("form");
+                        int verseCount = poemInfoObject.getInt("verse_count");
+                        poemInfo = new PoemInfo(meter, form, verseCount);
+                    }
                     break;
                 }
             }
         } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
-        return verseList;
+        return new PoemDetails(verseList, poemInfo);
     }
 }
