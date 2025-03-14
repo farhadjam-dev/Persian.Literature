@@ -30,7 +30,8 @@ public class RubaiyatPagerAdapter extends RecyclerView.Adapter<RubaiyatPagerAdap
     @Override
     public void onBindViewHolder(@NonNull RubaiyatViewHolder holder, int position) {
         String rubaiyatTitle = rubaiyatTitles.get(position);
-        List<Verse> verses = ((RubaiyatDetailActivity) context).loadVersesFromJson(rubaiyatTitle);
+        PoemDetails poemDetails = ((RubaiyatDetailActivity) context).loadPoemDetails(rubaiyatTitle);
+        List<Verse> verses = poemDetails.getVerses();
         VerseAdapter verseAdapter = new VerseAdapter(verses);
         holder.recyclerView.setLayoutManager(new LinearLayoutManager(context));
         holder.recyclerView.setAdapter(verseAdapter);

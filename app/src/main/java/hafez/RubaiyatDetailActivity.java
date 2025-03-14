@@ -9,12 +9,16 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.text.TextUtilsCompat;
 import androidx.viewpager2.widget.ViewPager2;
+import android.view.Gravity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -39,6 +43,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -59,6 +64,7 @@ public class RubaiyatDetailActivity extends AppCompatActivity {
     private ImageButton copyButton;
     private ImageButton shareButton;
     private ImageButton favoriteMenuButton;
+    private ImageButton poemInfoButton;
     private boolean isFavorite = false;
     private String rubaiyatTitle;
     private MediaPlayer mediaPlayer;
@@ -68,7 +74,6 @@ public class RubaiyatDetailActivity extends AppCompatActivity {
     private boolean isMenuExpanded = false;
 
     private static final Map<String, String> AUDIO_URLS = new HashMap<String, String>() {{
-        //put("رباعی شماره ۱", "https://drive.google.com/uc?export=download&id=لینک_صوتی");
         put("رباعی شماره ۱ حافظ", "https://drive.google.com/uc?export=download&id=1I0-uTMaLue_soo10cXKFMptPI1UCab4b");
         put("رباعی شماره ۲ حافظ", "https://drive.google.com/uc?export=download&id=1zi0kAzVPs2aKHiwTWGp3JgXn8INwt3ni");
         put("رباعی شماره ۳ حافظ", "https://drive.google.com/uc?export=download&id=1cuMY_-2TT5UOSEJ-gimU5z3eJuvJcCGn");
@@ -141,8 +146,8 @@ public class RubaiyatDetailActivity extends AppCompatActivity {
         copyButton = findViewById(R.id.copy_button);
         shareButton = findViewById(R.id.share_button);
         favoriteMenuButton = findViewById(R.id.favorite_menu_button);
+        poemInfoButton = findViewById(R.id.poem_info_button);
 
-        // بارگذاری لیست رباعیات و معکوس کردن آن
         rubaiyatTitles = loadRubaiyatTitlesFromJson();
         Collections.reverse(rubaiyatTitles);
         rubaiyatTitle = getIntent().getStringExtra("rubaiyatTitle");
@@ -152,7 +157,6 @@ public class RubaiyatDetailActivity extends AppCompatActivity {
         int initialPosition = rubaiyatTitles.indexOf(rubaiyatTitle);
         if (initialPosition == -1) initialPosition = 0;
 
-        // تنظیم ViewPager2
         rubaiyatAdapter = new RubaiyatPagerAdapter(this, rubaiyatTitles);
         viewPager.setAdapter(rubaiyatAdapter);
         viewPager.setCurrentItem(initialPosition, false);
@@ -160,7 +164,6 @@ public class RubaiyatDetailActivity extends AppCompatActivity {
 
         toolbarTitle.setText(rubaiyatTitle);
 
-        // به‌روزرسانی عنوان و صوت هنگام تغییر صفحه
         viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
@@ -171,7 +174,6 @@ public class RubaiyatDetailActivity extends AppCompatActivity {
             }
         });
 
-        // مدیریت دکمه‌های قبلی و بعدی
         nextButton.setOnClickListener(v -> {
             int prevPosition = viewPager.getCurrentItem() - 1;
             if (prevPosition >= 0) {
@@ -190,12 +192,10 @@ public class RubaiyatDetailActivity extends AppCompatActivity {
             }
         });
 
-        // تنظیم دکمه علاقه‌مندی‌ها
         updateFavoriteButton();
         favoriteButton.setOnClickListener(v -> toggleFavorite());
         favoriteMenuButton.setOnClickListener(v -> toggleFavorite());
 
-        // تنظیم دکمه پخش/توقف
         playPauseButton.setOnClickListener(v -> {
             Animation playPauseAnim = AnimationUtils.loadAnimation(this, R.anim.play_pause_animation);
             playPauseButton.startAnimation(playPauseAnim);
@@ -206,10 +206,10 @@ public class RubaiyatDetailActivity extends AppCompatActivity {
             }
         });
 
-        // تنظیمات آیکون شناور و منوی گسترش‌پذیر
         fabSettings.setOnClickListener(v -> toggleMenu());
         copyButton.setOnClickListener(v -> copyText());
         shareButton.setOnClickListener(v -> shareText());
+        poemInfoButton.setOnClickListener(v -> showPoemInfoDialog());
 
         setupSeekBar();
     }
@@ -239,7 +239,8 @@ public class RubaiyatDetailActivity extends AppCompatActivity {
     }
 
     private void copyText() {
-        List<Verse> verses = loadVersesFromJson(rubaiyatTitle);
+        PoemDetails poemDetails = loadPoemDetails(rubaiyatTitle);
+        List<Verse> verses = poemDetails.getVerses();
         StringBuilder textToCopy = new StringBuilder(rubaiyatTitle + "\n\n");
         for (Verse verse : verses) {
             textToCopy.append(verse.getText()).append("\n");
@@ -251,7 +252,8 @@ public class RubaiyatDetailActivity extends AppCompatActivity {
     }
 
     private void shareText() {
-        List<Verse> verses = loadVersesFromJson(rubaiyatTitle);
+        PoemDetails poemDetails = loadPoemDetails(rubaiyatTitle);
+        List<Verse> verses = poemDetails.getVerses();
         StringBuilder textToShare = new StringBuilder(rubaiyatTitle + "\n\n");
         for (Verse verse : verses) {
             textToShare.append(verse.getText()).append("\n");
@@ -260,6 +262,70 @@ public class RubaiyatDetailActivity extends AppCompatActivity {
         shareIntent.setType("text/plain");
         shareIntent.putExtra(Intent.EXTRA_TEXT, textToShare.toString());
         startActivity(Intent.createChooser(shareIntent, "اشتراک رباعی"));
+    }
+
+    private void showPoemInfoDialog() {
+        PoemDetails poemDetails = loadPoemDetails(rubaiyatTitle);
+        PoemInfo poemInfo = poemDetails.getPoemInfo();
+        List<Verse> verses = poemDetails.getVerses();
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomDialogTheme);
+
+        // ساخت ویوی سفارشی برای عنوان
+        TextView customTitle = new TextView(this);
+        customTitle.setText("اطلاعات شعر");
+        customTitle.setGravity(Gravity.CENTER);
+        customTitle.setTextColor(getResources().getColor(R.color.textColor));
+        customTitle.setTextSize(20); // اندازه متن عنوان
+        customTitle.setPadding(0, 20, 0, 20); // پدینگ برای فاصله بهتر
+        LinearLayout.LayoutParams titleParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+        titleParams.gravity = Gravity.CENTER;
+        customTitle.setLayoutParams(titleParams);
+
+        // تنظیم جهت متن بر اساس زبان (برای جلوگیری از مشکلات RTL)
+        boolean isRtl = TextUtilsCompat.getLayoutDirectionFromLocale(Locale.getDefault()) == View.LAYOUT_DIRECTION_RTL;
+        customTitle.setLayoutDirection(View.LAYOUT_DIRECTION_LTR); // اجبار به LTR برای وسط‌چین شدن
+        customTitle.setTextDirection(isRtl ? View.TEXT_DIRECTION_RTL : View.TEXT_DIRECTION_LTR);
+
+        builder.setCustomTitle(customTitle);
+
+        StringBuilder message = new StringBuilder();
+        if (poemInfo != null) {
+            message.append("وزن: ").append(poemInfo.getMeter()).append("\n");
+            message.append("قالب: ").append(poemInfo.getForm()).append("\n");
+            int verseCount = verses.size(); // هر Verse یک بیت کامل است
+            message.append("تعداد ابیات: ").append(toPersianNumber(verseCount));
+        } else {
+            message.append("اطلاعات شعر در دسترس نیست.");
+        }
+
+        builder.setMessage(message.toString());
+        builder.setPositiveButton("بستن", (dialog, which) -> dialog.dismiss());
+        AlertDialog dialog = builder.create();
+
+        dialog.setOnShowListener(dialogInterface -> {
+            Button positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+            if (positiveButton != null) {
+                positiveButton.setTextColor(getResources().getColor(android.R.color.black)); // رنگ تیره
+                positiveButton.setGravity(Gravity.START | Gravity.CENTER_VERTICAL); // انتقال به چپ
+            }
+        });
+
+        dialog.show();
+    }
+
+    private String toPersianNumber(int number) {
+        String[] persianNumbers = {"۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"};
+        StringBuilder result = new StringBuilder();
+        String numberStr = String.valueOf(number);
+        for (int i = 0; i < numberStr.length(); i++) {
+            char digit = numberStr.charAt(i);
+            result.append(persianNumbers[Character.getNumericValue(digit)]);
+        }
+        return result.toString();
     }
 
     private void updateFavoriteButton() {
@@ -524,8 +590,9 @@ public class RubaiyatDetailActivity extends AppCompatActivity {
         return titles;
     }
 
-    public List<Verse> loadVersesFromJson(String rubaiyatTitle) {
+    PoemDetails loadPoemDetails(String rubaiyatTitle) {
         List<Verse> verseList = new ArrayList<>();
+        PoemInfo poemInfo = null;
         try {
             InputStream inputStream = getResources().openRawResource(R.raw.hafez_rubaiyat);
             int size = inputStream.available();
@@ -545,12 +612,19 @@ public class RubaiyatDetailActivity extends AppCompatActivity {
                         String explanation = verseObject.getString("explanation");
                         verseList.add(new Verse(text, explanation));
                     }
+                    if (jsonObject.has("poem_info")) {
+                        JSONObject poemInfoObject = jsonObject.getJSONObject("poem_info");
+                        String meter = poemInfoObject.getString("meter");
+                        String form = poemInfoObject.getString("form");
+                        int verseCount = poemInfoObject.getInt("verse_count");
+                        poemInfo = new PoemInfo(meter, form, verseCount);
+                    }
                     break;
                 }
             }
         } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
-        return verseList;
+        return new PoemDetails(verseList, poemInfo);
     }
 }
